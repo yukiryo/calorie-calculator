@@ -1,5 +1,11 @@
 # 更新日志 (Changelog)
 
+## [1.0.1] - 2025-12-08
+
+### 🐛 修复 (Fixes)
+- **iOS 图标**: 修复添加到主屏幕时图标丢失的问题 (添加 `apple-touch-icon.png`)。
+- **全屏显示**: 修复 iOS Safari 上下滑动时出现的白边问题 (添加 `viewport-fit=cover`)。
+
 ## [1.0.0] - 2025-12-08
 
 ### ✨ 新增功能 (Features)

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>卡路里计算器 | 精准热量换算</title>
+  <meta name="description" content="专业的食品热量计算器，快速将千焦(kJ/100g)转换为大卡(kcal)。适用于减肥、健身人群的精准饮食管理工具。">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div id="app">
+    <div class="glass-container">
+      <header>
+        <h1>卡路里计算器</h1>
+        <p class="subtitle">kJ 到 kcal 精准换算</p>
+      </header>
+
+      <div class="mode-toggle-wrapper">
+        <button id="mode-toggle" class="mode-toggle" type="button">
+          <span class="toggle-text">kJ ➜ kcal</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="toggle-icon">
+            <path d="M7 10h14" />
+            <path d="M7 14h14" />
+            <path d="M7 10L10 7" />
+            <path d="M17 14l-3 3" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="input-group">
+        <label for="energy-input" id="energy-label">每100克能量 (kJ)</label>
+        <div class="input-wrapper">
+          <input type="number" id="energy-input" placeholder="例如: 1800" step="any" novalidate inputmode="decimal">
+          <span class="unit" id="energy-unit">kJ</span>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="weight-input">摄入重量 (克)</label>
+        <div class="input-wrapper">
+          <input type="number" id="weight-input" placeholder="例如: 150" step="any" novalidate inputmode="decimal">
+          <span class="unit">g</span>
+        </div>
+      </div>
+
+      <div class="result-card">
+        <span class="result-label">总热量</span>
+        <div class="result-value-wrapper">
+          <span id="result-value">0</span>
+          <span class="result-unit" id="result-unit">kcal</span>
+        </div>
+        <div class="formula-container" id="formula-container">
+          <p class="formula-hint">总千焦 = (输入的千焦 / 100) * 摄入重量(克)</p>
+          <p class="formula-hint">总大卡 = 总千焦 / 4.184</p>
+        </div>
+      </div>
+
+      <footer>
+        <p>Designed & Developed by <a href="https://t.me/Yukiryo" target="_blank" rel="noopener noreferrer"
+            class="author-name">雪凌Yukiryo</a></p>
+      </footer>
+    </div>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>

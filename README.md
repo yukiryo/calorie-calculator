@@ -1,5 +1,7 @@
 # 🥑 Calorie Calculator (卡路里计算器)
 
+[简体中文](./README_zh-CN.md) | [English](./README.md)
+
 A modern, minimalist web application to convert food energy values between **kJ** (Kilojoules) and **kcal** (Calories). Designed with a premium Glassmorphism UI and mobile-first approach.
 
 ✨ **Live Demo**: [https://calorie-calculator.pages.dev](https://calorie-calculator.pages.dev) (Replace with your actual URL after deployment)

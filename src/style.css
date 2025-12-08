@@ -20,6 +20,7 @@ html {
   /* Fallback */
   background: var(--bg-gradient);
   min-height: 100vh;
+  min-height: 100dvh;
   overscroll-behavior-y: none;
   /* Prevent bounce globally */
 }
@@ -29,6 +30,7 @@ body {
   /* background moved to html to cover overscroll/safearsa */
   color: var(--text-main);
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;

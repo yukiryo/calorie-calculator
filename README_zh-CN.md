@@ -2,7 +2,7 @@
 
 一个现代化的、极简的 Web 应用，用于在 **千焦 (kJ)** 和 **大卡 (kcal)** 之间进行食品热量换算。专为移动端优先设计，采用高级的毛玻璃 (Glassmorphism) UI 风格。
 
-✨ **在线演示**: [https://calorie-calculator.pages.dev](https://calorie-calculator.pages.dev) (部署后请替换为实际链接)
+✨ **在线演示**: [https://calorie-calculator-e9i.pages.dev/](https://calorie-calculator-e9i.pages.dev/)
 
 ## 🚀 功能特性
 

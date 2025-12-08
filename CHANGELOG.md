@@ -24,3 +24,6 @@
 - 使用 Vite + TypeScript 构建。
 - 配置 Cloudflare Pages 部署流程。
 - 包含完整的各种尺寸 PWA 图标。
+- [docs] 更新在线演示链接
+- [docs] 更新在线演示链接
+

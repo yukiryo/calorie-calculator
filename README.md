@@ -4,7 +4,7 @@
 
 A modern, minimalist web application to convert food energy values between **kJ** (Kilojoules) and **kcal** (Calories). Designed with a premium Glassmorphism UI and mobile-first approach.
 
-✨ **Live Demo**: [https://calorie-calculator.pages.dev](https://calorie-calculator.pages.dev) (Replace with your actual URL after deployment)
+✨ **Live Demo**: [https://calorie-calculator-e9i.pages.dev/](https://calorie-calculator-e9i.pages.dev/)
 
 ## 🚀 Features
 

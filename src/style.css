@@ -15,15 +15,27 @@
   padding: 0;
 }
 
+html {
+  background: #0f172a; /* Fallback */
+  background: var(--bg-gradient);
+  min-height: 100vh;
+}
+
 body {
   font-family: 'Outfit', system-ui, -apple-system, sans-serif;
-  background: var(--bg-gradient);
+  /* background moved to html to cover overscroll/safearsa */
   color: var(--text-main);
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: clamp(1rem, 5vw, 2rem);
+  
+  /* Safe area handling + existing padding */
+  padding-top: max(clamp(1rem, 5vw, 2rem), env(safe-area-inset-top));
+  padding-bottom: max(clamp(1rem, 5vw, 2rem), env(safe-area-inset-bottom));
+  padding-left: max(clamp(1rem, 5vw, 2rem), env(safe-area-inset-left));
+  padding-right: max(clamp(1rem, 5vw, 2rem), env(safe-area-inset-right));
+  
   overflow-x: hidden;
 }
 

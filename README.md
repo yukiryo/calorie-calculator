@@ -11,7 +11,8 @@ A modern, minimalist web application to convert food energy values between **kJ*
 - **Bidirectional Conversion**: 
   - Mode 1: Input `kJ/100g` & Weight -> Calculate Total `kcal`.
   - Mode 2: Input `kcal/100g` & Weight -> Calculate Total `kJ`.
-- **PWA Support**: Installable as a native app on iOS and Android. Offline capable.
+- **Meal Total (Grand Total)**: Add multiple items to a history list to calculate the total calorie intake for a full meal.
+- **PWA Support**: Installable as a native app on iOS and Android. Offline capable. "App-like" experience with locked scrolling (smartly enabled when content overflows).
 - **Premium UI**: Dark mode with Glassmorphism frosted glass effects.
 - **Responsive**: Fluid typography and layout that adapts to any screen size.
 - **Privacy Focused**: All calculations happen locally in your browser.

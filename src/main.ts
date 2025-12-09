@@ -98,8 +98,7 @@ function toggleMode() {
             resultUnit.textContent = "kcal";
 
             formulaContainer.innerHTML = `
-        <p class="formula-hint">总千焦 = (输入的千焦 / 100) * 摄入重量(克)</p>
-        <p class="formula-hint">总大卡 = 总千焦 / 4.184</p>
+        <p class="formula-hint">总大卡 = (每100克千焦含量 × 摄入克数) ÷ 418.4</p>
       `;
         } else {
             // Mode: kcal -> kJ
@@ -110,8 +109,7 @@ function toggleMode() {
             resultUnit.textContent = "kJ";
 
             formulaContainer.innerHTML = `
-        <p class="formula-hint">总大卡 = (输入的大卡 / 100) * 摄入重量(克)</p>
-        <p class="formula-hint">总千焦 = 总大卡 * 4.184</p>
+        <p class="formula-hint">总千焦 = (每100克大卡含量 × 摄入克数 × 4.184) ÷ 100</p>
       `;
         }
 

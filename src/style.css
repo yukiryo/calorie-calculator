@@ -17,17 +17,14 @@
 
 html {
   background: #0f172a;
-  /* Fallback */
   background: var(--bg-gradient);
   min-height: 100vh;
   min-height: 100dvh;
   overscroll-behavior-y: none;
-  /* Prevent bounce globally */
 }
 
 body {
   font-family: 'Outfit', system-ui, -apple-system, sans-serif;
-  /* background moved to html to cover overscroll/safearsa */
   color: var(--text-main);
   min-height: 100vh;
   min-height: 100dvh;
@@ -47,7 +44,6 @@ body {
 #app {
   width: 100%;
   max-width: 480px;
-  /* Increased slightly for better desktop feel */
   perspective: 1000px;
 }
 
@@ -215,7 +211,6 @@ input::placeholder {
   justify-content: center;
   gap: 0.5rem;
   flex-wrap: wrap;
-  /* Allow wrapping on very small screens */
 }
 
 #result-value {
@@ -245,7 +240,6 @@ input::placeholder {
   font-family: monospace;
   margin: 0;
   word-break: break-all;
-  /* Prevent overflow of long formula */
 }
 
 /* Action Buttons */
@@ -283,7 +277,6 @@ input::placeholder {
 .add-btn:active {
   transform: scale(0.95);
 }
-
 
 
 /* History Section */
@@ -324,7 +317,6 @@ input::placeholder {
 
 .clear-btn:hover {
   color: #ef4444;
-  /* Red */
   background: rgba(239, 68, 68, 0.1);
 }
 
@@ -401,7 +393,6 @@ input::placeholder {
 
 .grand-total {
   background: rgba(99, 102, 241, 0.15);
-  /* Primary tint */
   border: 1px solid rgba(99, 102, 241, 0.3);
   border-radius: 12px;
   padding: 1rem;
@@ -422,8 +413,7 @@ input::placeholder {
 
 
 
-/* Footer & Author */
-/* Footer & Links */
+/* Footer */
 footer {
   margin-top: clamp(1.5rem, 4vw, 2rem);
   border-top: 1px solid var(--glass-border);
@@ -507,7 +497,6 @@ footer {
   display: flex;
   flex-direction: column;
   background: rgba(30, 41, 59, 0.7);
-  /* Slightly darker for readability */
   transform: scale(0.95);
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -663,14 +652,10 @@ input[type=number] {
   }
 }
 
-/* PWA Standalone Mode - Intelligent Scrolling */
 @media all and (display-mode: standalone) {
   body {
-    /* Allow scrolling if content overflows */
     overflow-y: auto;
-    /* Prevent rubber-band effect */
     overscroll-behavior-y: none;
-    /* Ensure formatting context */
     position: relative;
     width: 100%;
     height: auto;

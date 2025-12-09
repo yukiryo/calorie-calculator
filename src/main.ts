@@ -218,7 +218,19 @@ clearBtn.addEventListener('click', clearHistory);
 
 [energyInput, weightInput].forEach(input => {
     input.addEventListener('keydown', (e) => {
-        if (e.key === '-') {
+        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'];
+
+        if (allowedKeys.includes(e.key)) return;
+        if ((e.ctrlKey || e.metaKey) && ['a', 'c', 'v', 'x', 'z'].includes(e.key.toLowerCase())) return;
+        if (e.key === '.' && !input.value.includes('.')) return;
+        if (!/^[0-9]$/.test(e.key)) {
+            e.preventDefault();
+        }
+    });
+
+    input.addEventListener('paste', (e) => {
+        const pastedData = e.clipboardData?.getData('text') || '';
+        if (!/^[0-9.]*$/.test(pastedData) || (pastedData.split('.').length - 1 > 1)) {
             e.preventDefault();
         }
     });

@@ -76,7 +76,7 @@ function updateResult(value: number) {
 function toggleMode() {
     isKjToKcal = !isKjToKcal;
 
-    // Clear inputs on toggle to avoid confusion
+
     energyInput.value = '';
     weightInput.value = '';
     updateResult(0);
@@ -200,8 +200,7 @@ function renderHistory() {
 
     totalKcalDisplay.textContent = total % 1 === 0 ? total.toString() : total.toFixed(1);
 
-    // Update total unit label if history items are mostly kJ?
-    // For now we keep the total label simple.
+
 }
 
 function deleteHistoryItem(id: number) {
@@ -234,31 +233,6 @@ const closeModalBtn = document.getElementById('close-modal-btn') as HTMLButtonEl
 const changelogContent = document.getElementById('changelog-content') as HTMLDivElement;
 
 function parseMarkdown(md: string): string {
-    // Simple parser specifically for the Changelog format
-    let html = md;
-
-    // Remove main title if present (e.g., # Changelog)
-    html = html.replace(/^#\s+.+$/gm, '');
-
-    // Convert ## [Version] to <h2>Version</h2>
-    html = html.replace(/^##\s+\[(.*?)\](.*)$/gm, '<h2>$1 $2</h2>');
-
-    // Convert ### Category to <h3>Category</h3>
-    html = html.replace(/^###\s+(.+)$/gm, '<h3>$1</h3>');
-
-    // Convert **Bold** to <strong>Bold</strong>
-    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-    // Convert - Item to <li>Item</li> and wrap in <ul> (Simplified: just style p or div as list item, or use simple replace)
-    // Converting straight to <li>. We'll wrap groups in <ul> later or rely on CSS pseudo-elements if we keep it simple.
-    // Better approach: line-by-line processing or just simple replacement.
-
-    // Let's use a simpler block visualizer since we have full control of CSS
-    html = html.replace(/^- (.*)$/gm, '<li>$1</li>');
-
-    // Wrap <li> in <ul> (Naive approach: if we see <li>, wrapping might be tricky with regex globally. 
-    // Let's just make <li> display block-like for simplicity or do a split)
-    // Actually, standard regex for wrapping lists is hard. Let's iterate lines.
 
     const lines = md.split('\n');
     let output = '';
@@ -271,12 +245,11 @@ function parseMarkdown(md: string): string {
             return;
         }
 
-        if (line.startsWith('# ')) return; // Skip H1
+        if (line.startsWith('# ')) return;
 
         if (line.startsWith('## ')) {
             if (inList) { output += '</ul>'; inList = false; }
-            const content = line.replace('## [', '').replace(']', ''); // Simplify version
-            // Remove date dash if needed, or keep it.
+            const content = line.replace('## [', '').replace(']', '');
             output += `<h2>${content.replace(/^#+\s*/, '')}</h2>`;
         } else if (line.startsWith('### ')) {
             if (inList) { output += '</ul>'; inList = false; }
@@ -289,8 +262,6 @@ function parseMarkdown(md: string): string {
             output += `<li>${content}</li>`;
         } else {
             if (inList) { output += '</ul>'; inList = false; }
-            // Normal text
-            // output += `<p>${line}</p>`;
         }
     });
     if (inList) output += '</ul>';
@@ -301,7 +272,7 @@ function parseMarkdown(md: string): string {
 function openModal() {
     changelogContent.innerHTML = parseMarkdown(changelogRaw);
     changelogModal.classList.remove('hidden');
-    // Start animation
+
     requestAnimationFrame(() => {
         changelogModal.classList.add('active');
     });
@@ -311,13 +282,13 @@ function closeModal() {
     changelogModal.classList.remove('active');
     setTimeout(() => {
         changelogModal.classList.add('hidden');
-    }, 300); // Wait for transition
+    }, 300);
 }
 
 changelogBtn.addEventListener('click', openModal);
 closeModalBtn.addEventListener('click', closeModal);
 
-// Close on click outside
+
 changelogModal.addEventListener('click', (e) => {
     if (e.target === changelogModal) {
         closeModal();

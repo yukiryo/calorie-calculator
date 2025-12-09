@@ -284,33 +284,202 @@ input::placeholder {
   transform: scale(0.95);
 }
 
-.shake {
-  animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both;
+
+
+/* History Section */
+.history-section {
+  margin-top: 2rem;
+  border-top: 1px solid var(--glass-border);
+  padding-top: 1.5rem;
+  animation: floatIn 0.3s ease-out;
 }
 
-@keyframes shake {
-
-  10%,
-  90% {
-    transform: translate3d(-1px, 0, 0);
-  }
-
-  20%,
-  80% {
-    transform: translate3d(2px, 0, 0);
-  }
-
-  30%,
-  50%,
-  70% {
-    transform: translate3d(-4px, 0, 0);
-  }
-
-  40%,
-  60% {
-    transform: translate3d(4px, 0, 0);
-  }
+.history-section.hidden {
+  display: none;
 }
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.history-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.clear-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.clear-btn:hover {
+  color: #ef4444;
+  /* Red */
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.history-list {
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  padding-right: 0.5rem;
+  /* Space for scrollbar */
+}
+
+/* Custom Scrollbar */
+.history-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  animation: floatIn 0.3s ease-out backwards;
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  text-align: left;
+}
+
+.item-weight {
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.item-energy {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.item-result {
+  font-weight: 700;
+  color: var(--secondary-color);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.delete-item-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.delete-item-btn:hover {
+  opacity: 1;
+  color: #ef4444;
+}
+
+.grand-total {
+  background: rgba(99, 102, 241, 0.15);
+  /* Primary tint */
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.5rem;
+  color: white;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.grand-total span:nth-child(2) {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--primary-color);
+}
+
+/* Footer & Author */
+footer {
+  margin-top: clamp(1.5rem, 4vw, 2rem);
+  text-align: center;
+  border-top: 1px solid var(--glass-border);
+  padding-top: clamp(1rem, 3vw, 1.5rem);
+}
+
+footer p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.author-name {
+  background: linear-gradient(to right, #818cf8, #c084fc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+  display: inline-block;
+  /* Better for hover effect on links */
+}
+
+justify-content: center;
+}
+
+.action-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.add-btn {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+.add-btn:hover {
+  background: rgba(99, 102, 241, 0.4);
+  transform: translateY(-2px);
+}
+
+.add-btn:active {
+  transform: scale(0.95);
+}
+
+
 
 /* History Section */
 .history-section {
@@ -478,6 +647,34 @@ footer p {
 }
 
 /* Animations */
+.shake {
+  animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+@keyframes shake {
+
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
 @keyframes floatIn {
   to {
     opacity: 1;
@@ -516,11 +713,11 @@ input[type=number] {
 @media all and (display-mode: standalone) {
   body {
     /* Allow scrolling if content overflows */
-    overflow-y: auto; 
+    overflow-y: auto;
     /* Prevent rubber-band effect */
     overscroll-behavior-y: none;
     /* Ensure formatting context */
-    position: relative; 
+    position: relative;
     width: 100%;
     height: auto;
     min-height: 100dvh;

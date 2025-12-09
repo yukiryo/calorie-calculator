@@ -226,3 +226,102 @@ clearBtn.addEventListener('click', clearHistory);
         }
     });
 });
+
+// Changelog Logic
+import changelogRaw from '../CHANGELOG.md?raw';
+
+const changelogBtn = document.getElementById('changelog-btn') as HTMLButtonElement;
+const changelogModal = document.getElementById('changelog-modal') as HTMLDivElement;
+const closeModalBtn = document.getElementById('close-modal-btn') as HTMLButtonElement;
+const changelogContent = document.getElementById('changelog-content') as HTMLDivElement;
+
+function parseMarkdown(md: string): string {
+    // Simple parser specifically for the Changelog format
+    let html = md;
+
+    // Remove main title if present (e.g., # Changelog)
+    html = html.replace(/^#\s+.+$/gm, '');
+
+    // Convert ## [Version] to <h2>Version</h2>
+    html = html.replace(/^##\s+\[(.*?)\](.*)$/gm, '<h2>$1 $2</h2>');
+
+    // Convert ### Category to <h3>Category</h3>
+    html = html.replace(/^###\s+(.+)$/gm, '<h3>$1</h3>');
+
+    // Convert **Bold** to <strong>Bold</strong>
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+    // Convert - Item to <li>Item</li> and wrap in <ul> (Simplified: just style p or div as list item, or use simple replace)
+    // Converting straight to <li>. We'll wrap groups in <ul> later or rely on CSS pseudo-elements if we keep it simple.
+    // Better approach: line-by-line processing or just simple replacement.
+
+    // Let's use a simpler block visualizer since we have full control of CSS
+    html = html.replace(/^- (.*)$/gm, '<li>$1</li>');
+
+    // Wrap <li> in <ul> (Naive approach: if we see <li>, wrapping might be tricky with regex globally. 
+    // Let's just make <li> display block-like for simplicity or do a split)
+    // Actually, standard regex for wrapping lists is hard. Let's iterate lines.
+
+    const lines = md.split('\n');
+    let output = '';
+    let inList = false;
+
+    lines.forEach(line => {
+        line = line.trim();
+        if (!line) {
+            if (inList) { output += '</ul>'; inList = false; }
+            return;
+        }
+
+        if (line.startsWith('# ')) return; // Skip H1
+
+        if (line.startsWith('## ')) {
+            if (inList) { output += '</ul>'; inList = false; }
+            const content = line.replace('## [', '').replace(']', ''); // Simplify version
+            // Remove date dash if needed, or keep it.
+            output += `<h2>${content.replace(/^#+\s*/, '')}</h2>`;
+        } else if (line.startsWith('### ')) {
+            if (inList) { output += '</ul>'; inList = false; }
+            output += `<h3>${line.replace('### ', '')}</h3>`;
+        } else if (line.startsWith('- ')) {
+            if (!inList) { output += '<ul>'; inList = true; }
+            let content = line.replace('- ', '');
+            content = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            content = content.replace(/`([^`]+)`/g, '<code>$1</code>');
+            output += `<li>${content}</li>`;
+        } else {
+            if (inList) { output += '</ul>'; inList = false; }
+            // Normal text
+            // output += `<p>${line}</p>`;
+        }
+    });
+    if (inList) output += '</ul>';
+
+    return output;
+}
+
+function openModal() {
+    changelogContent.innerHTML = parseMarkdown(changelogRaw);
+    changelogModal.classList.remove('hidden');
+    // Start animation
+    requestAnimationFrame(() => {
+        changelogModal.classList.add('active');
+    });
+}
+
+function closeModal() {
+    changelogModal.classList.remove('active');
+    setTimeout(() => {
+        changelogModal.classList.add('hidden');
+    }, 300); // Wait for transition
+}
+
+changelogBtn.addEventListener('click', openModal);
+closeModalBtn.addEventListener('click', closeModal);
+
+// Close on click outside
+changelogModal.addEventListener('click', (e) => {
+    if (e.target === changelogModal) {
+        closeModal();
+    }
+});

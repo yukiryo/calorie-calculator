@@ -93,9 +93,26 @@
       </div>
 
       <footer>
-        <p>Designed & Developed by <a href="https://t.me/Yukiryo" target="_blank" rel="noopener noreferrer"
-            class="author-name">雪凌Yukiryo</a></p>
+        <div class="footer-links">
+          <button id="changelog-btn" class="text-btn">更新日志</button>
+          <span class="divider">|</span>
+          <p>Designed by <a href="https://t.me/Yukiryo" target="_blank" rel="noopener noreferrer"
+              class="author-name">雪凌Yukiryo</a></p>
+        </div>
       </footer>
+    </div>
+
+    <!-- Changelog Modal -->
+    <div id="changelog-modal" class="modal hidden">
+      <div class="modal-content glass-container">
+        <div class="modal-header">
+          <h2>更新日志</h2>
+          <button id="close-modal-btn" class="close-btn" aria-label="关闭">×</button>
+        </div>
+        <div id="changelog-content" class="markdown-body">
+          <!-- Content will be injected here -->
+        </div>
+      </div>
     </div>
   </div>
   <script type="module" src="/src/main.ts"></script>

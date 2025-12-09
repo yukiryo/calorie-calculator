@@ -58,9 +58,36 @@
           <span id="result-value">0</span>
           <span class="result-unit" id="result-unit">kcal</span>
         </div>
+
+        <div class="action-buttons">
+          <button id="add-btn" class="action-btn add-btn" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            加入记录
+          </button>
+        </div>
+
         <div class="formula-container" id="formula-container">
           <p class="formula-hint">总千焦 = (输入的千焦 / 100) * 摄入重量(克)</p>
           <p class="formula-hint">总大卡 = 总千焦 / 4.184</p>
+        </div>
+      </div>
+
+      <div class="history-section hidden" id="history-section">
+        <div class="history-header">
+          <h3>本次记录</h3>
+          <button id="clear-btn" class="clear-btn" type="button">清空</button>
+        </div>
+        <ul id="history-list" class="history-list">
+          <!-- History items will be injected here -->
+        </ul>
+        <div class="grand-total">
+          <span>总计:</span>
+          <span id="total-kcal">0</span>
+          <span class="unit-small">kcal</span>
         </div>
       </div>
 

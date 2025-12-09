@@ -13,6 +13,11 @@
 - 移除 `main.ts` 中约30行冗余注释和废弃代码。
 - 移除 `style.css` 中15处重复注释。
 
+### ⚡ 代码优化
+- 重构 `main.ts`：提取模式配置为 `MODE_CONFIG` 常量对象，简化 `toggleMode` 函数。
+- 简化 `calculate` 函数，使用三元运算符替代 if-else。
+- 移动 import 语句到文件顶部。
+
 ## [1.0.3] - 2025-12-09
 
 ### ✨ 新增功能 (Features)

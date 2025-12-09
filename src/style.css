@@ -512,12 +512,17 @@ input[type=number] {
   }
 }
 
-/* PWA Standalone Mode - Prevent Scrolling */
+/* PWA Standalone Mode - Intelligent Scrolling */
 @media all and (display-mode: standalone) {
   body {
-    overflow: hidden;
-    position: fixed;
+    /* Allow scrolling if content overflows */
+    overflow-y: auto; 
+    /* Prevent rubber-band effect */
+    overscroll-behavior-y: none;
+    /* Ensure formatting context */
+    position: relative; 
     width: 100%;
-    height: 100%;
+    height: auto;
+    min-height: 100dvh;
   }
 }

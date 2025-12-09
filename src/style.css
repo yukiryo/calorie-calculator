@@ -333,8 +333,6 @@ input::placeholder {
   max-height: 200px;
   overflow-y: auto;
   margin-bottom: 1rem;
-  padding-right: 0.5rem;
-  /* Space for scrollbar */
 }
 
 /* Custom Scrollbar */

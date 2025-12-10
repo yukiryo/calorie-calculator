@@ -225,20 +225,21 @@ input {
 .drawer-content {
   position: absolute;
   bottom: 0;
-  left: 0;
+  left: 50%;
   width: 100%;
+  max-width: 480px;
   max-height: 80vh;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   padding: 1.5rem;
-  transform: translateY(100%);
+  transform: translateX(-50%) translateY(100%);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
 }
 
 .drawer-overlay.active .drawer-content {
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
 }
 
 .drawer-header {

@@ -642,8 +642,8 @@ input::placeholder {
 }
 
 .action-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid var(--glass-border);
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border: none;
   color: white;
   padding: 0.6rem 1.2rem;
   border-radius: 12px;
@@ -654,11 +654,22 @@ input::placeholder {
   align-items: center;
   gap: 0.5rem;
   transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+  filter: brightness(1.1);
+}
+
+/* Remove old add-btn specific styles if they conflict or use them as secondary? 
+   Actually add-btn was just an overlay. Let's keep it safe. */
 .add-btn {
   background: rgba(99, 102, 241, 0.2);
-  border-color: rgba(99, 102, 241, 0.4);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  box-shadow: none;
+  /* Reset shadow for secondary action if needed */
 }
 
 .add-btn:hover {
@@ -1043,7 +1054,18 @@ footer {
   text-align: center;
   font-size: 1.1rem;
   padding: 1rem;
-  /* Override generic input padding to ensure centering */
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  color: white;
+  transition: all 0.3s;
+}
+
+.prompt-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+  background: rgba(15, 23, 42, 0.6);
+  outline: none;
 }
 
 .prompt-actions {

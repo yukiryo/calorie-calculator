@@ -47,19 +47,19 @@ const KJ_TO_KCAL = 4.184;
 const MODE_CONFIG = {
     kjToKcal: {
         toggleText: 'kJ ➜ kcal',
-        label: '每100克能量 (kJ)',
+        label: '每100g能量 (kJ)',
         unit: 'kJ',
         placeholder: '例如: 1800',
         resultUnit: 'kcal',
-        formula: '<p class="formula-hint">总大卡 = (每100克千焦含量 × 摄入克数) ÷ 418.4</p>'
+        formula: '<p class="formula-hint">总kcal = (每100g kJ含量 × 摄入g数) ÷ 418.4</p>'
     },
     kcalToKj: {
         toggleText: 'kcal ➜ kJ',
-        label: '每100克热量 (kcal)',
+        label: '每100g热量 (kcal)',
         unit: 'kcal',
         placeholder: '例如: 400',
         resultUnit: 'kJ',
-        formula: '<p class="formula-hint">总千焦 = (每100克大卡含量 × 摄入克数 × 4.184) ÷ 100</p>'
+        formula: '<p class="formula-hint">总kJ = (每100g kcal含量 × 摄入g数 × 4.184) ÷ 100</p>'
     }
 };
 

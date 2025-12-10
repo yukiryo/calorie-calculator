@@ -204,15 +204,58 @@ function deleteHistoryItem(id: number) {
     renderHistory();
 }
 
+// Custom Prompt Logic
+const customPromptModal = document.getElementById('custom-prompt-modal') as HTMLDivElement;
+const promptInput = document.getElementById('prompt-input') as HTMLInputElement;
+const promptCancelBtn = document.getElementById('prompt-cancel-btn') as HTMLButtonElement;
+const promptConfirmBtn = document.getElementById('prompt-confirm-btn') as HTMLButtonElement;
+
+function showCustomPrompt(): Promise<string | null> {
+    return new Promise((resolve) => {
+        promptInput.value = '';
+        customPromptModal.classList.remove('hidden');
+        requestAnimationFrame(() => {
+            promptInput.focus();
+        });
+
+        const handleConfirm = () => {
+            const value = promptInput.value;
+            cleanup();
+            resolve(value);
+        };
+
+        const handleCancel = () => {
+            cleanup();
+            resolve(null);
+        };
+
+        const handleKeydown = (e: KeyboardEvent) => {
+            if (e.key === 'Enter') handleConfirm();
+            if (e.key === 'Escape') handleCancel();
+        };
+
+        const cleanup = () => {
+            customPromptModal.classList.add('hidden');
+            promptConfirmBtn.removeEventListener('click', handleConfirm);
+            promptCancelBtn.removeEventListener('click', handleCancel);
+            promptInput.removeEventListener('keydown', handleKeydown);
+        };
+
+        promptConfirmBtn.addEventListener('click', handleConfirm);
+        promptCancelBtn.addEventListener('click', handleCancel);
+        promptInput.addEventListener('keydown', handleKeydown);
+    });
+}
+
 // Saved Foods Functions
-function saveFood() {
+async function saveFood() {
     const energy = parseFloat(energyInput.value);
     if (isNaN(energy)) {
         alert('请先输入有效的能量值');
         return;
     }
 
-    const name = prompt('请输入食品名称 (例如: 鸡胸肉):');
+    const name = await showCustomPrompt();
     if (!name || !name.trim()) return;
 
     const newFood: SavedFood = {

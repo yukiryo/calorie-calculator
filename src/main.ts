@@ -894,9 +894,21 @@ authSubmitBtn.addEventListener('click', async () => {
 });
 
 // Logout
+// Logout
 logoutBtn.addEventListener('click', async () => {
-    await Supa.logout();
-    // Subscription handles UI updates
+    logoutBtn.disabled = true;
+    logoutBtn.textContent = '注销中...';
+    try {
+        await Supa.logout();
+        updateCloudUIState(false); // Force UI update immediately
+        await showCustomAlert('已安全注销。');
+    } catch (e: any) {
+        console.error(e);
+        await showCustomAlert('注销失败，请重试');
+    } finally {
+        logoutBtn.disabled = false;
+        logoutBtn.textContent = '注销登录';
+    }
 });
 
 manualSyncBtn.addEventListener('click', async () => {

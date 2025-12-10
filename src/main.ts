@@ -302,6 +302,43 @@ function showCustomConfirm(message: string): Promise<boolean> {
     });
 }
 
+// Custom Alert Logic
+const customAlertModal = document.getElementById('custom-alert-modal') as HTMLDivElement;
+const alertMessage = document.getElementById('alert-message') as HTMLParagraphElement;
+const alertOkBtn = document.getElementById('alert-ok-btn') as HTMLButtonElement;
+
+function showCustomAlert(message: string): Promise<void> {
+    return new Promise((resolve) => {
+        alertMessage.textContent = message;
+        customAlertModal.classList.remove('hidden');
+        requestAnimationFrame(() => {
+            customAlertModal.classList.add('active');
+            alertOkBtn.focus();
+        });
+
+        const handleOk = () => {
+            cleanup();
+            resolve();
+        };
+
+        const handleKeydown = (e: KeyboardEvent) => {
+            if (e.key === 'Enter' || e.key === 'Escape') handleOk();
+        };
+
+        const cleanup = () => {
+            customAlertModal.classList.remove('active');
+            setTimeout(() => {
+                customAlertModal.classList.add('hidden');
+            }, 300);
+            alertOkBtn.removeEventListener('click', handleOk);
+            document.removeEventListener('keydown', handleKeydown);
+        };
+
+        alertOkBtn.addEventListener('click', handleOk);
+        document.addEventListener('keydown', handleKeydown);
+    });
+}
+
 // Drawer Logic
 const foodDrawer = document.getElementById('food-drawer') as HTMLDivElement;
 const openDrawerBtn = document.getElementById('open-drawer-btn') as HTMLButtonElement;
@@ -384,7 +421,7 @@ foodDrawer.addEventListener('click', (e) => {
 async function saveFood() {
     const energy = parseFloat(energyInput.value);
     if (isNaN(energy)) {
-        alert('请先输入有效的能量值');
+        await showCustomAlert('请先输入有效的能量值');
         return;
     }
 
@@ -488,16 +525,16 @@ function showEditFoodModal(food: SavedFood) {
         nameInput.focus();
     });
 
-    const handleSave = () => {
+    const handleSave = async () => {
         const newName = nameInput.value.trim();
         const newEnergy = parseFloat(energyInput.value);
 
         if (!newName) {
-            alert('请输入食品名称');
+            await showCustomAlert('请输入食品名称');
             return;
         }
         if (isNaN(newEnergy)) {
-            alert('请输入有效的能量值');
+            await showCustomAlert('请输入有效的能量值');
             return;
         }
 

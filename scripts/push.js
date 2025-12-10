@@ -61,41 +61,51 @@ async function main() {
             console.log(`✅ 版本号已更新为: ${version}`);
         }
 
-        // 更新 CHANGELOG.md
-        let changelogContent = fs.existsSync(changelogPath) ? fs.readFileSync(changelogPath, 'utf-8') : '# 更新日志 (Changelog)\n\n';
+        const updateChangelog = (await question('📝 是否自动更新 CHANGELOG.md? (y/n) [默认: y]: ')).toLowerCase() !== 'n';
 
-        const date = getTodayDate();
-        const header = `## [${version}] - ${date}`;
+        if (updateChangelog) {
+            // 更新 CHANGELOG.md
+            let changelogContent = fs.existsSync(changelogPath) ? fs.readFileSync(changelogPath, 'utf-8') : '# 更新日志 (Changelog)\n\n';
 
-        // 简单的日志插入逻辑：如果今天已经有条目，插入到对应类型下；否则创建新区块
-        // 为了简化，我们只简单地插到文件顶部（在 header 之后）
-        // 或者更简单：每次总是创建新条目，用户可以手动整理。
-        // 这里采用策略：总是创建新的头部，如果存在相同头部则复用（需要简单解析）
+            const date = getTodayDate();
+            const header = `## [${version}] - ${date}`;
 
-        let newEntry = '';
-        if (!changelogContent.includes(header)) {
-            newEntry = `\n${header}\n\n### ${type}\n- ${message}\n`;
-            // 找到第一个 '## [' 之前插入，或者直接追加到文件头（跳过第一行标题）
-            const lines = changelogContent.split('\n');
-            const versionLineIndex = lines.findIndex((l, i) => i > 0 && l.startsWith('## ['));
-
-            if (versionLineIndex !== -1) {
-                lines.splice(versionLineIndex, 0, newEntry.trim() + '\n');
-                changelogContent = lines.join('\n');
+            // Check if message already exists to verify duplicates
+            if (changelogContent.includes(message)) {
+                console.log('⚠️  日志中已包含该提交信息，跳过写入。');
             } else {
-                changelogContent += newEntry;
+                if (!changelogContent.includes(header)) {
+                    let newEntry = `\n${header}\n\n### ${type}\n- ${message}\n`;
+                    // 找到第一个 '## [' 之前插入，或者直接追加到文件头（跳过第一行标题）
+                    const lines = changelogContent.split('\n');
+                    const versionLineIndex = lines.findIndex((l, i) => i > 0 && l.startsWith('## ['));
+
+                    if (versionLineIndex !== -1) {
+                        lines.splice(versionLineIndex, 0, newEntry.trim() + '\n');
+                        changelogContent = lines.join('\n');
+                    } else {
+                        changelogContent += newEntry;
+                    }
+                } else {
+                    // 已存在今天的版本头，尝试追加到对应类型
+                    // 简单追加到该版本区块紧接着的一行
+                    const regex = new RegExp(`(## \\[${version}\\] - ${date}[\\s\\S]*?)(\\n## \\[|$)`);
+                    changelogContent = changelogContent.replace(regex, (match, p1, p2) => {
+                        // Check if the type section exists
+                        if (p1.includes(`### ${type}`)) {
+                            return p1.replace(`### ${type}`, `### ${type}\n- ${message}`) + (p2 || '');
+                        } else {
+                            // add new type section
+                            return `${p1.trim()}\n\n### ${type}\n- ${message}\n\n${p2 || ''}`;
+                        }
+                    });
+                }
+                fs.writeFileSync(changelogPath, changelogContent);
+                console.log('✅ CHANGELOG.md 已更新');
             }
         } else {
-            // 已存在今天的版本头，尝试追加到对应类型
-            // 这里的正则匹配比较复杂，为防出错，简单追加到该版本区块紧接着的一行
-            const regex = new RegExp(`(## \\[${version}\\] - ${date}[\\s\\S]*?)(\\n## \\[|$)`);
-            changelogContent = changelogContent.replace(regex, (match, p1, p2) => {
-                return `${p1.trim()}\n- [${type}] ${message}\n\n${p2 || ''}`;
-            });
+            console.log('⏩ 跳过 CHANGELOG.md 更新');
         }
-
-        fs.writeFileSync(changelogPath, changelogContent);
-        console.log('✅ CHANGELOG.md 已更新');
 
         // 4. 执行 Git 命令
         console.log('📦 执行 Git 提交...');

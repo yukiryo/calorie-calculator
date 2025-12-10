@@ -1099,7 +1099,7 @@ footer {
 }
 
 .prompt-btn.confirm {
-  background: var(--primary-color);
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   color: white;
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
 }

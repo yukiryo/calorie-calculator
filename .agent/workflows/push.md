@@ -4,31 +4,23 @@ description: 推送代码时同步更新 CHANGELOG
 
 # 推送代码工作流
 
-每次推送代码更改时，必须同步更新 `CHANGELOG.md`：
+推荐使用自动化脚本进行推送，它会自动处理 CHANGELOG 和版本号。
 
-## 步骤
+## 自动化步骤
 
-1. 完成代码更改
-2. 更新 `CHANGELOG.md`：
-   - **版本号判断**：根据变动的大小和性质自行判断是否需要增加版本号或开始新的版本（如 `## [1.0.5] - 日期`），或者合并到当前版本。
-   - 根据更改类型添加内容：
-     - `### ✨ 新增功能 (Features)` - 新功能
-     - `### 🐛 修复 (Fixes)` - Bug 修复
-     - `### 💄 样式优化` - UI/样式更改
-     - `### 🧹 代码清理` - 重构/清理
-     - `### 🔧 工程化` - 构建/配置更改
-3. 提交所有更改（包括 CHANGELOG.md）
-4. 推送到远程仓库
+1. 在终端运行：
+   ```bash
+   node scripts/push.js
+   ```
+2. 按照提示输入：
+   - 提交信息 (Commit Message)
+   - 变更类型 (Type)
+   - 是否升级版本号 (y/n)
+   - **(新)** 是否自动更新 CHANGELOG (y/n) - *如果手动编辑过日志，请选 n*
 
-## 示例提交命令
+## 手动步骤 (如果不使用脚本)
 
-```bash
-git add .
-git commit -m "feat: 新功能描述"
-# 或分开提交
-git add src/
-git commit -m "feat: 新功能描述"
-git add CHANGELOG.md
-git commit -m "docs: Update CHANGELOG for vX.X.X"
-git push
-```
+1. 更新 `CHANGELOG.md`
+2. `git add .`
+3. `git commit -m "type: message"`
+4. `git push`

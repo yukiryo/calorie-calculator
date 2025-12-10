@@ -365,20 +365,31 @@ function renderSavedFoods() {
     savedFoods.forEach(food => {
         const chip = document.createElement('div');
         chip.className = 'food-chip';
+        // Add edit button before delete button
         chip.innerHTML = `
             <span>${food.name}</span>
             <span class="chip-energy">${food.energy}</span>
-            <button class="delete-chip-btn" aria-label="删除食品">×</button>
+            <div style="margin-left: auto; display: flex; align-items: center;">
+                 <button class="edit-chip-btn" aria-label="编辑食品">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                </button>
+                <button class="delete-chip-btn" aria-label="删除食品">×</button>
+            </div>
         `;
 
-        chip.addEventListener('click', () => {
-            // If units mismatch, maybe warn or convert? For now we assumes user knows context or inputs raw number
-            // But actually isKjToKcal mode might change. 
-            // Ideally we should store unit and check against current mode, or just fill the number.
-            // Let's just fill the number for simplicity as per plan "Apply energy value".
+        chip.addEventListener('click', (e) => {
+            // Prevent triggering if clicking buttons
+            if ((e.target as HTMLElement).closest('button')) return;
+
             energyInput.value = food.energy.toString();
             calculate();
             closeDrawer();
+        });
+
+        const editBtn = chip.querySelector('.edit-chip-btn') as HTMLButtonElement;
+        editBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showEditFoodModal(food);
         });
 
         const deleteBtn = chip.querySelector('.delete-chip-btn') as HTMLButtonElement;
@@ -389,6 +400,62 @@ function renderSavedFoods() {
 
         savedFoodsGrid.appendChild(chip);
     });
+}
+
+function showEditFoodModal(food: SavedFood) {
+    const modal = document.getElementById('custom-edit-modal') as HTMLDivElement;
+    const nameInput = document.getElementById('edit-name-input') as HTMLInputElement;
+    const energyInput = document.getElementById('edit-energy-input') as HTMLInputElement;
+    const cancelBtn = document.getElementById('edit-cancel-btn') as HTMLButtonElement;
+    const saveBtn = document.getElementById('edit-save-btn') as HTMLButtonElement;
+
+    nameInput.value = food.name;
+    energyInput.value = food.energy.toString();
+
+    modal.classList.remove('hidden');
+    requestAnimationFrame(() => {
+        modal.classList.add('active');
+        nameInput.focus();
+    });
+
+    const handleSave = () => {
+        const newName = nameInput.value.trim();
+        const newEnergy = parseFloat(energyInput.value);
+
+        if (!newName) {
+            alert('请输入食品名称');
+            return;
+        }
+        if (isNaN(newEnergy)) {
+            alert('请输入有效的能量值');
+            return;
+        }
+
+        // Update food object
+        food.name = newName;
+        food.energy = newEnergy;
+
+        // Save to local storage
+        localStorage.setItem('savedFoods', JSON.stringify(savedFoods));
+        renderSavedFoods();
+        cleanup();
+    };
+
+    const handleCancel = () => {
+        cleanup();
+    };
+
+    const cleanup = () => {
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+        saveBtn.removeEventListener('click', handleSave);
+        cancelBtn.removeEventListener('click', handleCancel);
+    };
+
+    saveBtn.addEventListener('click', handleSave);
+    cancelBtn.addEventListener('click', handleCancel);
 }
 
 async function deleteSavedFood(id: number) {

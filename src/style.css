@@ -324,6 +324,25 @@ input {
   align-items: center;
 }
 
+.edit-chip-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  opacity: 0.5;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 0.2rem;
+  font-size: 0.9rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+
+.edit-chip-btn:hover {
+  opacity: 1;
+  color: var(--primary-color);
+}
+
 .delete-chip-btn:hover {
   opacity: 1;
   color: #ef4444;

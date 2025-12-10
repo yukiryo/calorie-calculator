@@ -328,6 +328,7 @@ function renderSavedFoods() {
             // Let's just fill the number for simplicity as per plan "Apply energy value".
             energyInput.value = food.energy.toString();
             calculate();
+            closeDrawer();
         });
 
         const deleteBtn = chip.querySelector('.delete-chip-btn') as HTMLButtonElement;

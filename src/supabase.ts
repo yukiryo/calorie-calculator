@@ -71,7 +71,13 @@ export async function login(email: string, password: string) {
 
 export async function signUp(email: string, password: string) {
     if (!supabase) throw new Error('Not connected to Supabase');
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+            emailRedirectTo: window.location.origin
+        }
+    });
     if (error) throw error;
     // Critical fix: If confirm email is on, session will be null.
     // We should not set currentUser if there is no session, or UI will think we are logged in.

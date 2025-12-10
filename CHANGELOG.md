@@ -1,5 +1,10 @@
 # 更新日志 (Changelog)
 
+## [1.0.6] - 2025-12-10
+
+### fix
+- fix: disable autocomplete on inputs and correct auth redirect
+
 ## [1.0.5] - 2025-12-10
 
 ### ✨ 新增功能 (Features)

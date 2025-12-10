@@ -1,5 +1,10 @@
 # 更新日志 (Changelog)
 
+## [1.0.7] - 2025-12-10
+
+### fix
+- fix: close cloud settings modal after successful login
+
 ## [1.0.6] - 2025-12-10
 
 ### fix

@@ -813,15 +813,18 @@ authSubmitBtn.addEventListener('click', async () => {
             await Supa.login(email, password);
             alert('登录成功！');
             closeAuthModal();
+            closeCloudSettings(); // Close the settings modal too
             // UI update handled by subscription
         } else {
             const data = await Supa.signUp(email, password);
             if (data.user && !data.session) {
                 alert('注册成功！请务必查收邮件并点击验证链接，否则无法登录。');
                 closeAuthModal();
+                closeCloudSettings(); // Close the settings modal too
             } else {
                 alert('注册并登录成功！');
                 closeAuthModal();
+                closeCloudSettings(); // Close the settings modal too
             }
         }
     } catch (e: any) {

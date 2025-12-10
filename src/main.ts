@@ -189,18 +189,20 @@ function renderHistory() {
 
         // Add delete event
         const deleteBtn = li.querySelector('.delete-item-btn') as HTMLButtonElement;
-        deleteBtn.addEventListener('click', (e) => {
+        deleteBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
-            deleteHistoryItem(item.id);
+            await deleteHistoryItem(item.id);
         });
     });
 
     totalKcalDisplay.textContent = total % 1 === 0 ? total.toString() : total.toFixed(1);
 }
 
-function deleteHistoryItem(id: number) {
-    history = history.filter(item => item.id !== id);
-    renderHistory();
+async function deleteHistoryItem(id: number) {
+    if (await showCustomConfirm('确定要删除这条记录吗？')) {
+        history = history.filter(item => item.id !== id);
+        renderHistory();
+    }
 }
 
 // Custom Prompt Logic
@@ -251,6 +253,54 @@ function showCustomPrompt(): Promise<string | null> {
     });
 }
 
+
+// Custom Confirm Logic
+const customConfirmModal = document.getElementById('custom-confirm-modal') as HTMLDivElement;
+const confirmMessage = document.getElementById('confirm-message') as HTMLParagraphElement;
+const confirmCancelBtn = document.getElementById('confirm-cancel-btn') as HTMLButtonElement;
+const confirmYesBtn = document.getElementById('confirm-yes-btn') as HTMLButtonElement;
+
+function showCustomConfirm(message: string): Promise<boolean> {
+    return new Promise((resolve) => {
+        confirmMessage.textContent = message;
+        customConfirmModal.classList.remove('hidden');
+        requestAnimationFrame(() => {
+            customConfirmModal.classList.add('active');
+            confirmYesBtn.focus();
+        });
+
+        const handleConfirm = () => {
+            cleanup();
+            resolve(true);
+        };
+
+        const handleCancel = () => {
+            cleanup();
+            resolve(false);
+        };
+
+        const handleKeydown = (e: KeyboardEvent) => {
+            if (e.key === 'Enter') handleConfirm();
+            if (e.key === 'Escape') handleCancel();
+        };
+
+        const cleanup = () => {
+            customConfirmModal.classList.remove('active');
+            setTimeout(() => {
+                customConfirmModal.classList.add('hidden');
+            }, 300);
+
+            confirmYesBtn.removeEventListener('click', handleConfirm);
+            confirmCancelBtn.removeEventListener('click', handleCancel);
+            document.removeEventListener('keydown', handleKeydown);
+        };
+
+        confirmYesBtn.addEventListener('click', handleConfirm);
+        confirmCancelBtn.addEventListener('click', handleCancel);
+        document.addEventListener('keydown', handleKeydown);
+    });
+}
+
 // Drawer Logic
 const foodDrawer = document.getElementById('food-drawer') as HTMLDivElement;
 const openDrawerBtn = document.getElementById('open-drawer-btn') as HTMLButtonElement;
@@ -298,7 +348,7 @@ async function saveFood() {
 
     savedFoods.unshift(newFood);
     // Limit to 20 items
-    if (savedFoods.length > 20) savedFoods.pop();
+    if (savedFoods.length > 50) savedFoods.pop();
 
     localStorage.setItem('savedFoods', JSON.stringify(savedFoods));
     renderSavedFoods();
@@ -332,17 +382,17 @@ function renderSavedFoods() {
         });
 
         const deleteBtn = chip.querySelector('.delete-chip-btn') as HTMLButtonElement;
-        deleteBtn.addEventListener('click', (e) => {
+        deleteBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
-            deleteSavedFood(food.id);
+            await deleteSavedFood(food.id);
         });
 
         savedFoodsGrid.appendChild(chip);
     });
 }
 
-function deleteSavedFood(id: number) {
-    if (confirm('确定要删除这个常用食品吗？')) {
+async function deleteSavedFood(id: number) {
+    if (await showCustomConfirm('确定要删除这个常用食品吗？')) {
         savedFoods = savedFoods.filter(f => f.id !== id);
         localStorage.setItem('savedFoods', JSON.stringify(savedFoods));
         renderSavedFoods();

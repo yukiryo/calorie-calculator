@@ -800,6 +800,12 @@ footer {
   font-size: 1.2rem;
 }
 
+.prompt-btn.delete-confirm:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+}
+
 .prompt-input {
   width: 100%;
   margin-bottom: 1.5rem;

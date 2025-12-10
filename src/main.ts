@@ -51,7 +51,7 @@ const MODE_CONFIG = {
         unit: 'kJ',
         placeholder: '例如: 1800',
         resultUnit: 'kcal',
-        formula: '<p class="formula-hint">Total (kcal) = (kJ/100g × g) ÷ 418.4</p>'
+        formula: '<p class="formula-hint">Total kcal = (kJ/100g × Weight) ÷ 418.4</p>'
     },
     kcalToKj: {
         toggleText: 'kcal ➜ kJ',
@@ -59,7 +59,7 @@ const MODE_CONFIG = {
         unit: 'kcal',
         placeholder: '例如: 400',
         resultUnit: 'kJ',
-        formula: '<p class="formula-hint">Total (kJ) = (kcal/100g × g × 4.184) ÷ 100</p>'
+        formula: '<p class="formula-hint">Total kJ = (kcal/100g × Weight × 4.184) ÷ 100</p>'
     }
 };
 

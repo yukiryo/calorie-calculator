@@ -35,6 +35,11 @@ export default defineConfig({
                         purpose: 'any maskable'
                     }
                 ]
+            },
+            workbox: {
+                cleanupOutdatedCaches: true,
+                skipWaiting: true,
+                clientsClaim: true
             }
         })
     ]

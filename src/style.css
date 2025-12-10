@@ -648,7 +648,7 @@ footer {
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  z-index: 1000;
+  z-index: 3000;
   display: flex;
   justify-content: center;
   align-items: center;

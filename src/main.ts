@@ -690,6 +690,11 @@ function initCloudUI() {
     }
 }
 
+const cloudGuestSection = document.getElementById('cloud-guest-section') as HTMLDivElement;
+const guestLoginBtn = document.getElementById('guest-login-btn') as HTMLButtonElement;
+const guestResetConfigBtn = document.getElementById('guest-reset-config-btn') as HTMLButtonElement;
+
+
 function updateCloudUIState(isLoggedIn: boolean) {
     if (Supa.isHelperConnected()) {
         cloudConfigSection.classList.add('hidden');
@@ -697,17 +702,20 @@ function updateCloudUIState(isLoggedIn: boolean) {
         if (isLoggedIn) {
             cloudStatusDot.classList.remove('hidden');
             cloudAuthSection.classList.remove('hidden');
+            cloudGuestSection.classList.add('hidden');
             const user = Supa.getCurrentUser();
             if (user) currentUserEmail.textContent = user.email || 'User';
         } else {
-            // Connected to Project, but not User
+            // Connected to Project, but not User (Guest)
             cloudStatusDot.classList.add('hidden');
             cloudAuthSection.classList.add('hidden');
+            cloudGuestSection.classList.remove('hidden');
         }
     } else {
         cloudStatusDot.classList.add('hidden');
         cloudConfigSection.classList.remove('hidden');
         cloudAuthSection.classList.add('hidden');
+        cloudGuestSection.classList.add('hidden');
     }
 }
 
@@ -720,10 +728,22 @@ cloudSettingsBtn.addEventListener('click', async () => {
     supabaseUrlInput.value = localStorage.getItem(Supa.STORAGE_KEY_URL) || '';
     supabaseKeyInput.value = localStorage.getItem(Supa.STORAGE_KEY_KEY) || '';
 
-    // If connected but not logged in, maybe show auth modal instead/on top?
-    if (Supa.isHelperConnected() && !Supa.getCurrentUser()) {
-        // Show Auth Modal on top
-        openAuthModal();
+    // Logic is now handled purely by UI state in UpdateCloudUIState
+});
+
+// Guest Section Listeners
+guestLoginBtn.addEventListener('click', () => {
+    // Keep settings modal open or close it? 
+    // Usually close it to focus on auth
+    closeCloudSettings();
+    openAuthModal();
+});
+
+guestResetConfigBtn.addEventListener('click', () => {
+    if (confirm('确定要清除服务器配置吗？您将无法同步数据。')) {
+        localStorage.removeItem(Supa.STORAGE_KEY_URL);
+        localStorage.removeItem(Supa.STORAGE_KEY_KEY);
+        location.reload();
     }
 });
 

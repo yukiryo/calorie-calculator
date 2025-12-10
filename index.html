@@ -229,6 +229,29 @@
           style="width: 100%; justify-content: center;">连接服务器</button>
       </div>
 
+      <div id="cloud-guest-section" class="hidden">
+        <div class="user-info-card">
+          <div class="avatar-placeholder" style="background: rgba(255,255,255,0.1); color: var(--text-muted);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <div class="user-details">
+            <span class="user-email" style="color: var(--text-muted);">未登录</span>
+            <span class="connection-status">已连接到服务器</span>
+          </div>
+        </div>
+        <button id="guest-login-btn" class="action-btn"
+          style="width: 100%; justify-content: center; margin-bottom: 1rem;">登录 / 注册</button>
+
+        <div class="config-reset-wrapper"
+          style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem; text-align: center;">
+          <button id="guest-reset-config-btn" class="text-btn danger-text">重置服务器配置</button>
+        </div>
+      </div>
+
       <div id="cloud-auth-section" class="hidden">
         <div class="user-info-card">
           <div class="avatar-placeholder">

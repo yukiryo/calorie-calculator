@@ -1,5 +1,6 @@
 import './style.css'
 import changelogRaw from '../CHANGELOG.md?raw';
+import * as Supa from './supabase';
 
 const energyInput = document.getElementById('energy-input') as HTMLInputElement;
 const weightInput = document.getElementById('weight-input') as HTMLInputElement;
@@ -312,7 +313,58 @@ function openDrawer() {
     requestAnimationFrame(() => {
         foodDrawer.classList.add('active');
     });
-    renderSavedFoods();
+
+    if (Supa.getSupabase() && Supa.getCurrentUser()) {
+        syncFoods();
+    } else {
+        renderSavedFoods();
+    }
+}
+
+async function syncFoods() {
+    try {
+        const remoteFoods = await Supa.fetchRemoteFoods();
+
+        // --- Merge Strategy (Smart Sync) ---
+        // 1. Create a Map of existing local foods for easy lookup
+        const localMap = new Map(savedFoods.map(f => [f.id, f]));
+
+        // 2. Add/Update logic: Remote data is trusted source for existing IDs (in case of edits)
+        //    But we also want to KEEP local items that haven't been synced yet.
+        const mergedFoods: SavedFood[] = [];
+
+        // Add all remote foods (they are the "truth" for those IDs)
+        remoteFoods.forEach(rf => {
+            localMap.delete(rf.id); // Remove from local map so we know it's handled
+            mergedFoods.push({
+                id: rf.id,
+                name: rf.name,
+                energy: rf.energy,
+                unit: rf.unit
+            });
+        });
+
+        // 3. Any items remaining in localMap are "Local Only" (Offline created).
+        //    We should keep them AND try to push them to cloud.
+        for (const localAuthored of localMap.values()) {
+            mergedFoods.push(localAuthored);
+            // Attempt to push to cloud in background
+            Supa.addRemoteFood(localAuthored).catch(console.error);
+        }
+
+        // 4. Sort by ID (Timestamp) descending to keep order
+        mergedFoods.sort((a, b) => b.id - a.id);
+
+        // 5. Update state
+        savedFoods = mergedFoods;
+        localStorage.setItem('savedFoods', JSON.stringify(savedFoods));
+        renderSavedFoods();
+
+    } catch (e) {
+        console.error("Sync failed", e);
+        // If sync fails (offline), we just show local data
+        renderSavedFoods();
+    }
 }
 
 function closeDrawer() {
@@ -347,11 +399,15 @@ async function saveFood() {
     };
 
     savedFoods.unshift(newFood);
-    // Limit to 20 items
+    // Limit to 50 items
     if (savedFoods.length > 50) savedFoods.pop();
-
     localStorage.setItem('savedFoods', JSON.stringify(savedFoods));
     renderSavedFoods();
+
+    // Sync if online
+    if (Supa.getSupabase() && Supa.getCurrentUser()) {
+        await Supa.addRemoteFood(newFood);
+    }
 }
 
 function renderSavedFoods() {
@@ -453,6 +509,8 @@ function showEditFoodModal(food: SavedFood) {
         localStorage.setItem('savedFoods', JSON.stringify(savedFoods));
         renderSavedFoods();
         cleanup();
+
+        // TODO: Handle cloud update for edits (omitted for brevity, requires delete then insert or an update rpc)
     };
 
     const handleCancel = () => {
@@ -477,15 +535,13 @@ async function deleteSavedFood(id: number) {
         savedFoods = savedFoods.filter(f => f.id !== id);
         localStorage.setItem('savedFoods', JSON.stringify(savedFoods));
         renderSavedFoods();
+
+        // Cloud Sync
+        if (Supa.getSupabase() && Supa.getCurrentUser()) {
+            await Supa.deleteRemoteFood(id);
+        }
     }
 }
-
-// Initial render
-
-
-
-
-
 
 weightInput.addEventListener('input', calculate);
 modeToggleBtn.addEventListener('click', toggleMode);
@@ -582,3 +638,217 @@ changelogModal.addEventListener('click', (e) => {
         closeModal();
     }
 });
+
+
+// --- Cloud Settings Logic ---
+const cloudSettingsBtn = document.getElementById('cloud-settings-btn') as HTMLButtonElement;
+const cloudSettingsModal = document.getElementById('cloud-settings-modal') as HTMLDivElement;
+const closeCloudSettingsBtn = document.getElementById('close-cloud-settings-btn') as HTMLButtonElement;
+const saveCloudConfigBtn = document.getElementById('save-cloud-config-btn') as HTMLButtonElement;
+const supabaseUrlInput = document.getElementById('supabase-url') as HTMLInputElement;
+const supabaseKeyInput = document.getElementById('supabase-key') as HTMLInputElement;
+const cloudStatusDot = document.getElementById('cloud-status-dot') as HTMLSpanElement;
+
+const cloudConfigSection = document.getElementById('cloud-config-section') as HTMLDivElement;
+const cloudAuthSection = document.getElementById('cloud-auth-section') as HTMLDivElement;
+const currentUserEmail = document.getElementById('current-user-email') as HTMLSpanElement;
+const logoutBtn = document.getElementById('logout-btn') as HTMLButtonElement;
+const manualSyncBtn = document.getElementById('manual-sync-btn') as HTMLButtonElement;
+const resetConfigBtn = document.getElementById('reset-config-btn') as HTMLButtonElement;
+
+
+const authModal = document.getElementById('auth-modal') as HTMLDivElement;
+const closeAuthBtn = document.getElementById('close-auth-btn') as HTMLButtonElement;
+const authEmailInput = document.getElementById('auth-email') as HTMLInputElement;
+const authPasswordInput = document.getElementById('auth-password') as HTMLInputElement;
+const authSubmitBtn = document.getElementById('auth-submit-btn') as HTMLButtonElement;
+const authSwitchBtn = document.getElementById('auth-switch-btn') as HTMLButtonElement;
+const authSwitchText = document.getElementById('auth-switch-text') as HTMLSpanElement;
+const authTitle = document.getElementById('auth-title') as HTMLHeadingElement;
+
+// State needed for UI
+let isLoginMode = true;
+
+function initCloudUI() {
+    // Check if configuration exists
+    const hasConfig = Supa.initSupabase();
+    if (hasConfig) {
+        // Default to hidden until we verify session
+        cloudAuthSection.classList.add('hidden');
+
+        // Use real-time subscription for Auth State
+        // This handles Initial Load, Refresh, Login, Logout automatically
+        Supa.subscribeToAuthChanges((user) => {
+            updateCloudUIState(!!user);
+            if (user) {
+                // If we just got a user (login or restore), sync foods
+                syncFoods();
+            }
+        });
+    } else {
+        updateCloudUIState(false);
+    }
+}
+
+function updateCloudUIState(isLoggedIn: boolean) {
+    if (Supa.isHelperConnected()) {
+        cloudConfigSection.classList.add('hidden');
+
+        if (isLoggedIn) {
+            cloudStatusDot.classList.remove('hidden');
+            cloudAuthSection.classList.remove('hidden');
+            const user = Supa.getCurrentUser();
+            if (user) currentUserEmail.textContent = user.email || 'User';
+        } else {
+            // Connected to Project, but not User
+            cloudStatusDot.classList.add('hidden');
+            cloudAuthSection.classList.add('hidden');
+        }
+    } else {
+        cloudStatusDot.classList.add('hidden');
+        cloudConfigSection.classList.remove('hidden');
+        cloudAuthSection.classList.add('hidden');
+    }
+}
+
+// Open Settings
+cloudSettingsBtn.addEventListener('click', async () => {
+    cloudSettingsModal.classList.remove('hidden');
+    requestAnimationFrame(() => cloudSettingsModal.classList.add('active'));
+
+    // Fill inputs if localstorage has them
+    supabaseUrlInput.value = localStorage.getItem(Supa.STORAGE_KEY_URL) || '';
+    supabaseKeyInput.value = localStorage.getItem(Supa.STORAGE_KEY_KEY) || '';
+
+    // If connected but not logged in, maybe show auth modal instead/on top?
+    if (Supa.isHelperConnected() && !Supa.getCurrentUser()) {
+        // Show Auth Modal on top
+        openAuthModal();
+    }
+});
+
+function closeCloudSettings() {
+    cloudSettingsModal.classList.remove('active');
+    setTimeout(() => cloudSettingsModal.classList.add('hidden'), 300);
+}
+
+closeCloudSettingsBtn.addEventListener('click', closeCloudSettings);
+cloudSettingsModal.addEventListener('click', (e) => {
+    if (e.target === cloudSettingsModal) closeCloudSettings();
+});
+
+
+// Save Config
+saveCloudConfigBtn.addEventListener('click', () => {
+    const url = supabaseUrlInput.value.trim();
+    const key = supabaseKeyInput.value.trim();
+
+    if (!url || !key) {
+        alert('请输入完整的 Project URL 和 Anon Key');
+        return;
+    }
+
+    localStorage.setItem(Supa.STORAGE_KEY_URL, url);
+    localStorage.setItem(Supa.STORAGE_KEY_KEY, key);
+
+    if (Supa.initSupabase()) {
+        // Config saved, try to auth
+        alert('连接成功！请登录您的账号。');
+        cloudConfigSection.classList.add('hidden');
+        openAuthModal();
+    } else {
+        alert('连接失败，请检查 URL 和 Key 格式是否正确。');
+    }
+});
+
+// Reset Config
+resetConfigBtn.addEventListener('click', () => {
+    if (confirm('确定要清除服务器配置吗？您将无法同步数据。')) {
+        localStorage.removeItem(Supa.STORAGE_KEY_URL);
+        localStorage.removeItem(Supa.STORAGE_KEY_KEY);
+        location.reload();
+    }
+});
+
+// Auth Modal
+function openAuthModal() {
+    authModal.classList.remove('hidden');
+    requestAnimationFrame(() => authModal.classList.add('active'));
+    authEmailInput.focus();
+}
+
+function closeAuthModal() {
+    authModal.classList.remove('active');
+    setTimeout(() => authModal.classList.add('hidden'), 300);
+}
+
+closeAuthBtn.addEventListener('click', closeAuthModal);
+
+authSwitchBtn.addEventListener('click', () => {
+    isLoginMode = !isLoginMode;
+    if (isLoginMode) {
+        authTitle.textContent = '登录';
+        authSubmitBtn.textContent = '登录';
+        authSwitchText.textContent = '还没有账号？';
+        authSwitchBtn.textContent = '去注册';
+    } else {
+        authTitle.textContent = '注册账号';
+        authSubmitBtn.textContent = '注册';
+        authSwitchText.textContent = '已有账号？';
+        authSwitchBtn.textContent = '去登录';
+    }
+});
+
+authSubmitBtn.addEventListener('click', async () => {
+    const email = authEmailInput.value.trim();
+    const password = authPasswordInput.value.trim();
+
+    if (!email || !password) return;
+
+    authSubmitBtn.textContent = '处理中...';
+    authSubmitBtn.disabled = true;
+
+    try {
+        if (isLoginMode) {
+            await Supa.login(email, password);
+            alert('登录成功！');
+            closeAuthModal();
+            // UI update handled by subscription
+        } else {
+            const data = await Supa.signUp(email, password);
+            if (data.user && !data.session) {
+                alert('注册成功！请务必查收邮件并点击验证链接，否则无法登录。');
+                closeAuthModal();
+            } else {
+                alert('注册并登录成功！');
+                closeAuthModal();
+            }
+        }
+    } catch (e: any) {
+        alert('操作失败: ' + (e.message || '未知错误'));
+        console.error(e);
+    } finally {
+        authSubmitBtn.textContent = isLoginMode ? '登录' : '注册';
+        authSubmitBtn.disabled = false;
+    }
+});
+
+// Logout
+logoutBtn.addEventListener('click', async () => {
+    await Supa.logout();
+    // Subscription handles UI updates
+});
+
+manualSyncBtn.addEventListener('click', async () => {
+    manualSyncBtn.disabled = true;
+    manualSyncBtn.textContent = '同步中...';
+    await syncFoods();
+    manualSyncBtn.textContent = '同步完成';
+    setTimeout(() => {
+        manualSyncBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/></svg> 立即同步`;
+        manualSyncBtn.disabled = false;
+    }, 1500);
+});
+
+// Init on load
+initCloudUI();

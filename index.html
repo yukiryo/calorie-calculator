@@ -20,8 +20,21 @@
   <div id="app">
     <div class="glass-container">
       <header>
-        <h1>卡路里计算器</h1>
-        <p class="subtitle">kJ 到 kcal 精准换算</p>
+        <div class="header-content">
+          <div class="title-group">
+            <h1>卡路里计算器</h1>
+            <p class="subtitle">kJ 到 kcal 精准换算</p>
+          </div>
+          <button id="cloud-settings-btn" class="icon-btn" aria-label="云同步设置">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M17.5 19c0-1.7-1.3-3-3-3h-1.1c-.2-1.9-1.9-3.4-3.9-3.4-1.6 0-3 1-3.6 2.4-1.3.2-2.3 1.3-2.3 2.6 0 1.4 1.1 2.5 2.5 2.5h8.9c1.4 0 2.5-1.1 2.5-2.5z">
+              </path>
+            </svg>
+            <span class="status-dot hidden" id="cloud-status-dot"></span>
+          </button>
+        </div>
       </header>
 
       <div class="mode-toggle-wrapper">
@@ -186,6 +199,94 @@
       </div>
       <div id="changelog-content" class="markdown-body">
         <!-- Content will be injected here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Cloud Settings Modal -->
+  <div id="cloud-settings-modal" class="modal hidden">
+    <div class="modal-content glass-container prompt-modal">
+      <div class="modal-header" style="margin-bottom: 1.5rem;">
+        <h3>云同步设置</h3>
+        <button id="close-cloud-settings-btn" class="close-btn" aria-label="关闭">×</button>
+      </div>
+
+      <div id="cloud-config-section">
+        <p class="modal-desc">请输入您的 Supabase 项目信息以开启同步功能。</p>
+        <div class="input-group" style="margin-bottom: 1rem; width: 100%;">
+          <label for="supabase-url" style="text-align: left;">Project URL (项目网址)</label>
+          <input type="text" id="supabase-url" class="prompt-input" autocomplete="off"
+            placeholder="https://xyz.supabase.co" style="margin-bottom: 0;">
+        </div>
+        <div class="input-group" style="margin-bottom: 1.5rem; width: 100%;">
+          <label for="supabase-key" style="text-align: left;">Anon Key (API 密钥)</label>
+          <input type="password" id="supabase-key" class="prompt-input" autocomplete="off" placeholder="eyJhb..."
+            style="margin-bottom: 0;">
+        </div>
+        <button id="save-cloud-config-btn" class="action-btn"
+          style="width: 100%; justify-content: center;">连接服务器</button>
+      </div>
+
+      <div id="cloud-auth-section" class="hidden">
+        <div class="user-info-card">
+          <div class="avatar-placeholder">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <div class="user-details">
+            <span class="user-email" id="current-user-email"></span>
+            <span class="connection-status">已连接</span>
+          </div>
+        </div>
+
+        <div class="sync-actions">
+          <button id="manual-sync-btn" class="prompt-btn confirm" style="width: 100%; margin-bottom: 0.5rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              style="margin-right: 6px;">
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3" />
+            </svg>
+            立即同步
+          </button>
+          <button id="logout-btn" class="prompt-btn cancel" style="width: 100%;">注销登录</button>
+        </div>
+
+        <div class="config-reset-wrapper"
+          style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem; text-align: center;">
+          <button id="reset-config-btn" class="text-btn danger-text">重置服务器配置</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auth Modal (Login/Signup) -->
+  <div id="auth-modal" class="modal hidden">
+    <div class="modal-content glass-container prompt-modal">
+      <div class="modal-header">
+        <h3 id="auth-title">登录</h3>
+        <button id="close-auth-btn" class="close-btn" aria-label="关闭">×</button>
+      </div>
+      <p class="modal-desc" style="margin-bottom: 1.5rem;">登录以同步您的常用食品库。</p>
+
+      <div class="input-group" style="margin-bottom: 1rem; width: 100%;">
+        <label for="auth-email" style="text-align: left;">邮箱</label>
+        <input type="email" id="auth-email" class="prompt-input" autocomplete="email" style="margin-bottom: 0;">
+      </div>
+      <div class="input-group" style="margin-bottom: 1.5rem; width: 100%;">
+        <label for="auth-password" style="text-align: left;">密码</label>
+        <input type="password" id="auth-password" class="prompt-input" autocomplete="current-password"
+          style="margin-bottom: 0;">
+      </div>
+
+      <button id="auth-submit-btn" class="action-btn"
+        style="width: 100%; justify-content: center; margin-bottom: 1rem;">登录</button>
+
+      <div class="auth-switch">
+        <span id="auth-switch-text">还没有账号？</span>
+        <button id="auth-switch-btn" class="text-btn">去注册</button>
       </div>
     </div>
   </div>

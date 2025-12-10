@@ -15,6 +15,10 @@
   padding: 0;
 }
 
+.hidden {
+  display: none !important;
+}
+
 html {
   background: #0f172a;
   background: var(--bg-gradient);
@@ -60,9 +64,197 @@ body {
   transform: translateY(20px);
 }
 
-header {
+/* Custom Prompt Specifics */
+.prompt-modal.modal-content {
+  max-width: 400px;
+  background: #1e293b;
+  /* Solid background for better readability */
+  border: 1px solid var(--glass-border);
+}
+
+.prompt-title {
+  color: white;
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
   text-align: center;
+}
+
+.prompt-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.prompt-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.prompt-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.prompt-btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.prompt-btn.cancel {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--glass-border);
+}
+
+.prompt-btn.cancel:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.prompt-btn.confirm {
+  background: var(--primary-color);
+  color: white;
+}
+
+.prompt-btn.confirm:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.delete-confirm {
+  background: #ef4444 !important;
+}
+
+/* Cloud Settings / Auth Specifics */
+.icon-btn {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.icon-btn svg {
+  margin-bottom: 2px;
+}
+
+.status-dot {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  background: #22c55e;
+  border-radius: 50%;
+  border: 2px solid #0f172a;
+}
+
+.status-dot.hidden {
+  display: none;
+}
+
+.modal-desc {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.user-info-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.avatar-placeholder {
+  width: 48px;
+  height: 48px;
+  background: rgba(99, 102, 241, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-email {
+  color: white;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.connection-status {
+  color: #22c55e;
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
+
+.auth-switch {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.auth-switch span {
+  color: var(--text-muted);
+}
+
+.danger-text {
+  color: #ef4444 !important;
+  font-size: 0.85rem;
+}
+
+.danger-text:hover {
+  text-decoration: underline;
+}
+
+header {
   margin-bottom: clamp(1.5rem, 5vw, 2.5rem);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.title-group {
+  text-align: left;
 }
 
 h1 {

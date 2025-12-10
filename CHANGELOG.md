@@ -1,5 +1,10 @@
 # 更新日志 (Changelog)
 
+## [1.0.3] - 2025-12-10
+
+### feat
+- feat: add supabase cloud sync and auth
+
 ## [1.0.4] - 2025-12-10
 
 ### ✨ 新增功能 (Features)

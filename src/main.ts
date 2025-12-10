@@ -14,12 +14,14 @@ const resultUnit = document.getElementById('result-unit') as HTMLElement;
 const formulaContainer = document.getElementById('formula-container') as HTMLElement;
 
 
+const saveFoodBtn = document.getElementById('save-food-btn') as HTMLButtonElement;
+const savedFoodsContainer = document.getElementById('saved-foods-container') as HTMLDivElement;
+
 const addBtn = document.getElementById('add-btn') as HTMLButtonElement;
 const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
 const historySection = document.getElementById('history-section') as HTMLDivElement;
 const historyList = document.getElementById('history-list') as HTMLUListElement;
 const totalKcalDisplay = document.getElementById('total-kcal') as HTMLSpanElement;
-
 
 let isKjToKcal = true;
 
@@ -31,7 +33,15 @@ interface HistoryEntry {
     unit: string;
 }
 
+interface SavedFood {
+    id: number;
+    name: string;
+    energy: number; // Stored value
+    unit: string;   // 'kJ' or 'kcal' depending on mode when saved, though technically we just use the number
+}
+
 let history: HistoryEntry[] = [];
+let savedFoods: SavedFood[] = JSON.parse(localStorage.getItem('savedFoods') || '[]');
 
 const KJ_TO_KCAL = 4.184;
 
@@ -194,6 +204,74 @@ function deleteHistoryItem(id: number) {
     renderHistory();
 }
 
+// Saved Foods Functions
+function saveFood() {
+    const energy = parseFloat(energyInput.value);
+    if (isNaN(energy)) {
+        alert('请先输入有效的能量值');
+        return;
+    }
+
+    const name = prompt('请输入食品名称 (例如: 鸡胸肉):');
+    if (!name || !name.trim()) return;
+
+    const newFood: SavedFood = {
+        id: Date.now(),
+        name: name.trim(),
+        energy: energy,
+        unit: isKjToKcal ? 'kJ' : 'kcal'
+    };
+
+    savedFoods.unshift(newFood);
+    // Limit to 20 items
+    if (savedFoods.length > 20) savedFoods.pop();
+
+    localStorage.setItem('savedFoods', JSON.stringify(savedFoods));
+    renderSavedFoods();
+}
+
+function renderSavedFoods() {
+    savedFoodsContainer.innerHTML = '';
+
+    savedFoods.forEach(food => {
+        const chip = document.createElement('div');
+        chip.className = 'food-chip';
+        chip.innerHTML = `
+            <span>${food.name}</span>
+            <span class="chip-energy">${food.energy}</span>
+            <button class="delete-chip-btn" aria-label="删除食品">×</button>
+        `;
+
+        chip.addEventListener('click', () => {
+            // If units mismatch, maybe warn or convert? For now we assumes user knows context or inputs raw number
+            // But actually isKjToKcal mode might change. 
+            // Ideally we should store unit and check against current mode, or just fill the number.
+            // Let's just fill the number for simplicity as per plan "Apply energy value".
+            energyInput.value = food.energy.toString();
+            calculate();
+        });
+
+        const deleteBtn = chip.querySelector('.delete-chip-btn') as HTMLButtonElement;
+        deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            deleteSavedFood(food.id);
+        });
+
+        savedFoodsContainer.appendChild(chip);
+    });
+}
+
+function deleteSavedFood(id: number) {
+    if (confirm('确定要删除这个常用食品吗？')) {
+        savedFoods = savedFoods.filter(f => f.id !== id);
+        localStorage.setItem('savedFoods', JSON.stringify(savedFoods));
+        renderSavedFoods();
+    }
+}
+
+// Initial render
+renderSavedFoods();
+
 
 energyInput.addEventListener('input', calculate);
 weightInput.addEventListener('input', calculate);
@@ -201,6 +279,7 @@ modeToggleBtn.addEventListener('click', toggleMode);
 
 addBtn.addEventListener('click', addToHistory);
 clearBtn.addEventListener('click', clearHistory);
+saveFoodBtn.addEventListener('click', saveFood);
 
 [energyInput, weightInput].forEach(input => {
     input.addEventListener('keydown', (e) => {

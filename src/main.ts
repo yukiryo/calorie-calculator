@@ -901,7 +901,6 @@ logoutBtn.addEventListener('click', async () => {
     try {
         await Supa.logout();
         updateCloudUIState(false); // Force UI update immediately
-        await showCustomAlert('已安全注销。');
     } catch (e: any) {
         console.error(e);
         await showCustomAlert('注销失败，请重试');

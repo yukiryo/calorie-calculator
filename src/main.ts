@@ -15,7 +15,6 @@ const formulaContainer = document.getElementById('formula-container') as HTMLEle
 
 
 const saveFoodBtn = document.getElementById('save-food-btn') as HTMLButtonElement;
-const savedFoodsContainer = document.getElementById('saved-foods-container') as HTMLDivElement;
 
 const addBtn = document.getElementById('add-btn') as HTMLButtonElement;
 const clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
@@ -252,6 +251,33 @@ function showCustomPrompt(): Promise<string | null> {
     });
 }
 
+// Drawer Logic
+const foodDrawer = document.getElementById('food-drawer') as HTMLDivElement;
+const openDrawerBtn = document.getElementById('open-drawer-btn') as HTMLButtonElement;
+const closeDrawerBtn = document.getElementById('close-drawer-btn') as HTMLButtonElement;
+const savedFoodsGrid = document.getElementById('saved-foods-grid') as HTMLDivElement;
+
+function openDrawer() {
+    foodDrawer.classList.remove('hidden');
+    requestAnimationFrame(() => {
+        foodDrawer.classList.add('active');
+    });
+    renderSavedFoods();
+}
+
+function closeDrawer() {
+    foodDrawer.classList.remove('active');
+    setTimeout(() => {
+        foodDrawer.classList.add('hidden');
+    }, 300);
+}
+
+openDrawerBtn.addEventListener('click', openDrawer);
+closeDrawerBtn.addEventListener('click', closeDrawer);
+foodDrawer.addEventListener('click', (e) => {
+    if (e.target === foodDrawer) closeDrawer();
+});
+
 // Saved Foods Functions
 async function saveFood() {
     const energy = parseFloat(energyInput.value);
@@ -279,7 +305,12 @@ async function saveFood() {
 }
 
 function renderSavedFoods() {
-    savedFoodsContainer.innerHTML = '';
+    if (savedFoods.length === 0) {
+        savedFoodsGrid.innerHTML = '<div class="empty-state">暂无保存的食品</div>';
+        return;
+    }
+
+    savedFoodsGrid.innerHTML = '';
 
     savedFoods.forEach(food => {
         const chip = document.createElement('div');
@@ -305,7 +336,7 @@ function renderSavedFoods() {
             deleteSavedFood(food.id);
         });
 
-        savedFoodsContainer.appendChild(chip);
+        savedFoodsGrid.appendChild(chip);
     });
 }
 
@@ -318,10 +349,12 @@ function deleteSavedFood(id: number) {
 }
 
 // Initial render
-renderSavedFoods();
 
 
-energyInput.addEventListener('input', calculate);
+
+
+
+
 weightInput.addEventListener('input', calculate);
 modeToggleBtn.addEventListener('click', toggleMode);
 

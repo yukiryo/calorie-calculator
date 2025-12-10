@@ -51,9 +51,15 @@
             </svg>
           </button>
         </div>
-        <div id="saved-foods-container" class="saved-foods-container">
-          <!-- Saved food chips will be injected here -->
-        </div>
+
+        <!-- Drawer Trigger -->
+        <button id="open-drawer-btn" class="drawer-trigger" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+          常用食品库
+        </button>
       </div>
 
       <div class="input-group">
@@ -112,6 +118,20 @@
       </footer>
     </div>
 
+  </div>
+
+  <!-- Food Library Drawer -->
+  <div id="food-drawer" class="drawer-overlay hidden">
+    <div class="drawer-content glass-container">
+      <div class="drawer-header">
+        <h3>常用食品库</h3>
+        <button id="close-drawer-btn" class="close-btn" aria-label="关闭">×</button>
+      </div>
+      <div id="saved-foods-grid" class="drawer-body">
+        <!-- Saved food chips will be injected here -->
+        <div class="empty-state">暂无保存的食品</div>
+      </div>
+    </div>
   </div>
 
   <!-- Custom Prompt Modal -->

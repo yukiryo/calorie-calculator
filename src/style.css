@@ -179,37 +179,114 @@ input {
   background: rgba(99, 102, 241, 0.1);
 }
 
-/* Saved Foods Container */
-.saved-foods-container {
+/* Drawer Trigger Button */
+.drawer-trigger {
+  width: 100%;
   margin-top: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-muted);
+  padding: 0.6rem;
+  border-radius: 12px;
+  cursor: pointer;
   display: flex;
-  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  overflow-x: auto;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.drawer-trigger:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Bottom Sheet Drawer */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(2px);
+}
+
+.drawer-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawer-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-height: 80vh;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  padding: 1.5rem;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-overlay.active .drawer-content {
+  transform: translateY(0);
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  /* Firefox */
+  border-bottom: 1px solid var(--glass-border);
 }
 
-.saved-foods-container::-webkit-scrollbar {
-  display: none;
-  /* Chrome/Safari */
+.drawer-header h3 {
+  font-size: 1.2rem;
+  color: white;
 }
 
+.drawer-body {
+  overflow-y: auto;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 0.75rem;
+  max-height: 60vh;
+}
+
+.empty-state {
+  width: 100%;
+  text-align: center;
+  color: var(--text-muted);
+  padding: 2rem 0;
+  font-size: 0.9rem;
+}
+
+/* Update Food Chip Styles for Grid */
 .food-chip {
   flex: 0 0 auto;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  padding: 0.5rem 0.85rem;
   color: var(--text-muted);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
   user-select: none;
 }
 

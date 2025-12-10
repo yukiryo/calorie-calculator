@@ -65,11 +65,10 @@ body {
 }
 
 /* Custom Prompt Specifics */
+/* Custom Prompt Specifics */
 .prompt-modal.modal-content {
   max-width: 400px;
-  background: #1e293b;
-  /* Solid background for better readability */
-  border: 1px solid var(--glass-border);
+  /* Removed solid background to match glass style */
 }
 
 .prompt-title {

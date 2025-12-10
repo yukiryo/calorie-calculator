@@ -368,7 +368,10 @@ function renderSavedFoods() {
         // Add edit button before delete button
         chip.innerHTML = `
             <span>${food.name}</span>
-            <span class="chip-energy">${food.energy}</span>
+            <span class="chip-energy">
+                ${food.energy}
+                <small>${food.unit || (isKjToKcal ? 'kJ' : 'kcal')}</small>
+            </span>
             <div style="margin-left: auto; display: flex; align-items: center;">
                  <button class="edit-chip-btn" aria-label="编辑食品">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
@@ -380,6 +383,17 @@ function renderSavedFoods() {
         chip.addEventListener('click', (e) => {
             // Prevent triggering if clicking buttons
             if ((e.target as HTMLElement).closest('button')) return;
+
+            // Auto-switch mode if unit doesn't match
+            // Current Mode: isKjToKcal = true -> input is kJ
+            // Food Unit: 'kcal'
+            // Need to switch to kcalToKj mode.
+            const foodUnit = food.unit || (isKjToKcal ? 'kJ' : 'kcal');
+            const currentModeUnit = isKjToKcal ? 'kJ' : 'kcal';
+
+            if (foodUnit !== currentModeUnit) {
+                toggleMode();
+            }
 
             energyInput.value = food.energy.toString();
             calculate();

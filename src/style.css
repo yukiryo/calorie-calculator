@@ -308,6 +308,15 @@ input {
 .chip-energy {
   font-weight: 600;
   color: var(--secondary-color);
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.chip-energy small {
+  font-size: 0.75em;
+  font-weight: 400;
+  color: var(--text-muted);
 }
 
 .delete-chip-btn {

@@ -727,6 +727,8 @@ footer {
   margin-bottom: 1.5rem;
   text-align: center;
   font-size: 1.1rem;
+  padding: 1rem;
+  /* Override generic input padding to ensure centering */
 }
 
 .prompt-actions {

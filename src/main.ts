@@ -215,6 +215,7 @@ function showCustomPrompt(): Promise<string | null> {
         promptInput.value = '';
         customPromptModal.classList.remove('hidden');
         requestAnimationFrame(() => {
+            customPromptModal.classList.add('active');
             promptInput.focus();
         });
 
@@ -235,7 +236,11 @@ function showCustomPrompt(): Promise<string | null> {
         };
 
         const cleanup = () => {
-            customPromptModal.classList.add('hidden');
+            customPromptModal.classList.remove('active');
+            setTimeout(() => {
+                customPromptModal.classList.add('hidden');
+            }, 300); // Wait for transition
+
             promptConfirmBtn.removeEventListener('click', handleConfirm);
             promptCancelBtn.removeEventListener('click', handleCancel);
             promptInput.removeEventListener('keydown', handleKeydown);

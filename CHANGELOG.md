@@ -15,7 +15,7 @@
 - **iOS 状态栏**: 修复 iOS PWA 状态栏不沉浸问题 ([f870aae](https://github.com/yukiryo/calorie-calculator/commit/f870aae))
 
 ### 🐛 问题修复 (Bug Fixes)
-- **iOS 状态栏**: 使用 black 样式替代 black-translucent ([b2ebbfe](https://github.com/yukiryo/calorie-calculator/commit/b2ebbfe))
+- **iOS 状态栏**: 使用 black 样式替代 black-translucent ([788ba36](https://github.com/yukiryo/calorie-calculator/commit/788ba36))
 - **iOS 状态栏**: 移除 theme-color 以解决与 black-translucent 的冲突 ([867cd80](https://github.com/yukiryo/calorie-calculator/commit/867cd80))
 - **iOS 状态栏**: 在 head 中添加同步 CSS 解决状态栏不沉浸问题 ([8101227](https://github.com/yukiryo/calorie-calculator/commit/8101227))
 ## [1.0.7] - 2025-12-11

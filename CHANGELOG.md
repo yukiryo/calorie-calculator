@@ -9,6 +9,9 @@
 ### 🔧 杂项 (Chore)
 - **项目清理**: 移除冗余文档与依赖，增强推送脚本稳定性 ([861ceb8](https://github.com/yukiryo/calorie-calculator/commit/861ceb8))
 
+
+### 🎨 样式优化 (Styles)
+- **style**: 修复 iOS PWA 状态栏不沉浸问题 ([f870aae](https://github.com/yukiryo/calorie-calculator/commit/f870aae))
 ## [1.0.7] - 2025-12-11
 
 ### 📝 文档更新 (Docs)

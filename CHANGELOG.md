@@ -15,7 +15,7 @@
 - **iOS 状态栏**: 修复 iOS PWA 状态栏不沉浸问题 ([f870aae](https://github.com/yukiryo/calorie-calculator/commit/f870aae))
 
 ### 🐛 问题修复 (Bug Fixes)
-- **iOS 状态栏**: 在 head 中添加同步 CSS 解决状态栏不沉浸问题 ([b5156b0](https://github.com/yukiryo/calorie-calculator/commit/b5156b0))
+- **iOS 状态栏**: 在 head 中添加同步 CSS 解决状态栏不沉浸问题 ([8101227](https://github.com/yukiryo/calorie-calculator/commit/8101227))
 ## [1.0.7] - 2025-12-11
 
 ### 📝 文档更新 (Docs)

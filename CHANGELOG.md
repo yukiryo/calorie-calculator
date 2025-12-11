@@ -11,7 +11,7 @@
 
 
 ### 🎨 样式优化 (Styles)
-- **style**: 恢复 theme-color 以适配 iOS 状态栏背景色 ([5ab1e23](https://github.com/yukiryo/calorie-calculator/commit/5ab1e23))
+- **iOS 状态栏**: 恢复 theme-color 以适配 iOS 状态栏背景色 ([5ab1e23](https://github.com/yukiryo/calorie-calculator/commit/5ab1e23))
 - **iOS 状态栏**: 修复 iOS PWA 状态栏不沉浸问题 ([f870aae](https://github.com/yukiryo/calorie-calculator/commit/f870aae))
 ## [1.0.7] - 2025-12-11
 

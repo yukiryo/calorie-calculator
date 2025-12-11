@@ -1,6 +1,7 @@
 import './style.css'
 import changelogRaw from '../CHANGELOG.md?raw';
 import * as Supa from './supabase';
+import packageJson from '../package.json';
 
 const energyInput = document.getElementById('energy-input') as HTMLInputElement;
 const weightInput = document.getElementById('weight-input') as HTMLInputElement;
@@ -923,3 +924,9 @@ manualSyncBtn.addEventListener('click', async () => {
 
 // Init on load
 initCloudUI();
+
+// Display app version
+const appVersionEl = document.getElementById('app-version') as HTMLSpanElement;
+if (appVersionEl) {
+    appVersionEl.textContent = `v${packageJson.version}`;
+}

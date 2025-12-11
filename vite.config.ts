@@ -14,8 +14,8 @@ export default defineConfig({
                 name: '卡路里计算器 - 精准热量换算',
                 short_name: '热量计算',
                 description: '专业的食品热量计算器，快速将千焦(kJ/100g)转换为大卡(kcal)。',
-                theme_color: '#0f172a',
-                background_color: '#0f172a',
+                // theme_color: '#0f172a',
+                // background_color: '#0f172a',
                 display: 'standalone',
                 icons: [
                     {

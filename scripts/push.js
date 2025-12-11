@@ -16,6 +16,17 @@ const rl = readline.createInterface({
 
 const question = (query) => new Promise((resolve) => rl.question(query, resolve));
 
+const TYPE_TO_SECTION = {
+    'feat': '### ✨ 新增功能 (Features)',
+    'fix': '### 🐛 问题修复 (Bug Fixes)',
+    'style': '### 🎨 样式优化 (Styles)',
+    'docs': '### 📝 文档更新 (Docs)',
+    'refactor': '### ♻️ 代码优化 (Refactoring)',
+    'perf': '### ⚡ 性能优化 (Performance)',
+    'test': '### ✅ 测试 (Tests)',
+    'chore': '### 🔧 杂项 (Chore)'
+};
+
 function getTodayDate() {
     const date = new Date();
     return date.toISOString().split('T')[0];
@@ -64,26 +75,22 @@ async function main() {
         const updateChangelog = (await question('📝 是否自动更新 CHANGELOG.md? (y/n) [默认: y]: ')).toLowerCase() !== 'n';
 
         if (updateChangelog) {
-            // Get current commit hash (short)
-            let commitHash = '';
-            try {
-                // Stage changes first to get accurate hash after commit
-                execSync('git add .', { stdio: 'pipe' });
-                // We'll get the hash after commit, for now use placeholder
-                commitHash = 'pending';
-            } catch (e) {
-                console.log('⚠️  无法获取 commit hash');
-            }
-
             let changelogContent = fs.existsSync(changelogPath) ? fs.readFileSync(changelogPath, 'utf-8') : '# 更新日志 (Changelog)\n\n';
             const date = getTodayDate();
+            const sectionTitle = TYPE_TO_SECTION[type] || `### ${type}`;
 
-            // New format: ## [version]（hash）- date
-            // Match existing version header (with or without hash)
-            const versionHeaderRegex = new RegExp(`## \\[${version.replace(/\./g, '\\.')}\\](?:（[a-f0-9]+）)?\\s*-\\s*${date}`);
+            // New format: ## [version] - date (without commit hash)
+            const versionHeaderRegex = new RegExp(`^## \\[${version.replace(/\./g, '\\.')}\\]\\s*-\\s*${date}`, 'm');
 
-            // Check if this exact message already exists
-            if (changelogContent.includes(`- ${message}`)) {
+            // Parse message into keyword and description
+            const messageParts = message.includes(':') ? message.split(':', 2) : [message, ''];
+            const keyword = messageParts[0].trim();
+            const description = messageParts[1].trim();
+            const formattedEntryBase = `- **${keyword}**: ${description || keyword}`;
+            const formattedEntry = formattedEntryBase + ' (commit: pending)';
+
+            // Check if similar entry exists
+            if (changelogContent.includes(formattedEntryBase)) {
                 console.log('⚠️  日志中已包含该提交信息，跳过写入。');
             } else {
                 const lines = changelogContent.split('\n');
@@ -96,10 +103,10 @@ async function main() {
 
                     const newSection = [
                         '',
-                        `## [${version}]（pending）- ${date}`,
+                        `## [${version}] - ${date}`,
                         '',
-                        `### ${type}`,
-                        `- ${message}`,
+                        sectionTitle,
+                        formattedEntry,
                         ''
                     ];
 
@@ -115,7 +122,7 @@ async function main() {
                     let typeIndex = -1;
                     for (let i = existingVersionIndex + 1; i < lines.length; i++) {
                         if (lines[i].startsWith('## [')) break; // Next version
-                        if (lines[i] === `### ${type}`) {
+                        if (lines[i] === sectionTitle) {
                             typeIndex = i;
                             break;
                         }
@@ -123,7 +130,7 @@ async function main() {
 
                     if (typeIndex !== -1) {
                         // Add under existing type section
-                        lines.splice(typeIndex + 1, 0, `- ${message}`);
+                        lines.splice(typeIndex + 1, 0, formattedEntry);
                     } else {
                         // Create new type section after version header
                         // Find where to insert (after last item of current version or after header)
@@ -132,13 +139,13 @@ async function main() {
                             if (lines[i].startsWith('## [')) break;
                             insertIndex = i + 1;
                         }
-                        lines.splice(insertIndex, 0, '', `### ${type}`, `- ${message}`);
+                        lines.splice(insertIndex, 0, '', sectionTitle, formattedEntry);
                     }
                 }
 
                 changelogContent = lines.join('\n');
                 fs.writeFileSync(changelogPath, changelogContent);
-                console.log('✅ CHANGELOG.md 已更新 (commit hash 将在提交后更新)');
+                console.log('✅ CHANGELOG.md 已更新 (commit hash 将在提交后填充)');
             }
         } else {
             console.log('⏩ 跳过 CHANGELOG.md 更新');
@@ -149,8 +156,25 @@ async function main() {
         execSync('git add .', { stdio: 'inherit' });
         execSync(`git commit -m "${type}: ${message}"`, { stdio: 'inherit' });
 
+        // 5. 获取 commit hash 并更新 CHANGELOG
+        if (updateChangelog) {
+            try {
+                const commitHash = execSync('git rev-parse --short HEAD').toString().trim();
+                let changelogContent = fs.readFileSync(changelogPath, 'utf-8');
+                changelogContent = changelogContent.replace('(commit: pending)', `(commit: ${commitHash})`);
+                fs.writeFileSync(changelogPath, changelogContent);
+
+                // Re-add and amend commit
+                execSync('git add CHANGELOG.md', { stdio: 'pipe' });
+                execSync(`git commit --amend --no-edit`, { stdio: 'pipe' });
+                console.log(`✅ CHANGELOG.md 已更新 commit hash: ${commitHash}`);
+            } catch (e) {
+                console.log('⚠️  无法更新 commit hash');
+            }
+        }
+
         console.log('🚀 推送到 GitHub...');
-        execSync('git push', { stdio: 'inherit' });
+        execSync('git push --force-with-lease', { stdio: 'inherit' });
 
         console.log('🎉 完成！');
 

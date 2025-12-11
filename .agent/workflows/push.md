@@ -40,3 +40,9 @@ description: 推送代码时同步更新 CHANGELOG
 版本标题格式：`## [版本号]（commit hash）- 日期`
 
 示例：`## [1.0.7]（e64168a）- 2025-12-11`
+
+## README 更新规则
+
+更新 README 时必须同步更新两个语言版本：
+- `README.md` (英文)
+- `README_zh-CN.md` (中文)

@@ -56,7 +56,15 @@ async function main() {
             process.exit(1);
         }
 
-        const type = await question('🏷️  请输入变更类型 (feat/fix/docs/style/refactor/perf/test/chore) [默认: chore]: ') || 'chore';
+        let type = '';
+        while (!type) {
+            const typeInput = (await question('🏷️  请输入变更类型 (feat/fix/docs/style/refactor/perf/test/chore) [默认: chore]: ')).trim() || 'chore';
+            if (TYPE_TO_SECTION[typeInput]) {
+                type = typeInput;
+            } else {
+                console.log('❌ 无效的变更类型，请重新输入。');
+            }
+        }
 
         const shouldBump = (await question('⬆️  是否升级版本号? (y/n) [默认: n]: ')).toLowerCase() === 'y';
 
@@ -78,16 +86,51 @@ async function main() {
         if (updateChangelog) {
             let changelogContent = fs.existsSync(changelogPath) ? fs.readFileSync(changelogPath, 'utf-8') : '# 更新日志 (Changelog)\n\n';
             const date = getTodayDate();
-            const sectionTitle = TYPE_TO_SECTION[type] || `### ${type}`;
+            const sectionTitle = TYPE_TO_SECTION[type]; // Guaranteed to exist
 
             // New format: ## [version] - date (without commit hash)
             const versionHeaderRegex = new RegExp(`^## \\[${version.replace(/\./g, '\\.')}\\]\\s*-\\s*${date}`, 'm');
 
-            // Parse message into keyword and description
-            const messageParts = message.includes(':') ? message.split(':', 2) : [message, ''];
-            const keyword = messageParts[0].trim();
-            const description = messageParts[1].trim();
-            const formattedEntryBase = `- **${keyword}**: ${description || keyword}`;
+            // Parse message: If "type: subject", strip "type:"
+            // Regex to match "type(scope): subject" or "type: subject"
+            let keyword = type;
+            let description = message;
+
+            const conventionalCommitRegex = /^(\w+)(?:\(([^)]+)\))?: (.+)$/;
+            const match = message.match(conventionalCommitRegex);
+
+            if (match) {
+                const msgType = match[1];
+                const msgScope = match[2]; // Optional scope
+                const msgSubject = match[3];
+
+                if (msgType === type) {
+                    // Message started with redundant type "feat: ..."
+                    keyword = msgScope || msgType; // Use scope as keyword if present, else default to type
+                    description = msgSubject;
+
+                    // Optimization: If no scope, try to guess a keyword from subject start?
+                    // For now, let's look for "**Keyword**: ..." pattern or just use simple subject
+                    if (msgSubject.includes(':')) {
+                        const subjectParts = msgSubject.split(':', 2);
+                        keyword = subjectParts[0].trim();
+                        description = subjectParts[1].trim();
+                    } else {
+                        // Default keyword: "更新" or something? 
+                        // Let's stick to using the commit type or scope as keyword base, 
+                        // changing logic to be: 
+                        // Entry: - **Keyword/Scope**: Description
+                        keyword = msgScope ? msgScope : keyword;
+                    }
+                }
+            } else if (message.includes(':')) {
+                // Simple "Keyword: Description" format
+                const parts = message.split(':', 2);
+                keyword = parts[0].trim();
+                description = parts[1].trim();
+            }
+
+            const formattedEntryBase = `- **${keyword}**: ${description}`;
             const formattedEntry = formattedEntryBase + ' ([pending](pending))';
 
             // Check if similar entry exists

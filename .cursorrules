@@ -1,14 +1,74 @@
-# AI 行为规则 (.cursorrules)
+# AI 行为规则与项目规范 (.cursorrules)
 
-1. **语言要求**:
-   - `task.md` (任务清单)、`implementation_plan.md` (实施计划) 和 `walkthrough.md` (验证报告) 等所有 Artifacts **必须**使用中文编写。
-   - 与用户的对话和任务描述也应尽量使用中文。
+## 1. 核心行为准则
+- **中文优先**: `task.md` (任务清单)、`implementation_plan.md` (实施计划) 和 `walkthrough.md` (验证报告) 等所有 Artifacts **必须**使用中文编写。对话和任务描述也应尽量使用中文。
+- **Artifacts 管理**:
+   - 开始复杂任务前，更新 `task.md`。
+   - EXECUTION 前，创建/更新 `implementation_plan.md`。
+   - 任务完成后，更新 `walkthrough.md`。
 
-2. **Artifacts 管理**:
-   - 在开始复杂任务前，必须更新 `task.md`。
-   - 在进入 EXECUTION 模式前，必须创建或更新 `implementation_plan.md` 并获得用户批准（如果是重大变更）。
-   - 任务完成后，必须更新 `walkthrough.md` 记录变更和验证结果。
+---
 
-3. **CHANGELOG 维护**:
-   - 遵循 `scripts/push.js` 的自动化流程。
-   - 每次推送前确认是否需要更新 CHANGELOG。
+## 2. 项目上下文 (Project Context)
+
+### 项目概述
+**卡路里计算器** - 一个现代化的 PWA 应用，用于 kJ/kcal 热量换算。
+- **技术栈**: Vite + TypeScript + Vanilla CSS + Supabase (云同步)
+- **部署**: Cloudflare Pages
+- **仓库**: https://github.com/yukiryo/calorie-calculator
+
+### 核心功能
+1. **双向热量换算**: kJ ↔ kcal
+2. **一席总计**: 累加多条记录计算总热量
+3. **常用食品库**: 保存/编辑常用食品，一键填充
+4. **云端同步**: Supabase集成，多设备同步（配置已硬编码，开箱即用）
+5. **PWA**: 离线可用，可安装到桌面
+
+### 文件结构
+```
+├── src/
+│   ├── main.ts          # 主逻辑
+│   ├── style.css        # 样式
+│   └── supabase.ts      # Supabase 客户端 (含配置)
+├── scripts/
+│   └── push.js          # 自动化推送脚本
+├── CHANGELOG.md         # 更新日志
+├── README.md            # 英文文档
+└── README_zh-CN.md      # 中文文档
+```
+
+---
+
+## 3. 开发工作流 (Development Workflow)
+
+### 自动化推送
+推荐使用脚本进行提交，自动处理 CHANGELOG 和版本号：
+```bash
+node scripts/push.js
+```
+
+### 版本号规则 (Version Rules)
+| 更新类型 | 版本号处理 | 示例 |
+|---------|----------|------|
+| **小改动** (文案/样式微调) | 保持版本号 | 1.0.7 |
+| **累积改动** (Bug修复/优化) | PATCH +1 | 1.0.7 → 1.0.8 |
+| **新功能** (Feature) | MINOR +1 | 1.0.7 → 1.1.0 |
+| **破坏性变更** (Breaking) | MAJOR +1 | 1.0.7 → 2.0.0 |
+
+### 变更类型 (Commit Types)
+脚本会将 type 自动映射为 CHANGELOG 分类：
+- `feat`: ✨ 新增功能
+- `fix`: 🐛 问题修复
+- `style`: 🎨 样式优化
+- `docs`: 📝 文档更新
+- `refactor`: ♻️ 代码优化
+- `perf`: ⚡ 性能优化
+- `test`: ✅ 测试
+- `chore`: 🔧 杂项
+
+### CHANGELOG 规范
+- 脚本会自动生成及其 commit hash 链接。
+- 格式：`- **关键词**: 描述 ([hash](链接))`
+
+### 文档维护
+- 更新 README 时必须同步更新 `README.md` 和 `README_zh-CN.md`。

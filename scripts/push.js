@@ -64,44 +64,81 @@ async function main() {
         const updateChangelog = (await question('📝 是否自动更新 CHANGELOG.md? (y/n) [默认: y]: ')).toLowerCase() !== 'n';
 
         if (updateChangelog) {
-            // 更新 CHANGELOG.md
+            // Get current commit hash (short)
+            let commitHash = '';
+            try {
+                // Stage changes first to get accurate hash after commit
+                execSync('git add .', { stdio: 'pipe' });
+                // We'll get the hash after commit, for now use placeholder
+                commitHash = 'pending';
+            } catch (e) {
+                console.log('⚠️  无法获取 commit hash');
+            }
+
             let changelogContent = fs.existsSync(changelogPath) ? fs.readFileSync(changelogPath, 'utf-8') : '# 更新日志 (Changelog)\n\n';
-
             const date = getTodayDate();
-            const header = `## [${version}] - ${date}`;
 
-            // Check if message already exists to verify duplicates
-            if (changelogContent.includes(message)) {
+            // New format: ## [version]（hash）- date
+            // Match existing version header (with or without hash)
+            const versionHeaderRegex = new RegExp(`## \\[${version.replace(/\./g, '\\.')}\\](?:（[a-f0-9]+）)?\\s*-\\s*${date}`);
+
+            // Check if this exact message already exists
+            if (changelogContent.includes(`- ${message}`)) {
                 console.log('⚠️  日志中已包含该提交信息，跳过写入。');
             } else {
-                if (!changelogContent.includes(header)) {
-                    let newEntry = `\n${header}\n\n### ${type}\n- ${message}\n`;
-                    // 找到第一个 '## [' 之前插入，或者直接追加到文件头（跳过第一行标题）
-                    const lines = changelogContent.split('\n');
-                    const versionLineIndex = lines.findIndex((l, i) => i > 0 && l.startsWith('## ['));
+                const lines = changelogContent.split('\n');
+                const existingVersionIndex = lines.findIndex(l => versionHeaderRegex.test(l));
 
-                    if (versionLineIndex !== -1) {
-                        lines.splice(versionLineIndex, 0, newEntry.trim() + '\n');
-                        changelogContent = lines.join('\n');
+                if (existingVersionIndex === -1) {
+                    // No existing version header for today, create new section
+                    // Find first version header to insert before
+                    const firstVersionIndex = lines.findIndex((l, i) => i > 0 && l.startsWith('## ['));
+
+                    const newSection = [
+                        '',
+                        `## [${version}]（pending）- ${date}`,
+                        '',
+                        `### ${type}`,
+                        `- ${message}`,
+                        ''
+                    ];
+
+                    if (firstVersionIndex !== -1) {
+                        lines.splice(firstVersionIndex, 0, ...newSection);
                     } else {
-                        changelogContent += newEntry;
+                        // No existing versions, append after header
+                        lines.push(...newSection);
                     }
                 } else {
-                    // 已存在今天的版本头，尝试追加到对应类型
-                    // 简单追加到该版本区块紧接着的一行
-                    const regex = new RegExp(`(## \\[${version}\\] - ${date}[\\s\\S]*?)(\\n## \\[|$)`);
-                    changelogContent = changelogContent.replace(regex, (match, p1, p2) => {
-                        // Check if the type section exists
-                        if (p1.includes(`### ${type}`)) {
-                            return p1.replace(`### ${type}`, `### ${type}\n- ${message}`) + (p2 || '');
-                        } else {
-                            // add new type section
-                            return `${p1.trim()}\n\n### ${type}\n- ${message}\n\n${p2 || ''}`;
+                    // Existing version header found, add to appropriate section
+                    // Find the type section or create one
+                    let typeIndex = -1;
+                    for (let i = existingVersionIndex + 1; i < lines.length; i++) {
+                        if (lines[i].startsWith('## [')) break; // Next version
+                        if (lines[i] === `### ${type}`) {
+                            typeIndex = i;
+                            break;
                         }
-                    });
+                    }
+
+                    if (typeIndex !== -1) {
+                        // Add under existing type section
+                        lines.splice(typeIndex + 1, 0, `- ${message}`);
+                    } else {
+                        // Create new type section after version header
+                        // Find where to insert (after last item of current version or after header)
+                        let insertIndex = existingVersionIndex + 1;
+                        for (let i = existingVersionIndex + 1; i < lines.length; i++) {
+                            if (lines[i].startsWith('## [')) break;
+                            insertIndex = i + 1;
+                        }
+                        lines.splice(insertIndex, 0, '', `### ${type}`, `- ${message}`);
+                    }
                 }
+
+                changelogContent = lines.join('\n');
                 fs.writeFileSync(changelogPath, changelogContent);
-                console.log('✅ CHANGELOG.md 已更新');
+                console.log('✅ CHANGELOG.md 已更新 (commit hash 将在提交后更新)');
             }
         } else {
             console.log('⏩ 跳过 CHANGELOG.md 更新');

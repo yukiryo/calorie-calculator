@@ -46,3 +46,13 @@ description: 推送代码时同步更新 CHANGELOG
 更新 README 时必须同步更新两个语言版本：
 - `README.md` (英文)
 - `README_zh-CN.md` (中文)
+
+## CONTEXT.md 更新规则
+
+当以下情况发生时，必须更新 `CONTEXT.md`：
+- 新增核心功能
+- 技术栈变更
+- 版本号变更
+- 文件结构调整
+
+保持 CONTEXT.md 与项目实际状态同步，方便在新设备/新会话中快速恢复上下文。

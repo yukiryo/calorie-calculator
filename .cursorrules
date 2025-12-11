@@ -67,8 +67,14 @@ node scripts/push.js
 - `chore`: 🔧 杂项
 
 ### CHANGELOG 规范
-- 脚本会自动生成及其 commit hash 链接。
+- 脚本会自动生成 commit hash 链接。
 - 格式：`- **关键词**: 描述 ([hash](链接))`
+
+> [!IMPORTANT]
+> **手动编辑 CHANGELOG 时**：每个条目 **必须** 包含 commit hash 链接！
+> - 如果尚未提交，先提交代码获取 hash，再更新 CHANGELOG。
+> - 使用 `git log -1 --pretty=format:"%h"` 获取最新 hash。
+> - 链接格式：`([hash](https://github.com/yukiryo/calorie-calculator/commit/hash))`
 
 ### 文档维护
 - 更新 README 时必须同步更新 `README.md` 和 `README_zh-CN.md`。

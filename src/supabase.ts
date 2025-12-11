@@ -1,7 +1,11 @@
 
 import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
 
-// Configuration keys in localStorage
+// Configuration - Hardcoded for better UX
+const PROJECT_URL = 'https://ykeluybbnrlecswnrarw.supabase.co';
+const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlrZWx1eWJibnJsZWNzd25yYXJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUzNzc1ODgsImV4cCI6MjA4MDk1MzU4OH0.x_vDaLc8przERdSKNZOFpOGtNTDei2nrttudknZY1EA';
+
+// Configuration keys in localStorage (Deprecated but kept for reference if needed cleaning)
 export const STORAGE_KEY_URL = 'supabase_project_url';
 export const STORAGE_KEY_KEY = 'supabase_anon_key';
 
@@ -9,19 +13,15 @@ let supabase: SupabaseClient | null = null;
 let currentUser: User | null = null; // Caching currentUser to avoid async calls everywhere
 
 export function initSupabase(): boolean {
-    const url = localStorage.getItem(STORAGE_KEY_URL);
-    const key = localStorage.getItem(STORAGE_KEY_KEY);
-
-    if (url && key) {
-        try {
-            supabase = createClient(url, key);
-            return true;
-        } catch (e) {
-            console.error('Invalid Supabase Configuration', e);
-            return false;
+    try {
+        if (!supabase) {
+            supabase = createClient(PROJECT_URL, ANON_KEY);
         }
+        return true;
+    } catch (e) {
+        console.error('Supabase Initialization Failed', e);
+        return false;
     }
-    return false;
 }
 
 export function getSupabase() {

@@ -1,0 +1,14 @@
+# AI 行为规则 (.cursorrules)
+
+1. **语言要求**:
+   - `task.md` (任务清单)、`implementation_plan.md` (实施计划) 和 `walkthrough.md` (验证报告) 等所有 Artifacts **必须**使用中文编写。
+   - 与用户的对话和任务描述也应尽量使用中文。
+
+2. **Artifacts 管理**:
+   - 在开始复杂任务前，必须更新 `task.md`。
+   - 在进入 EXECUTION 模式前，必须创建或更新 `implementation_plan.md` 并获得用户批准（如果是重大变更）。
+   - 任务完成后，必须更新 `walkthrough.md` 记录变更和验证结果。
+
+3. **CHANGELOG 维护**:
+   - 遵循 `scripts/push.js` 的自动化流程。
+   - 每次推送前确认是否需要更新 CHANGELOG。

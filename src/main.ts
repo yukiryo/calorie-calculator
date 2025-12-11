@@ -683,18 +683,15 @@ changelogModal.addEventListener('click', (e) => {
 const cloudSettingsBtn = document.getElementById('cloud-settings-btn') as HTMLButtonElement;
 const cloudSettingsModal = document.getElementById('cloud-settings-modal') as HTMLDivElement;
 const closeCloudSettingsBtn = document.getElementById('close-cloud-settings-btn') as HTMLButtonElement;
-const saveCloudConfigBtn = document.getElementById('save-cloud-config-btn') as HTMLButtonElement;
-const supabaseUrlInput = document.getElementById('supabase-url') as HTMLInputElement;
-const supabaseKeyInput = document.getElementById('supabase-key') as HTMLInputElement;
 const cloudStatusDot = document.getElementById('cloud-status-dot') as HTMLSpanElement;
 
-const cloudConfigSection = document.getElementById('cloud-config-section') as HTMLDivElement;
+// Sections (Config removed)
 const cloudAuthSection = document.getElementById('cloud-auth-section') as HTMLDivElement;
+const cloudGuestSection = document.getElementById('cloud-guest-section') as HTMLDivElement;
+
 const currentUserEmail = document.getElementById('current-user-email') as HTMLSpanElement;
 const logoutBtn = document.getElementById('logout-btn') as HTMLButtonElement;
 const manualSyncBtn = document.getElementById('manual-sync-btn') as HTMLButtonElement;
-const resetConfigBtn = document.getElementById('reset-config-btn') as HTMLButtonElement;
-
 
 const authModal = document.getElementById('auth-modal') as HTMLDivElement;
 const closeAuthBtn = document.getElementById('close-auth-btn') as HTMLButtonElement;
@@ -709,52 +706,38 @@ const authTitle = document.getElementById('auth-title') as HTMLHeadingElement;
 let isLoginMode = true;
 
 function initCloudUI() {
-    // Check if configuration exists
-    const hasConfig = Supa.initSupabase();
-    if (hasConfig) {
-        // Default to hidden until we verify session
-        cloudAuthSection.classList.add('hidden');
+    // Config hardcoded, always init
+    Supa.initSupabase();
 
-        // Use real-time subscription for Auth State
-        // This handles Initial Load, Refresh, Login, Logout automatically
-        Supa.subscribeToAuthChanges((user) => {
-            updateCloudUIState(!!user);
-            if (user) {
-                // If we just got a user (login or restore), sync foods
-                syncFoods();
-            }
-        });
-    } else {
-        updateCloudUIState(false);
-    }
+    // Use real-time subscription for Auth State
+    Supa.subscribeToAuthChanges((user) => {
+        updateCloudUIState(!!user);
+        if (user) {
+            syncFoods();
+        }
+    });
 }
 
-const cloudGuestSection = document.getElementById('cloud-guest-section') as HTMLDivElement;
 const guestLoginBtn = document.getElementById('guest-login-btn') as HTMLButtonElement;
-const guestResetConfigBtn = document.getElementById('guest-reset-config-btn') as HTMLButtonElement;
 
+// @ts-ignore
+// window.updateCloudUIState = updateCloudUIState;
 
 function updateCloudUIState(isLoggedIn: boolean) {
-    if (Supa.isHelperConnected()) {
-        cloudConfigSection.classList.add('hidden');
+    // console.log('updateCloudUIState', { isLoggedIn, isHelperConnected: Supa.isHelperConnected() });
 
-        if (isLoggedIn) {
-            cloudStatusDot.classList.remove('hidden');
-            cloudAuthSection.classList.remove('hidden');
-            cloudGuestSection.classList.add('hidden');
-            const user = Supa.getCurrentUser();
-            if (user) currentUserEmail.textContent = user.email || 'User';
-        } else {
-            // Connected to Project, but not User (Guest)
-            cloudStatusDot.classList.add('hidden');
-            cloudAuthSection.classList.add('hidden');
-            cloudGuestSection.classList.remove('hidden');
-        }
-    } else {
-        cloudStatusDot.classList.add('hidden');
-        cloudConfigSection.classList.remove('hidden');
-        cloudAuthSection.classList.add('hidden');
+    // Always connected now
+    if (isLoggedIn) {
+        cloudStatusDot.classList.remove('hidden');
+        cloudAuthSection.classList.remove('hidden');
         cloudGuestSection.classList.add('hidden');
+        const user = Supa.getCurrentUser();
+        if (user) currentUserEmail.textContent = user.email || 'User';
+    } else {
+        // Connected to Project, but not User (Guest)
+        cloudStatusDot.classList.add('hidden');
+        cloudAuthSection.classList.add('hidden');
+        cloudGuestSection.classList.remove('hidden');
     }
 }
 
@@ -762,29 +745,17 @@ function updateCloudUIState(isLoggedIn: boolean) {
 cloudSettingsBtn.addEventListener('click', async () => {
     cloudSettingsModal.classList.remove('hidden');
     requestAnimationFrame(() => cloudSettingsModal.classList.add('active'));
-
-    // Fill inputs if localstorage has them
-    supabaseUrlInput.value = localStorage.getItem(Supa.STORAGE_KEY_URL) || '';
-    supabaseKeyInput.value = localStorage.getItem(Supa.STORAGE_KEY_KEY) || '';
-
-    // Logic is now handled purely by UI state in UpdateCloudUIState
+    // No inputs to fill
 });
 
 // Guest Section Listeners
 guestLoginBtn.addEventListener('click', () => {
-    // Keep settings modal open or close it? 
     // Usually close it to focus on auth
     closeCloudSettings();
     openAuthModal();
 });
 
-guestResetConfigBtn.addEventListener('click', () => {
-    if (confirm('确定要清除服务器配置吗？您将无法同步数据。')) {
-        localStorage.removeItem(Supa.STORAGE_KEY_URL);
-        localStorage.removeItem(Supa.STORAGE_KEY_KEY);
-        location.reload();
-    }
-});
+// Guest Reset Config Removed
 
 function closeCloudSettings() {
     cloudSettingsModal.classList.remove('active');
@@ -796,38 +767,8 @@ cloudSettingsModal.addEventListener('click', (e) => {
     if (e.target === cloudSettingsModal) closeCloudSettings();
 });
 
-
-// Save Config
-saveCloudConfigBtn.addEventListener('click', () => {
-    const url = supabaseUrlInput.value.trim();
-    const key = supabaseKeyInput.value.trim();
-
-    if (!url || !key) {
-        alert('请输入完整的 Project URL 和 Anon Key');
-        return;
-    }
-
-    localStorage.setItem(Supa.STORAGE_KEY_URL, url);
-    localStorage.setItem(Supa.STORAGE_KEY_KEY, key);
-
-    if (Supa.initSupabase()) {
-        // Config saved, try to auth
-        alert('连接成功！请登录您的账号。');
-        cloudConfigSection.classList.add('hidden');
-        openAuthModal();
-    } else {
-        alert('连接失败，请检查 URL 和 Key 格式是否正确。');
-    }
-});
-
-// Reset Config
-resetConfigBtn.addEventListener('click', () => {
-    if (confirm('确定要清除服务器配置吗？您将无法同步数据。')) {
-        localStorage.removeItem(Supa.STORAGE_KEY_URL);
-        localStorage.removeItem(Supa.STORAGE_KEY_KEY);
-        location.reload();
-    }
-});
+// Save Config Listener Removed
+// Reset Config Listener Removed
 
 // Auth Modal
 function openAuthModal() {

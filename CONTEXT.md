@@ -4,7 +4,7 @@
 
 在新设备或新会话中继续工作时，告诉 Agent：
 
-> 继续 calorie-calculator 项目开发，请先阅读 `CONTEXT.md` 和 `.agent/workflows/push.md`。
+> 继续 calorie-calculator 项目开发，请先阅读 `CONTEXT.md`、`.agent/workflows/push.md` 和 `.cursorrules`。
 
 ---
 
@@ -30,7 +30,9 @@
 
 ## 开发规范
 
-详见 `.agent/workflows/push.md`，关键规则：
+详见 `.agent/workflows/push.md` 和 `.cursorrules`，关键规则：
+
+> **Note**: 所有文档（Plan, Task, Walkthrough）必须使用 **中文** 编写。
 
 | 规则 | 说明 |
 |-----|-----|

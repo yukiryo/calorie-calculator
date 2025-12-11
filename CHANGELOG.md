@@ -1,5 +1,11 @@
 # 更新日志 (Changelog)
 
+
+## [1.0.8] - 2025-12-11
+
+### featfeat
+- **feat**: 集成 Supabase 配置并简化云同步流程 ([53b266d](https://github.com/yukiryo/calorie-calculator/commit/53b266d))
+
 ## [1.0.7] - 2025-12-11
 
 ### 📝 文档更新 (Docs)

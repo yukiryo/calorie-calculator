@@ -223,21 +223,7 @@
         <button id="close-cloud-settings-btn" class="close-btn" aria-label="关闭">×</button>
       </div>
 
-      <div id="cloud-config-section">
-        <p class="modal-desc">请输入您的 Supabase 项目信息以开启同步功能。</p>
-        <div class="input-group" style="margin-bottom: 1rem; width: 100%;">
-          <label for="supabase-url" style="text-align: left;">Project URL (项目网址)</label>
-          <input type="text" id="supabase-url" class="prompt-input" autocomplete="off"
-            placeholder="https://xyz.supabase.co" style="margin-bottom: 0;">
-        </div>
-        <div class="input-group" style="margin-bottom: 1.5rem; width: 100%;">
-          <label for="supabase-key" style="text-align: left;">Anon Key (API 密钥)</label>
-          <input type="password" id="supabase-key" class="prompt-input" autocomplete="off" placeholder="eyJhb..."
-            style="margin-bottom: 0;">
-        </div>
-        <button id="save-cloud-config-btn" class="action-btn"
-          style="width: 100%; justify-content: center;">连接服务器</button>
-      </div>
+      <!-- Config Section Removed (Hardcoded) -->
 
       <div id="cloud-guest-section" class="hidden">
         <div class="user-info-card">
@@ -256,10 +242,7 @@
         <button id="guest-login-btn" class="action-btn"
           style="width: 100%; justify-content: center; margin-bottom: 1rem;">登录 / 注册</button>
 
-        <div class="config-reset-wrapper"
-          style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem; text-align: center;">
-          <button id="guest-reset-config-btn" class="text-btn danger-text">重置服务器配置</button>
-        </div>
+
       </div>
 
       <div id="cloud-auth-section" class="hidden">
@@ -289,10 +272,7 @@
           <button id="logout-btn" class="prompt-btn cancel" style="width: 100%;">注销登录</button>
         </div>
 
-        <div class="config-reset-wrapper"
-          style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem; text-align: center;">
-          <button id="reset-config-btn" class="text-btn danger-text">重置服务器配置</button>
-        </div>
+
       </div>
     </div>
   </div>

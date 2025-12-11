@@ -48,21 +48,21 @@ commit type 会自动转换为 CHANGELOG 分类：
 
 版本块格式：`## [版本号] - 日期`
 
-条目格式：`- **关键词**: 描述 (commit: hash)`
+条目格式：`- **关键词**: 描述 ([hash](GitHub链接))`
 
 示例：
 ```markdown
 ## [1.0.8] - 2025-12-11
 
 ### 🐛 问题修复 (Bug Fixes)
-- **登录流程**: 修复验证邮件跳转错误 (commit: a1b2c3d)
-- **输入框**: 修复自动填充样式问题 (commit: e4f5g6h)
+- **登录流程**: 修复验证邮件跳转错误 ([a1b2c3d](https://github.com/yukiryo/calorie-calculator/commit/a1b2c3d))
+- **输入框**: 修复自动填充样式问题 ([e4f5g6h](https://github.com/yukiryo/calorie-calculator/commit/e4f5g6h))
 
 ### 🎨 样式优化 (Styles)
-- **按钮对齐**: 调整云朵图标居中 (commit: i7j8k9l)
+- **按钮对齐**: 调整云朵图标居中 ([i7j8k9l](https://github.com/yukiryo/calorie-calculator/commit/i7j8k9l))
 ```
 
-**注意**：commit hash 由脚本自动填充，无需手动编辑。
+**注意**：commit hash 链接由脚本自动生成，无需手动编辑。
 
 ## 手动步骤 (如果不使用脚本)
 

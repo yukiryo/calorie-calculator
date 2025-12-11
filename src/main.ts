@@ -641,6 +641,7 @@ function parseMarkdown(md: string): string {
             let content = line.replace('- ', '');
             content = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             content = content.replace(/`([^`]+)`/g, '<code>$1</code>');
+            content = content.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
             output += `<li>${content}</li>`;
         } else {
             if (inList) { output += '</ul>'; inList = false; }

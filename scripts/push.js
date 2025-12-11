@@ -8,6 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.join(__dirname, '..');
 const changelogPath = path.join(rootDir, 'CHANGELOG.md');
 const packageJsonPath = path.join(rootDir, 'package.json');
+const GITHUB_REPO = 'https://github.com/yukiryo/calorie-calculator';
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -87,7 +88,7 @@ async function main() {
             const keyword = messageParts[0].trim();
             const description = messageParts[1].trim();
             const formattedEntryBase = `- **${keyword}**: ${description || keyword}`;
-            const formattedEntry = formattedEntryBase + ' (commit: pending)';
+            const formattedEntry = formattedEntryBase + ' ([pending](pending))';
 
             // Check if similar entry exists
             if (changelogContent.includes(formattedEntryBase)) {
@@ -161,7 +162,8 @@ async function main() {
             try {
                 const commitHash = execSync('git rev-parse --short HEAD').toString().trim();
                 let changelogContent = fs.readFileSync(changelogPath, 'utf-8');
-                changelogContent = changelogContent.replace('(commit: pending)', `(commit: ${commitHash})`);
+                const commitLink = `[${commitHash}](${GITHUB_REPO}/commit/${commitHash})`;
+                changelogContent = changelogContent.replace('([pending](pending))', `(${commitLink})`);
                 fs.writeFileSync(changelogPath, changelogContent);
 
                 // Re-add and amend commit

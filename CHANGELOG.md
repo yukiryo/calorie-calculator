@@ -11,7 +11,7 @@
 
 
 ### 🎨 样式优化 (Styles)
-- **iOS Status Bar**: 修复 iOS PWA 状态栏不沉浸问题 ([f870aae](https://github.com/yukiryo/calorie-calculator/commit/f870aae))
+- **iOS 状态栏**: 修复 iOS PWA 状态栏不沉浸问题 ([f870aae](https://github.com/yukiryo/calorie-calculator/commit/f870aae))
 ## [1.0.7] - 2025-12-11
 
 ### 📝 文档更新 (Docs)

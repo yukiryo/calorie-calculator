@@ -614,37 +614,41 @@ const changelogModal = document.getElementById('changelog-modal') as HTMLDivElem
 const closeModalBtn = document.getElementById('close-modal-btn') as HTMLButtonElement;
 const changelogContent = document.getElementById('changelog-content') as HTMLDivElement;
 
-function parseMarkdown(md: string): string {
-
-    const lines = md.split('\n');
+function parseMarkdown(markdown: string): string {
     let output = '';
     let inList = false;
 
-    lines.forEach(line => {
-        line = line.trim();
-        if (!line) {
-            if (inList) { output += '</ul>'; inList = false; }
-            return;
-        }
+    markdown.split('\n').forEach(line => {
+        line = line.trim(); // Helper: handle indentation
 
-        if (line.startsWith('# ')) return;
+        if (!line) return; // Skip empty lines
+        if (line.startsWith('# ')) return; // Skip H1 title
 
         if (line.startsWith('## ')) {
             if (inList) { output += '</ul>'; inList = false; }
             const content = line.replace('## [', '').replace(']', '');
+            // Remove version link if present in header (e.g. [1.0.0])
             output += `<h2>${content.replace(/^#+\s*/, '')}</h2>`;
         } else if (line.startsWith('### ')) {
             if (inList) { output += '</ul>'; inList = false; }
             output += `<h3>${line.replace('### ', '')}</h3>`;
         } else if (line.startsWith('- ')) {
             if (!inList) { output += '<ul>'; inList = true; }
-            let content = line.replace('- ', '');
+            let content = line.substring(2); // Remove "- " safely
             content = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             content = content.replace(/`([^`]+)`/g, '<code>$1</code>');
+            // Enhanced link regex: allow spaces, handle standard markdown links
             content = content.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
             output += `<li>${content}</li>`;
         } else {
-            if (inList) { output += '</ul>'; inList = false; }
+            // Handle content that is not a list item (e.g. wrapped text or paragraphs)
+            if (inList) {
+                // Option A: Close list. Treat as paragraph.
+                output += '</ul>'; inList = false;
+                output += `<p>${line}</p>`;
+            } else {
+                output += `<p>${line}</p>`;
+            }
         }
     });
     if (inList) output += '</ul>';

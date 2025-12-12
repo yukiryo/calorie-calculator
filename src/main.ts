@@ -303,42 +303,7 @@ function showCustomConfirm(message: string): Promise<boolean> {
     });
 }
 
-// Custom Alert Logic
-const customAlertModal = document.getElementById('custom-alert-modal') as HTMLDivElement;
-const alertMessage = document.getElementById('alert-message') as HTMLParagraphElement;
-const alertOkBtn = document.getElementById('alert-ok-btn') as HTMLButtonElement;
-
-function showCustomAlert(message: string): Promise<void> {
-    return new Promise((resolve) => {
-        alertMessage.textContent = message;
-        customAlertModal.classList.remove('hidden');
-        requestAnimationFrame(() => {
-            customAlertModal.classList.add('active');
-            alertOkBtn.focus();
-        });
-
-        const handleOk = () => {
-            cleanup();
-            resolve();
-        };
-
-        const handleKeydown = (e: KeyboardEvent) => {
-            if (e.key === 'Enter' || e.key === 'Escape') handleOk();
-        };
-
-        const cleanup = () => {
-            customAlertModal.classList.remove('active');
-            setTimeout(() => {
-                customAlertModal.classList.add('hidden');
-            }, 300);
-            alertOkBtn.removeEventListener('click', handleOk);
-            document.removeEventListener('keydown', handleKeydown);
-        };
-
-        alertOkBtn.addEventListener('click', handleOk);
-        document.addEventListener('keydown', handleKeydown);
-    });
-}
+// Custom Alert Logic (Moved to bottom)
 
 // Drawer Logic
 const foodDrawer = document.getElementById('food-drawer') as HTMLDivElement;
@@ -815,18 +780,31 @@ function showCustomAlert(message: string, title = '提示'): Promise<void> {
         alertMessage.textContent = message;
 
         customAlertModal.classList.remove('hidden');
-        requestAnimationFrame(() => customAlertModal.classList.add('active'));
+        requestAnimationFrame(() => {
+            customAlertModal.classList.add('active');
+            alertOkBtn.focus();
+        });
 
         const handleOk = () => {
+            cleanup();
+            resolve();
+        };
+
+        const handleKeydown = (e: KeyboardEvent) => {
+            if (e.key === 'Enter' || e.key === 'Escape') handleOk();
+        };
+
+        const cleanup = () => {
             customAlertModal.classList.remove('active');
             setTimeout(() => {
                 customAlertModal.classList.add('hidden');
-                alertOkBtn.removeEventListener('click', handleOk);
-                resolve();
             }, 300);
+            alertOkBtn.removeEventListener('click', handleOk);
+            document.removeEventListener('keydown', handleKeydown);
         };
 
         alertOkBtn.addEventListener('click', handleOk);
+        document.addEventListener('keydown', handleKeydown);
     });
 }
 

@@ -15,7 +15,14 @@ let currentUser: User | null = null; // Caching currentUser to avoid async calls
 export function initSupabase(): boolean {
     try {
         if (!supabase) {
-            supabase = createClient(PROJECT_URL, ANON_KEY);
+            supabase = createClient(PROJECT_URL, ANON_KEY, {
+                auth: {
+                    persistSession: true,
+                    autoRefreshToken: true,
+                    detectSessionInUrl: true,
+                    storage: window.localStorage
+                }
+            });
         }
         return true;
     } catch (e) {

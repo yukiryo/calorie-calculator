@@ -16,6 +16,7 @@
 - **iOS 状态栏**: 修复 iOS PWA 状态栏不沉浸问题 ([f870aae](https://github.com/yukiryo/calorie-calculator/commit/f870aae))
 
 ### 🐛 问题修复 (Bug Fixes)
+- **iOS 模态框**: 重构模态框逻辑，使用 `visibility` 代替 `display: none` 彻底修复渲染问题 ([4d63fb0](https://github.com/yukiryo/calorie-calculator/commit/4d63fb0))
 - **iOS 模态框**: 使用强制重排修复第二次打开弹窗无内容的问题 ([8954c34](https://github.com/yukiryo/calorie-calculator/commit/8954c34))
 - **云同步弹窗**: 修复 iOS 上第二次点击无法显示弹窗的问题 ([7be52e2](https://github.com/yukiryo/calorie-calculator/commit/7be52e2))
 - **弹窗层级**: 修复登录成功弹窗被登录窗口遮挡的问题 ([4ad14b7](https://github.com/yukiryo/calorie-calculator/commit/4ad14b7))

@@ -645,11 +645,12 @@ input::placeholder {
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   border: none;
   color: white;
-  padding: 0.6rem 1.2rem;
+  padding: 0.85rem 1.5rem;
   border-radius: 12px;
   cursor: pointer;
   font-family: inherit;
   font-weight: 600;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;

@@ -624,10 +624,9 @@ function parseMarkdown(markdown: string): string {
 function openModal() {
     changelogContent.innerHTML = parseMarkdown(changelogRaw);
     changelogModal.classList.remove('hidden');
-
-    requestAnimationFrame(() => {
-        changelogModal.classList.add('active');
-    });
+    // Force reflow to ensure display change is applied before transition
+    void changelogModal.offsetHeight;
+    changelogModal.classList.add('active');
 }
 
 function closeModal() {
@@ -716,7 +715,9 @@ cloudSettingsBtn.addEventListener('click', async () => {
     // Cancel any pending close
     cloudSettingsClosing = false;
     cloudSettingsModal.classList.remove('hidden');
-    requestAnimationFrame(() => cloudSettingsModal.classList.add('active'));
+    // Force reflow to ensure display change is applied before transition
+    void cloudSettingsModal.offsetHeight;
+    cloudSettingsModal.classList.add('active');
     // No inputs to fill
 });
 
@@ -751,7 +752,9 @@ cloudSettingsModal.addEventListener('click', (e) => {
 // Auth Modal
 function openAuthModal() {
     authModal.classList.remove('hidden');
-    requestAnimationFrame(() => authModal.classList.add('active'));
+    // Force reflow to ensure display change is applied before transition
+    void authModal.offsetHeight;
+    authModal.classList.add('active');
     authEmailInput.focus();
 }
 

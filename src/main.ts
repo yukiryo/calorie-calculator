@@ -621,19 +621,14 @@ function parseMarkdown(markdown: string): string {
     return output;
 }
 
+
 function openModal() {
     changelogContent.innerHTML = parseMarkdown(changelogRaw);
-    changelogModal.classList.remove('hidden');
-    // Force reflow to ensure display change is applied before transition
-    void changelogModal.offsetHeight;
     changelogModal.classList.add('active');
 }
 
 function closeModal() {
     changelogModal.classList.remove('active');
-    setTimeout(() => {
-        changelogModal.classList.add('hidden');
-    }, 300);
 }
 
 changelogBtn.addEventListener('click', openModal);
@@ -710,20 +705,13 @@ function updateCloudUIState(isLoggedIn: boolean) {
 }
 
 // Open Settings
-let cloudSettingsClosing = false;
 cloudSettingsBtn.addEventListener('click', async () => {
-    // Cancel any pending close
-    cloudSettingsClosing = false;
-    cloudSettingsModal.classList.remove('hidden');
-    // Force reflow to ensure display change is applied before transition
-    void cloudSettingsModal.offsetHeight;
+    // Just add active - CSS handles the rest
     cloudSettingsModal.classList.add('active');
-    // No inputs to fill
 });
 
 // Guest Section Listeners
 guestLoginBtn.addEventListener('click', () => {
-    // Usually close it to focus on auth
     closeCloudSettings();
     openAuthModal();
 });
@@ -731,14 +719,8 @@ guestLoginBtn.addEventListener('click', () => {
 // Guest Reset Config Removed
 
 function closeCloudSettings() {
-    cloudSettingsClosing = true;
     cloudSettingsModal.classList.remove('active');
-    setTimeout(() => {
-        // Only add hidden if we're still in closing state
-        if (cloudSettingsClosing) {
-            cloudSettingsModal.classList.add('hidden');
-        }
-    }, 300);
+
 }
 
 closeCloudSettingsBtn.addEventListener('click', closeCloudSettings);
@@ -751,16 +733,12 @@ cloudSettingsModal.addEventListener('click', (e) => {
 
 // Auth Modal
 function openAuthModal() {
-    authModal.classList.remove('hidden');
-    // Force reflow to ensure display change is applied before transition
-    void authModal.offsetHeight;
     authModal.classList.add('active');
     authEmailInput.focus();
 }
 
 function closeAuthModal() {
     authModal.classList.remove('active');
-    setTimeout(() => authModal.classList.add('hidden'), 300);
 }
 
 closeAuthBtn.addEventListener('click', closeAuthModal);
@@ -791,7 +769,7 @@ function showCustomAlert(message: string, title = '提示'): Promise<void> {
         alertTitle.textContent = title;
         alertMessage.textContent = message;
 
-        customAlertModal.classList.remove('hidden');
+        // requestAnimationFrame not strictly needed with visibility transition but harmless
         requestAnimationFrame(() => {
             customAlertModal.classList.add('active');
             alertOkBtn.focus();
@@ -808,8 +786,9 @@ function showCustomAlert(message: string, title = '提示'): Promise<void> {
 
         const cleanup = () => {
             customAlertModal.classList.remove('active');
+            // Timeout purely for Promise resolution timing/UX
             setTimeout(() => {
-                customAlertModal.classList.add('hidden');
+                // No hidden class to add
             }, 300);
             alertOkBtn.removeEventListener('click', handleOk);
             document.removeEventListener('keydown', handleKeydown);

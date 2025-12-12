@@ -876,6 +876,7 @@ footer {
 }
 
 /* Modal */
+/* Modal */
 .modal {
   position: fixed;
   top: 0;
@@ -886,18 +887,24 @@ footer {
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   z-index: 3000;
-  display: flex;
+  display: flex !important;
+  /* Force flex, ignore hidden class if present */
   justify-content: center;
   align-items: center;
   padding: 1rem;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  /* Delay visibility transition to ensure it hides AFTER opacity fades out */
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
 }
 
 .modal.active {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
+  /* Immediate visibility when showing */
+  transition: opacity 0.3s ease, visibility 0s linear 0s;
 }
 
 .modal-content {

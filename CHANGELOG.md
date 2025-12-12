@@ -15,6 +15,9 @@
 - **iOS 状态栏**: 恢复 theme-color 以适配 iOS 状态栏背景色 ([5ab1e23](https://github.com/yukiryo/calorie-calculator/commit/5ab1e23))
 - **iOS 状态栏**: 修复 iOS PWA 状态栏不沉浸问题 ([f870aae](https://github.com/yukiryo/calorie-calculator/commit/f870aae))
 
+### 🎨 样式优化 (Styles)
+- **按钮统一**: 统一所有弹窗按钮（登录、注册、同步、确认等）的尺寸和样式 ([ebfc410](https://github.com/yukiryo/calorie-calculator/commit/ebfc410))
+
 ### 🐛 问题修复 (Bug Fixes)
 - **登录持久化**: 显式配置 Supabase 会话持久化和自动刷新，解决登录状态频繁丢失 ([1da5a81](https://github.com/yukiryo/calorie-calculator/commit/1da5a81))
 - **iOS 模态框**: 重构模态框逻辑，使用 `visibility` 代替 `display: none` 彻底修复渲染问题 ([4d63fb0](https://github.com/yukiryo/calorie-calculator/commit/4d63fb0))

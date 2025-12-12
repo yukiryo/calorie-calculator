@@ -803,6 +803,33 @@ authSwitchBtn.addEventListener('click', () => {
     }
 });
 
+// Custom Alert Logic
+const customAlertModal = document.getElementById('custom-alert-modal') as HTMLDivElement;
+const alertTitle = document.getElementById('alert-title') as HTMLHeadingElement;
+const alertMessage = document.getElementById('alert-message') as HTMLParagraphElement;
+const alertOkBtn = document.getElementById('alert-ok-btn') as HTMLButtonElement;
+
+function showCustomAlert(message: string, title = '提示'): Promise<void> {
+    return new Promise((resolve) => {
+        alertTitle.textContent = title;
+        alertMessage.textContent = message;
+
+        customAlertModal.classList.remove('hidden');
+        requestAnimationFrame(() => customAlertModal.classList.add('active'));
+
+        const handleOk = () => {
+            customAlertModal.classList.remove('active');
+            setTimeout(() => {
+                customAlertModal.classList.add('hidden');
+                alertOkBtn.removeEventListener('click', handleOk);
+                resolve();
+            }, 300);
+        };
+
+        alertOkBtn.addEventListener('click', handleOk);
+    });
+}
+
 authSubmitBtn.addEventListener('click', async () => {
     const email = authEmailInput.value.trim();
     const password = authPasswordInput.value.trim();
@@ -815,24 +842,25 @@ authSubmitBtn.addEventListener('click', async () => {
     try {
         if (isLoginMode) {
             await Supa.login(email, password);
-            alert('登录成功！');
+            // Verify this modal exists in HTML before calling
+            await showCustomAlert('登录成功！');
             closeAuthModal();
             closeCloudSettings(); // Close the settings modal too
             // UI update handled by subscription
         } else {
             const data = await Supa.signUp(email, password);
             if (data.user && !data.session) {
-                alert('注册成功！请务必查收邮件并点击验证链接，否则无法登录。');
+                await showCustomAlert('注册成功！\n请务必查收邮件并点击验证链接，否则无法登录。', '注册成功');
                 closeAuthModal();
                 closeCloudSettings(); // Close the settings modal too
             } else {
-                alert('注册并登录成功！');
+                await showCustomAlert('注册并登录成功！');
                 closeAuthModal();
                 closeCloudSettings(); // Close the settings modal too
             }
         }
     } catch (e: any) {
-        alert('操作失败: ' + (e.message || '未知错误'));
+        await showCustomAlert('操作失败: ' + (e.message || '未知错误'), '错误');
         console.error(e);
     } finally {
         authSubmitBtn.textContent = isLoginMode ? '登录' : '注册';

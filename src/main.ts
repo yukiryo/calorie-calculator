@@ -820,21 +820,18 @@ authSubmitBtn.addEventListener('click', async () => {
     try {
         if (isLoginMode) {
             await Supa.login(email, password);
-            // Verify this modal exists in HTML before calling
-            await showCustomAlert('登录成功！');
             closeAuthModal();
-            closeCloudSettings(); // Close the settings modal too
+            closeCloudSettings();
+            await showCustomAlert('登录成功！');
             // UI update handled by subscription
         } else {
             const data = await Supa.signUp(email, password);
+            closeAuthModal();
+            closeCloudSettings();
             if (data.user && !data.session) {
                 await showCustomAlert('注册成功！\n请务必查收邮件并点击验证链接，否则无法登录。', '注册成功');
-                closeAuthModal();
-                closeCloudSettings(); // Close the settings modal too
             } else {
                 await showCustomAlert('注册并登录成功！');
-                closeAuthModal();
-                closeCloudSettings(); // Close the settings modal too
             }
         }
     } catch (e: any) {

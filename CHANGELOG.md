@@ -5,6 +5,7 @@
 
 ### ✨ 新增功能 (Features)
 - **Supabase 集成**: 集成 Supabase 配置并简化云同步流程 ([53b266d](https://github.com/yukiryo/calorie-calculator/commit/53b266d))
+- **自定义提示框**: 替换原生 alert 为 Glassmorphism 风格模态框 ([d0434fd](https://github.com/yukiryo/calorie-calculator/commit/d0434fd))
 
 ### 🔧 杂项 (Chore)
 - **项目清理**: 移除冗余文档与依赖，增强推送脚本稳定性 ([861ceb8](https://github.com/yukiryo/calorie-calculator/commit/861ceb8))

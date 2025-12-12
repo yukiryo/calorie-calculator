@@ -711,7 +711,10 @@ function updateCloudUIState(isLoggedIn: boolean) {
 }
 
 // Open Settings
+let cloudSettingsClosing = false;
 cloudSettingsBtn.addEventListener('click', async () => {
+    // Cancel any pending close
+    cloudSettingsClosing = false;
     cloudSettingsModal.classList.remove('hidden');
     requestAnimationFrame(() => cloudSettingsModal.classList.add('active'));
     // No inputs to fill
@@ -727,8 +730,14 @@ guestLoginBtn.addEventListener('click', () => {
 // Guest Reset Config Removed
 
 function closeCloudSettings() {
+    cloudSettingsClosing = true;
     cloudSettingsModal.classList.remove('active');
-    setTimeout(() => cloudSettingsModal.classList.add('hidden'), 300);
+    setTimeout(() => {
+        // Only add hidden if we're still in closing state
+        if (cloudSettingsClosing) {
+            cloudSettingsModal.classList.add('hidden');
+        }
+    }, 300);
 }
 
 closeCloudSettingsBtn.addEventListener('click', closeCloudSettings);

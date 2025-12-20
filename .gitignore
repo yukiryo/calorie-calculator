@@ -26,6 +26,9 @@ yarn-error.log*
 tmp/
 temp/
 
+# 脚本
+scripts/
+
 # Agent
 .agent/
 CONTEXT.md

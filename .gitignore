@@ -9,6 +9,7 @@ package-lock.json
 # IDE
 .vscode/
 .idea/
+.cursorrules
 *.suo
 *.ntvs*
 *.njsproj

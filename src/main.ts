@@ -513,7 +513,10 @@ function showEditFoodModal(food: SavedFood) {
         renderSavedFoods();
         cleanup();
 
-        // TODO: Handle cloud update for edits (omitted for brevity, requires delete then insert or an update rpc)
+        // Sync to cloud if online
+        if (Supa.getSupabase() && Supa.getCurrentUser()) {
+            await Supa.updateRemoteFood(food);
+        }
     };
 
     const handleCancel = () => {
@@ -683,12 +686,7 @@ function initCloudUI() {
 
 const guestLoginBtn = document.getElementById('guest-login-btn') as HTMLButtonElement;
 
-// @ts-ignore
-// window.updateCloudUIState = updateCloudUIState;
-
 function updateCloudUIState(isLoggedIn: boolean) {
-    // console.log('updateCloudUIState', { isLoggedIn, isHelperConnected: Supa.isHelperConnected() });
-
     // Always connected now
     if (isLoggedIn) {
         cloudStatusDot.classList.remove('hidden');
@@ -825,8 +823,9 @@ authSubmitBtn.addEventListener('click', async () => {
                 await showCustomAlert('注册并登录成功！');
             }
         }
-    } catch (e: any) {
-        await showCustomAlert('操作失败: ' + (e.message || '未知错误'), '错误');
+    } catch (e: unknown) {
+        const message = e instanceof Error ? e.message : '未知错误';
+        await showCustomAlert('操作失败: ' + message, '错误');
         console.error(e);
     } finally {
         authSubmitBtn.textContent = isLoginMode ? '登录' : '注册';
@@ -835,14 +834,13 @@ authSubmitBtn.addEventListener('click', async () => {
 });
 
 // Logout
-// Logout
 logoutBtn.addEventListener('click', async () => {
     logoutBtn.disabled = true;
     logoutBtn.textContent = '注销中...';
     try {
         await Supa.logout();
         updateCloudUIState(false); // Force UI update immediately
-    } catch (e: any) {
+    } catch (e: unknown) {
         console.error(e);
         await showCustomAlert('注销失败，请重试');
     } finally {

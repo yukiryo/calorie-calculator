@@ -1,127 +1,96 @@
-# 更新日志 (Changelog)
+# Changelog
 
+## [1.0.9] - 2025-12-24
+
+### Added
+- 编辑常用食品后自动同步到云端
+
+### Changed
+- 替换 `any` 为具体类型，使用 `unknown` + 类型守卫处理错误
+- 移除调试代码和冗余注释
 
 ## [1.0.8] - 2025-12-11
 
-### ✨ 新增功能 (Features)
-- **Supabase 集成**: 集成 Supabase 配置并简化云同步流程 ([53b266d](https://github.com/yukiryo/calorie-calculator/commit/53b266d))
-- **自定义提示框**: 替换原生 alert 为 Glassmorphism 风格模态框 ([d0434fd](https://github.com/yukiryo/calorie-calculator/commit/d0434fd))
+### Added
+- 集成 Supabase 简化云同步流程
+- 自定义 Glassmorphism 风格提示框
 
-### 🔧 杂项 (Chore)
-- **项目清理**: 移除冗余文档与依赖，增强推送脚本稳定性 ([861ceb8](https://github.com/yukiryo/calorie-calculator/commit/861ceb8))
+### Fixed
+- 显式配置 Supabase 会话持久化，解决登录状态丢失
+- 使用 `visibility` 代替 `display: none` 修复 iOS 模态框渲染问题
+- 修复 iOS PWA 状态栏沉浸式显示
 
-
-### 🎨 样式优化 (Styles)
-- **iOS 状态栏**: 恢复 theme-color 以适配 iOS 状态栏背景色 ([5ab1e23](https://github.com/yukiryo/calorie-calculator/commit/5ab1e23))
-- **iOS 状态栏**: 修复 iOS PWA 状态栏不沉浸问题 ([f870aae](https://github.com/yukiryo/calorie-calculator/commit/f870aae))
-
-### 🎨 样式优化 (Styles)
-- **按钮统一**: 统一所有弹窗按钮（登录、注册、同步、确认等）的尺寸和样式 ([ebfc410](https://github.com/yukiryo/calorie-calculator/commit/ebfc410))
-
-### 🐛 问题修复 (Bug Fixes)
-- **登录持久化**: 显式配置 Supabase 会话持久化和自动刷新，解决登录状态频繁丢失 ([1da5a81](https://github.com/yukiryo/calorie-calculator/commit/1da5a81))
-- **iOS 模态框**: 重构模态框逻辑，使用 `visibility` 代替 `display: none` 彻底修复渲染问题 ([4d63fb0](https://github.com/yukiryo/calorie-calculator/commit/4d63fb0))
-- **iOS 模态框**: 使用强制重排修复第二次打开弹窗无内容的问题 ([8954c34](https://github.com/yukiryo/calorie-calculator/commit/8954c34))
-- **云同步弹窗**: 修复 iOS 上第二次点击无法显示弹窗的问题 ([7be52e2](https://github.com/yukiryo/calorie-calculator/commit/7be52e2))
-- **弹窗层级**: 修复登录成功弹窗被登录窗口遮挡的问题 ([4ad14b7](https://github.com/yukiryo/calorie-calculator/commit/4ad14b7))
-- **构建修复**: 解决因重复函数声明导致的构建失败 ([146a8ff](https://github.com/yukiryo/calorie-calculator/commit/146a8ff))
-- **iOS 状态栏**: 回退上下滑动露白修复 ([8fc3a2d](https://github.com/yukiryo/calorie-calculator/commit/8fc3a2d))
-- **iOS 状态栏**: 在 head 中添加同步 CSS 修复上下滑动露白问题 ([416a252](https://github.com/yukiryo/calorie-calculator/commit/416a252))
-- **iOS 状态栏**: 回退所有关于状态栏沉浸式的尝试 ([74b074f](https://github.com/yukiryo/calorie-calculator/commit/74b074f))
-- **iOS 状态栏**: 修复 HTML 语法错误并确认沉浸式配置 ([ac18973](https://github.com/yukiryo/calorie-calculator/commit/ac18973))
-- **iOS 状态栏**: 强制配置 light/dark 模式 theme-color 并恢复 black-translucent ([8634a0b](https://github.com/yukiryo/calorie-calculator/commit/8634a0b))
-- **iOS 状态栏**: 使用 black 样式替代 black-translucent ([788ba36](https://github.com/yukiryo/calorie-calculator/commit/788ba36))
-- **iOS 状态栏**: 移除 theme-color 以解决与 black-translucent 的冲突 ([867cd80](https://github.com/yukiryo/calorie-calculator/commit/867cd80))
-- **iOS 状态栏**: 在 head 中添加同步 CSS 解决状态栏不沉浸问题 ([8101227](https://github.com/yukiryo/calorie-calculator/commit/8101227))
 ## [1.0.7] - 2025-12-11
 
-### 📝 文档更新 (Docs)
-- **CHANGELOG 规则**: 重写 CHANGELOG 并更新推送规则 ([ca450ac](https://github.com/yukiryo/calorie-calculator/commit/ca450ac))
-- **副标题**: 更新为"kJ 和 kcal 之间精准换算" ([1319216](https://github.com/yukiryo/calorie-calculator/commit/1319216))
+### Added
+- 页面底部显示应用版本号
 
-### 🎨 样式优化 (Styles)
-- **云朵图标**: 修复按钮内图标不居中问题，使用标准 viewBox ([04ff15d](https://github.com/yukiryo/calorie-calculator/commit/04ff15d))
-- **CHANGELOG**: 修正格式为标准规范 ([04ff15d](https://github.com/yukiryo/calorie-calculator/commit/04ff15d))
-
-### ✨ 新增功能 (Features)
-- **版本号显示**: 在页面底部 footer 显示当前应用版本号，随 package.json 自动同步 ([9b33a71](https://github.com/yukiryo/calorie-calculator/commit/9b33a71))
-
-### 🐛 问题修复 (Bug Fixes)
-- **修复网页端更新日志链接点击问题**: 修复网页端更新日志链接点击问题 ([9e2b65f](https://github.com/yukiryo/calorie-calculator/commit/9e2b65f))
-- **弹窗体验**: 修复了登录/注册成功后云同步设置窗口未关闭的问题 ([e64168a](https://github.com/yukiryo/calorie-calculator/commit/e64168a))
-- **注销功能**: 修复了注销按钮点击无反应的问题 ([349d2ee](https://github.com/yukiryo/calorie-calculator/commit/349d2ee))
-- **输入干扰**: 修复了摄入量输入框被错误识别为密码框的问题 ([e64168a](https://github.com/yukiryo/calorie-calculator/commit/e64168a))
-- **邮件验证**: 修正了注册验证邮件的跳转链接 ([e64168a](https://github.com/yukiryo/calorie-calculator/commit/e64168a))
-- **弹窗体验**: 调整所有弹窗的关闭按钮位置至右上角 ([e64168a](https://github.com/yukiryo/calorie-calculator/commit/e64168a))
-- **UI 统一**: 统一了云同步设置和登录窗口的按钮颜色与输入框样式 ([ff5a64e](https://github.com/yukiryo/calorie-calculator/commit/ff5a64e))
-- **弹窗重构**: 全面替换浏览器原生 alert 弹窗为自定义玻璃拟态弹窗 ([51fe262](https://github.com/yukiryo/calorie-calculator/commit/51fe262))
+### Fixed
+- 网页端更新日志链接点击问题
+- 登录/注册成功后云同步设置窗口未关闭
+- 注销按钮点击无反应
+- 输入框被错误识别为密码框
+- 统一弹窗按钮样式和位置
 
 ## [1.0.6] - 2025-12-10
 
-### 🔧 临时修复 (Hotfix)
-- **版本号修正**: 修正了前次推送的版本号混乱问题 ([08fd3a3](https://github.com/yukiryo/calorie-calculator/commit/08fd3a3))
-- **自动填充**: 紧急修复了浏览器自动填充导致的输入框样式异常 ([08fd3a3](https://github.com/yukiryo/calorie-calculator/commit/08fd3a3))
+### Fixed
+- 版本号混乱问题
+- 浏览器自动填充导致的输入框样式异常
 
 ## [1.0.5] - 2025-12-10
 
-### ✨ 新增功能 (Features)
-- **云端同步**: 集成 Supabase 实现多设备数据同步 ([857edd7](https://github.com/yukiryo/calorie-calculator/commit/857edd7))
-- **用户认证**: 支持邮箱注册/登录，自动保持登录状态 ([857edd7](https://github.com/yukiryo/calorie-calculator/commit/857edd7))
-- **智能合并**: 采用"智能合并"策略，自动保留离线添加的数据 ([857edd7](https://github.com/yukiryo/calorie-calculator/commit/857edd7))
-- **UI 优化**: 修复了图标对齐和未登录时的显示状态 ([857edd7](https://github.com/yukiryo/calorie-calculator/commit/857edd7))
+### Added
+- 集成 Supabase 实现多设备云端同步
+- 邮箱注册/登录和自动保持登录状态
+- 智能合并策略，保留离线添加的数据
 
 ## [1.0.4] - 2025-12-10
 
-### ✨ 新增功能 (Features)
-- **智能食品库**: 食品库显示单位，点击自动切换模式并填充 ([cd5f941](https://github.com/yukiryo/calorie-calculator/commit/cd5f941))
-- **公式标准化**: 优化底部辅助公式为 `Total kcal = (kJ/100g × Weight) ÷ 418.4` ([cd5f941](https://github.com/yukiryo/calorie-calculator/commit/cd5f941))
-- **食品库编辑**: 支持编辑已保存的常用食品 ([cd5f941](https://github.com/yukiryo/calorie-calculator/commit/cd5f941))
-- **自定义弹窗**: 毛玻璃风格模态框替代原生弹窗 ([cd5f941](https://github.com/yukiryo/calorie-calculator/commit/cd5f941))
-- **输入限制**: 只允许输入数字和小数点 ([cd5f941](https://github.com/yukiryo/calorie-calculator/commit/cd5f941))
+### Added
+- 食品库显示单位，点击自动切换模式并填充
+- 支持编辑已保存的常用食品
+- 只允许输入数字和小数点
+- 毛玻璃风格模态框替代原生弹窗
 
-### 🎨 样式优化 (Styles)
-- **食品库抽屉**: 改为底部抽屉模式 (Bottom Sheet) ([cd5f941](https://github.com/yukiryo/calorie-calculator/commit/cd5f941))
+### Changed
+- 食品库改为底部抽屉模式 (Bottom Sheet)
+- 优化公式为 `Total kcal = (kJ/100g × Weight) ÷ 418.4`
+- 移除约 45 行冗余代码
 
-### 🐛 问题修复 (Bug Fixes)
-- **单位显示**: 修复 CSS 大写导致单位显示错误 ([cd5f941](https://github.com/yukiryo/calorie-calculator/commit/cd5f941))
-- **PWA 更新**: 优化 iOS 端更新策略 ([cd5f941](https://github.com/yukiryo/calorie-calculator/commit/cd5f941))
-- **抽屉适配**: 限制电脑端抽屉宽度为 480px ([cd5f941](https://github.com/yukiryo/calorie-calculator/commit/cd5f941))
-
-### ♻️ 代码优化 (Refactoring)
-- **代码清理**: 移除约 45 行冗余代码 ([cd5f941](https://github.com/yukiryo/calorie-calculator/commit/cd5f941))
-- **逻辑重构**: 提取模式配置为 `MODE_CONFIG` 常量 ([cd5f941](https://github.com/yukiryo/calorie-calculator/commit/cd5f941))
+### Fixed
+- CSS 大写导致单位显示错误
+- 电脑端抽屉宽度限制为 480px
 
 ## [1.0.3] - 2025-12-09
 
-### ✨ 新增功能 (Features)
-- **一席总计**: 新增"加入记录"功能，支持多次计算累加求和 ([6297513](https://github.com/yukiryo/calorie-calculator/commit/6297513))
-- **应用内更新日志**: 页面底部新增更新日志入口 ([6297513](https://github.com/yukiryo/calorie-calculator/commit/6297513))
-- **PWA 智能滚动**: 优化滚动体验，解决内容被遮挡问题 ([6297513](https://github.com/yukiryo/calorie-calculator/commit/6297513))
-- **Favicon**: 添加浏览器标签页图标 ([6297513](https://github.com/yukiryo/calorie-calculator/commit/6297513))
+### Added
+- "加入记录"功能，支持多次计算累加求和
+- 应用内更新日志入口
+- PWA 智能滚动，解决内容被遮挡问题
+- 浏览器标签页图标
 
-### 🐛 问题修复 (Bug Fixes)
-- **TypeScript**: 修复 `*.md?raw` 导入类型报错 ([6297513](https://github.com/yukiryo/calorie-calculator/commit/6297513))
-- **Input 样式**: 修复不同浏览器显示兼容性问题 ([6297513](https://github.com/yukiryo/calorie-calculator/commit/6297513))
+### Fixed
+- `*.md?raw` 导入类型报错
+- 不同浏览器 input 样式兼容性
 
 ## [1.0.2] - 2025-12-08
 
-### 🎨 样式优化 (Styles)
-- **移动端适配**: 使用 `100dvh` 解决地址栏遮挡问题
+### Changed
+- 使用 `100dvh` 解决移动端地址栏遮挡问题
 
 ## [1.0.1] - 2025-12-08
 
-### 🐛 问题修复 (Bug Fixes)
-- **iOS 图标**: 修复添加到主屏幕时图标显示异常
-- **全屏显示**: 修复 iOS Safari 白边问题
+### Fixed
+- iOS 添加到主屏幕时图标显示异常
+- iOS Safari 白边问题
 
 ## [1.0.0] - 2025-12-08
 
-### ✨ 新增功能 (Features)
-- **核心计算**: 支持输入食品重量和能量密度，自动计算总热量
-- **单位切换**: 支持 kJ ↔ kcal 双向计算
-- **PWA 支持**: 可安装到桌面，离线可用
-- **深色模式**: 高级毛玻璃 (Glassmorphism) UI 设计
-
-### 🎨 样式优化 (Styles)
-- **响应式设计**: 完美适配桌面端、平板和移动端
-- **动态交互**: 输入时自动计算，结果带缩放动画
+### Added
+- 核心计算：输入食品重量和能量密度，自动计算总热量
+- 单位切换：支持 kJ ↔ kcal 双向计算
+- PWA 支持：可安装到桌面，离线可用
+- 深色模式：高级毛玻璃 (Glassmorphism) UI 设计
+- 响应式设计：适配桌面端、平板和移动端
+- 动态交互：输入时自动计算，结果带缩放动画

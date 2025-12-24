@@ -102,6 +102,15 @@ export async function logout() {
 
 // --- Data Sync ---
 
+// Supabase 数据库返回的原始行类型
+interface SupabaseFoodRow {
+    id: number;
+    name: string;
+    energy: number | string; // Postgres numeric 可能返回字符串
+    unit: string;
+    created_at?: string;
+}
+
 export interface RemoteFood {
     id: number;
     name: string;
@@ -125,7 +134,7 @@ export async function fetchRemoteFoods(): Promise<RemoteFood[]> {
     }
 
     // Convert numeric string to number if needed (Postgres numeric comes as string sometimes)
-    return data.map((item: any) => ({
+    return data.map((item: SupabaseFoodRow) => ({
         ...item,
         energy: Number(item.energy)
     }));
@@ -158,6 +167,14 @@ export async function deleteRemoteFood(id: number) {
     if (error) console.error('Error deleting remote food:', error);
 }
 
-// Helper to fully overwrite remote with local (Use with caution - for initial sync maybe?)
-// For now, we are doing a "Merge" strategy where we prioritize remote but keep local if unique.
-// Actually, simple strategy: Cloud is source of truth.
+export async function updateRemoteFood(food: RemoteFood) {
+    if (!supabase || !currentUser) return;
+
+    const { error } = await supabase
+        .from('saved_foods')
+        .update({ name: food.name, energy: food.energy, unit: food.unit })
+        .eq('id', food.id)
+        .eq('user_id', currentUser.id);
+
+    if (error) console.error('Error updating remote food:', error);
+}

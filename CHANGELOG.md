@@ -1,5 +1,15 @@
 # 更新日志
 
+## [1.0.9] - 2024-12-25
+
+### 新增
+- **BMI 计算器**: 新增身体质量指数 (BMI) 计算工具，支持实时计算、历史记录保存与删除
+
+### 变更
+- **头部按钮布局**: 优化主页面头部按钮布局，云同步和工具箱按钮现在紧凑右对齐
+
+---
+
 ## [1.0.8] - 2024-12-20
 
 ### 新增
@@ -126,6 +136,7 @@
 - **响应式设计**: 完美适配桌面端、平板和移动端
 - **动态交互**: 输入时自动计算，结果带缩放动画
 
+[1.0.9]: https://github.com/yukiryo/calorie-calculator/compare/v1.0.8...v1.0.9
 [1.0.8]: https://github.com/yukiryo/calorie-calculator/compare/v1.0.7...v1.0.8
 [1.0.7]: https://github.com/yukiryo/calorie-calculator/compare/v1.0.6...v1.0.7
 [1.0.6]: https://github.com/yukiryo/calorie-calculator/compare/v1.0.5...v1.0.6

@@ -19,118 +19,228 @@
 
 <body>
   <div id="app">
-    <div class="glass-container">
-      <header>
-        <div class="header-content">
-          <div class="title-group">
-            <h1>卡路里计算器</h1>
-            <p class="subtitle">kJ 和 kcal 之间精准换算</p>
+    <!-- Main View -->
+    <div id="main-view" class="view active">
+      <div class="glass-container">
+        <header>
+          <div class="header-content">
+            <div class="title-group">
+              <h1>卡路里计算器</h1>
+              <p class="subtitle">kJ 和 kcal 之间精准换算</p>
+            </div>
+            <div class="header-actions">
+              <button id="cloud-settings-btn" class="icon-btn" aria-label="云同步设置">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+                </svg>
+                <span class="status-dot hidden" id="cloud-status-dot"></span>
+              </button>
+              <button id="tools-btn" class="icon-btn" aria-label="工具箱">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="2" width="9" height="9" rx="2"></rect>
+                  <rect x="13" y="2" width="9" height="9" rx="2"></rect>
+                  <rect x="2" y="13" width="9" height="9" rx="2"></rect>
+                  <rect x="13" y="13" width="9" height="9" rx="2"></rect>
+                </svg>
+              </button>
+            </div>
           </div>
-          <button id="cloud-settings-btn" class="icon-btn" aria-label="云同步设置">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
-            </svg>
-            <span class="status-dot hidden" id="cloud-status-dot"></span>
-          </button>
-        </div>
-      </header>
+        </header>
 
-      <div class="mode-toggle-wrapper">
-        <button id="mode-toggle" class="mode-toggle" type="button">
-          <span class="toggle-text">kJ ➜ kcal</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="toggle-icon">
-            <path d="M7 10h14" />
-            <path d="M7 14h14" />
-            <path d="M7 10L10 7" />
-            <path d="M17 14l-3 3" />
-          </svg>
-        </button>
-      </div>
-
-      <div class="input-group">
-        <label for="energy-input" id="energy-label">每100g能量 (kJ)</label>
-        <div class="input-wrapper">
-          <input type="number" id="energy-input" name="calculator_energy" placeholder="例如: 1800" step="any" novalidate
-            inputmode="decimal" autocomplete="off">
-          <span class="unit" id="energy-unit">kJ</span>
-          <button id="save-food-btn" class="save-btn" type="button" aria-label="保存当前食品">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-              <polyline points="17 21 17 13 7 13 7 21"></polyline>
-              <polyline points="7 3 7 8 15 8"></polyline>
+        <div class="mode-toggle-wrapper">
+          <button id="mode-toggle" class="mode-toggle" type="button">
+            <span class="toggle-text">kJ ➜ kcal</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="toggle-icon">
+              <path d="M7 10h14" />
+              <path d="M7 14h14" />
+              <path d="M7 10L10 7" />
+              <path d="M17 14l-3 3" />
             </svg>
           </button>
         </div>
 
-        <!-- Drawer Trigger -->
-        <button id="open-drawer-btn" class="drawer-trigger" type="button">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-          常用食品库
-        </button>
-      </div>
+        <div class="input-group">
+          <label for="energy-input" id="energy-label">每100g能量 (kJ)</label>
+          <div class="input-wrapper">
+            <input type="number" id="energy-input" name="calculator_energy" placeholder="例如: 1800" step="any" novalidate
+              inputmode="decimal" autocomplete="off">
+            <span class="unit" id="energy-unit">kJ</span>
+            <button id="save-food-btn" class="save-btn" type="button" aria-label="保存当前食品">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+              </svg>
+            </button>
+          </div>
 
-      <div class="input-group">
-        <label for="weight-input">摄入重量 (g)</label>
-        <div class="input-wrapper">
-          <input type="number" id="weight-input" name="calculator_weight" placeholder="例如: 150" step="any" novalidate
-            inputmode="decimal" autocomplete="off">
-          <span class="unit">g</span>
-        </div>
-      </div>
-
-      <div class="result-card">
-        <span class="result-label">总热量</span>
-        <div class="result-value-wrapper">
-          <span id="result-value">0</span>
-          <span class="result-unit" id="result-unit">kcal</span>
-        </div>
-
-        <div class="action-buttons">
-          <button id="add-btn" class="action-btn add-btn" type="button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          <!-- Drawer Trigger -->
+          <button id="open-drawer-btn" class="drawer-trigger" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <path d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
-            加入记录
+            常用食品库
           </button>
         </div>
 
-        <div class="formula-container" id="formula-container">
-          <p class="formula-hint">Total kcal = (kJ/100g × Weight) ÷ 418.4</p>
+        <div class="input-group">
+          <label for="weight-input">摄入重量 (g)</label>
+          <div class="input-wrapper">
+            <input type="number" id="weight-input" name="calculator_weight" placeholder="例如: 150" step="any" novalidate
+              inputmode="decimal" autocomplete="off">
+            <span class="unit">g</span>
+          </div>
+        </div>
+
+        <div class="result-card">
+          <span class="result-label">总热量</span>
+          <div class="result-value-wrapper">
+            <span id="result-value">0</span>
+            <span class="result-unit" id="result-unit">kcal</span>
+          </div>
+
+          <div class="action-buttons">
+            <button id="add-btn" class="action-btn add-btn" type="button">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              加入记录
+            </button>
+          </div>
+
+          <div class="formula-container" id="formula-container">
+            <p class="formula-hint">Total kcal = (kJ/100g × Weight) ÷ 418.4</p>
+          </div>
+        </div>
+
+        <div class="history-section hidden" id="history-section">
+          <div class="history-header">
+            <h3>本次记录</h3>
+            <button id="clear-btn" class="clear-btn" type="button">清空</button>
+          </div>
+          <ul id="history-list" class="history-list">
+            <!-- History items will be injected here -->
+          </ul>
+          <div class="grand-total">
+            <span>总计:</span>
+            <span id="total-kcal">0</span>
+            <span class="unit-small">kcal</span>
+          </div>
+        </div>
+
+        <footer>
+          <div class="footer-links">
+            <span id="app-version" class="app-version"></span>
+            <button id="changelog-btn" class="text-btn">更新日志</button>
+            <span class="divider">|</span>
+            <p>Designed by <a href="https://t.me/Yukiryo" target="_blank" rel="noopener noreferrer"
+                class="author-name">雪凌Yukiryo</a></p>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <!-- BMI View -->
+    <div id="bmi-view" class="view">
+      <div class="glass-container">
+        <header>
+          <div class="header-content">
+            <button id="back-btn" class="back-btn" type="button">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
+              返回
+            </button>
+            <div class="title-group" style="text-align: center; flex: 1;">
+              <h1 style="font-size: 1.5rem;">BMI 计算器</h1>
+              <p class="subtitle">身体质量指数计算</p>
+            </div>
+          </div>
+        </header>
+
+        <div class="input-group">
+          <label for="bmi-height">身高 (cm)</label>
+          <div class="input-wrapper">
+            <input type="number" id="bmi-height" placeholder="例如: 175" step="any" inputmode="decimal"
+              autocomplete="off">
+            <span class="unit">cm</span>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="bmi-weight">体重 (kg)</label>
+          <div class="input-wrapper">
+            <input type="number" id="bmi-weight" placeholder="例如: 70" step="any" inputmode="decimal" autocomplete="off">
+            <span class="unit">kg</span>
+          </div>
+        </div>
+
+        <div id="bmi-result-card" class="result-card" style="margin-top: 1.5rem;">
+          <span class="result-label">您的 BMI 指数</span>
+          <div class="result-value-wrapper">
+            <span id="bmi-value">--.-</span>
+          </div>
+          <div class="formula-container">
+            <span id="bmi-status" class="result-unit" style="font-size: 1.1rem;">--</span>
+          </div>
+          <div class="action-buttons" style="margin-top: 1rem;">
+            <button id="bmi-save-btn" class="action-btn add-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+              </svg>
+              保存记录
+            </button>
+          </div>
+          <div class="formula-container" style="margin-top: 1rem;">
+            <p class="formula-hint">BMI = Weight(kg) / Height(m)²</p>
+          </div>
+        </div>
+
+        <div class="input-group" style="margin-top: 1.5rem;">
+          <label>WHO 标准参考</label>
+          <div class="bmi-reference-table">
+            <div class="bmi-ref-row header">
+              <span class="bmi-col-status">分类</span>
+              <span class="bmi-col-range">BMI 范围</span>
+            </div>
+            <div class="bmi-ref-row thin">
+              <span class="bmi-col-status"><span class="status-indicator thin"></span>偏瘦</span>
+              <span class="bmi-col-range">&lt; 18.5</span>
+            </div>
+            <div class="bmi-ref-row normal">
+              <span class="bmi-col-status"><span class="status-indicator normal"></span>正常</span>
+              <span class="bmi-col-range">18.5 ~ 24.9</span>
+            </div>
+            <div class="bmi-ref-row overweight">
+              <span class="bmi-col-status"><span class="status-indicator overweight"></span>过重</span>
+              <span class="bmi-col-range">25.0 ~ 29.9</span>
+            </div>
+            <div class="bmi-ref-row obese">
+              <span class="bmi-col-status"><span class="status-indicator obese"></span>肥胖</span>
+              <span class="bmi-col-range">≥ 30.0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="history-section hidden" id="bmi-history-section" style="margin-top: 1.5rem;">
+          <div class="history-header">
+            <h3>最近记录</h3>
+            <button id="clear-bmi-history-btn" class="clear-btn" type="button">清空</button>
+          </div>
+          <ul id="bmi-history-list" class="history-list"></ul>
         </div>
       </div>
-
-      <div class="history-section hidden" id="history-section">
-        <div class="history-header">
-          <h3>本次记录</h3>
-          <button id="clear-btn" class="clear-btn" type="button">清空</button>
-        </div>
-        <ul id="history-list" class="history-list">
-          <!-- History items will be injected here -->
-        </ul>
-        <div class="grand-total">
-          <span>总计:</span>
-          <span id="total-kcal">0</span>
-          <span class="unit-small">kcal</span>
-        </div>
-      </div>
-
-      <footer>
-        <div class="footer-links">
-          <span id="app-version" class="app-version"></span>
-          <button id="changelog-btn" class="text-btn">更新日志</button>
-          <span class="divider">|</span>
-          <p>Designed by <a href="https://t.me/Yukiryo" target="_blank" rel="noopener noreferrer"
-              class="author-name">雪凌Yukiryo</a></p>
-        </div>
-      </footer>
     </div>
 
   </div>

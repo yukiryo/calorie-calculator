@@ -20,10 +20,7 @@
 }
 
 html {
-  background: #0f172a;
-  background: var(--bg-gradient);
-  min-height: 100vh;
-  min-height: 100dvh;
+  /* Gradient is set inline in index.html or body below to ensure coverage */
   overscroll-behavior-y: none;
 }
 
@@ -31,24 +28,32 @@ body {
   font-family: 'Outfit', system-ui, -apple-system, sans-serif;
   color: var(--text-main);
   min-height: 100vh;
-  min-height: 100dvh;
+  /* Ensure background fills screen */
+  margin: 0;
+  padding: 0;
+
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  /* Changed from center to allow scrolling */
 
-  /* Safe area handling + existing padding */
+  /* Safe area handling */
   padding-top: max(clamp(1rem, 5vw, 2rem), env(safe-area-inset-top));
   padding-bottom: max(clamp(1rem, 5vw, 2rem), env(safe-area-inset-bottom));
   padding-left: max(clamp(1rem, 5vw, 2rem), env(safe-area-inset-left));
   padding-right: max(clamp(1rem, 5vw, 2rem), env(safe-area-inset-right));
 
-  overflow-x: hidden;
+  /* Allow native scrolling */
 }
 
 #app {
   width: 100%;
-  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   perspective: 1000px;
+  min-height: 100vh;
+  /* Allow content to grow */
 }
 
 /* View System */
@@ -56,6 +61,8 @@ body {
   display: none;
   opacity: 0;
   transition: opacity 0.3s ease;
+  width: 100%;
+  /* Stable width */
 }
 
 .view.active {
@@ -94,6 +101,12 @@ body {
   animation: floatIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   opacity: 0;
   transform: translateY(20px);
+  width: 100%;
+  /* Stable Width */
+  max-width: 480px;
+  /* Max Width Constraint */
+  margin: 0 auto;
+  /* Center Alignment */
 }
 
 /* Custom Prompt Specifics */

@@ -1338,7 +1338,17 @@ input[type=number] {
     padding-left: max(1rem, env(safe-area-inset-left));
     padding-right: max(1rem, env(safe-area-inset-right));
     padding-top: max(1rem, env(safe-area-inset-top));
-    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    /* padding-bottom 改为 0，用伪元素撑开 */
+    padding-bottom: 0;
+  }
+
+  /* 使用伪元素撑开底部滚动空间，确保内容不被截断 */
+  #app::after {
+    content: '';
+    display: block;
+    height: max(2rem, env(safe-area-inset-bottom));
+    width: 100%;
+    flex-shrink: 0;
   }
 
   /* PWA模式下body不需要padding，交给#app处理 */

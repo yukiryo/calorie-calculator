@@ -1309,35 +1309,30 @@ input[type=number] {
 }
 
 @media all and (display-mode: standalone) {
-  html {
-    /* iOS PWA完整修复 - 补偿顶部安全区域偏移导致的底部白条 */
-    min-height: calc(100% + env(safe-area-inset-top));
+  html, body {
+    /* 禁止html/body滚动 */
     overflow: hidden;
+    overscroll-behavior: none;
+    /* 使用-webkit-fill-available确保完全填满屏幕 */
+    height: 100%;
+    height: -webkit-fill-available;
+  }
+
+  html {
     background: var(--bg-gradient);
     background-attachment: fixed;
   }
 
   body {
-    overflow: hidden;
-    overscroll-behavior: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    min-height: 100vh;
-    min-height: 100dvh;
-    /* iOS Safari 特定修复 */
-    min-height: -webkit-fill-available;
-    /* 背景透明，让html的背景显示 */
     background: transparent;
   }
 
   #app {
+    /* #app成为滚动容器 */
     height: 100%;
+    height: -webkit-fill-available;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: clip; /* 使用clip而非hidden，允许阴影显示 */
     overscroll-behavior-y: contain;
     -webkit-overflow-scrolling: touch;
   }

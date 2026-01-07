@@ -1332,9 +1332,19 @@ input[type=number] {
     height: 100%;
     height: -webkit-fill-available;
     overflow-y: auto;
-    /* 不限制overflow-x，让阴影正常显示 */
     overscroll-behavior-y: contain;
     -webkit-overflow-scrolling: touch;
+    /* 添加padding让box-shadow有空间显示 */
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    padding-top: max(1rem, env(safe-area-inset-top));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  /* PWA模式下body不需要padding，交给#app处理 */
+  body {
+    background: transparent;
+    padding: 0;
   }
 }
 

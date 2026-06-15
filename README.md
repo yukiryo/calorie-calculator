@@ -12,19 +12,17 @@ A modern, minimalist web application to convert food energy values between **kJ*
   - Mode 1: Input `kJ/100g` & Weight -> Calculate Total `kcal`.
   - Mode 2: Input `kcal/100g` & Weight -> Calculate Total `kJ`.
 - **Meal Total (Grand Total)**: Add multiple items to a history list to calculate the total calorie intake for a full meal.
-- **☁️ Cloud Sync**: Sync your saved foods across devices with Supabase integration. Supports email login/registration.
 - **Custom Food Library**: Save frequently used foods with their energy values. Quick-fill with one tap. Supports editing.
 - **PWA Support**: Installable as a native app on iOS and Android. Offline capable. Optimized for iOS with immersive status bar and native-like feel.
 - **Premium UI**: Dark mode with Glassmorphism effects. Completely custom alerts and modals (no native browser dialogs).
 - **Responsive**: Fluid typography and layout that adapts to any screen size.
-- **Privacy Focused**: All calculations happen locally in your browser. Cloud sync is optional.
+- **Privacy Focused**: All calculations happen locally in your browser.
 
 ## 🛠️ Tech Stack
 
 - **Framework**: [Vite](https://vitejs.dev/)
 - **Language**: TypeScript
 - **Styling**: Vanilla CSS (CSS Variables, Flexbox, Grid, Clamp)
-- **Backend**: [Supabase](https://supabase.com/) (Optional, for cloud sync)
 - **Deployment**: Cloudflare Pages
 
 ## 📦 Getting Started

@@ -209,20 +209,6 @@ body {
 
 
 
-.status-dot {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 10px;
-  height: 10px;
-  background: #22c55e;
-  border-radius: 50%;
-  border: 2px solid #0f172a;
-}
-
-.status-dot.hidden {
-  display: none;
-}
 
 .modal-desc {
   color: var(--text-muted);
@@ -231,62 +217,7 @@ body {
   line-height: 1.5;
 }
 
-.user-info-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 1rem;
-  border-radius: 12px;
-  margin-bottom: 1.5rem;
-}
 
-.avatar-placeholder {
-  width: 48px;
-  height: 48px;
-  background: rgba(99, 102, 241, 0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--primary-color);
-}
-
-.user-details {
-  display: flex;
-  flex-direction: column;
-}
-
-.user-email {
-  color: white;
-  font-weight: 500;
-  font-size: 1rem;
-}
-
-.connection-status {
-  color: #22c55e;
-  font-size: 0.8rem;
-  margin-top: 2px;
-}
-
-.auth-switch {
-  margin-top: 1rem;
-  text-align: center;
-  font-size: 0.9rem;
-}
-
-.auth-switch span {
-  color: var(--text-muted);
-}
-
-.danger-text {
-  color: #ef4444 !important;
-  font-size: 0.85rem;
-}
-
-.danger-text:hover {
-  text-decoration: underline;
-}
 
 .header-actions {
   display: flex;

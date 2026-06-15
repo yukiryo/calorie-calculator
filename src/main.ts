@@ -1,6 +1,6 @@
 import './style.css'
 import changelogRaw from '../CHANGELOG.md?raw';
-import * as Supa from './supabase';
+
 import { BMICalculator } from './bmi';
 import { router } from './router';
 import packageJson from '../package.json';
@@ -192,7 +192,7 @@ function renderHistory() {
         li.innerHTML = `
       <div class="item-info">
         <span class="item-weight">${item.weight}g</span>
-        <span class="item-energy text-muted">@ ${item.energy}${item.unit === 'kcal' ? 'kcal' : (isKjToKcal ? 'kJ' : '?')}/100g</span>
+        <span class="item-energy text-muted">@ ${item.energy}${item.unit === 'kcal' ? 'kJ' : 'kcal'}/100g</span>
       </div>
       <div class="item-result">
         +${item.result} <small>${item.unit}</small>
@@ -232,59 +232,10 @@ function openDrawer() {
     requestAnimationFrame(() => {
         foodDrawer.classList.add('active');
     });
-
-    if (Supa.getSupabase() && Supa.getCurrentUser()) {
-        syncFoods();
-    } else {
-        renderSavedFoods();
-    }
+    renderSavedFoods();
 }
 
-async function syncFoods() {
-    try {
-        const remoteFoods = await Supa.fetchRemoteFoods();
 
-        // --- Merge Strategy (Smart Sync) ---
-        // 1. Create a Map of existing local foods for easy lookup
-        const localMap = new Map(savedFoods.map(f => [f.id, f]));
-
-        // 2. Add/Update logic: Remote data is trusted source for existing IDs (in case of edits)
-        //    But we also want to KEEP local items that haven't been synced yet.
-        const mergedFoods: SavedFood[] = [];
-
-        // Add all remote foods (they are the "truth" for those IDs)
-        remoteFoods.forEach(rf => {
-            localMap.delete(rf.id); // Remove from local map so we know it's handled
-            mergedFoods.push({
-                id: rf.id,
-                name: rf.name,
-                energy: rf.energy,
-                unit: rf.unit
-            });
-        });
-
-        // 3. Any items remaining in localMap are "Local Only" (Offline created).
-        //    We should keep them AND try to push them to cloud.
-        for (const localAuthored of localMap.values()) {
-            mergedFoods.push(localAuthored);
-            // Attempt to push to cloud in background
-            Supa.addRemoteFood(localAuthored).catch(console.error);
-        }
-
-        // 4. Sort by ID (Timestamp) descending to keep order
-        mergedFoods.sort((a, b) => b.id - a.id);
-
-        // 5. Update state
-        savedFoods = mergedFoods;
-        localStorage.setItem('savedFoods', JSON.stringify(savedFoods));
-        renderSavedFoods();
-
-    } catch (e) {
-        console.error("Sync failed", e);
-        // If sync fails (offline), we just show local data
-        renderSavedFoods();
-    }
-}
 
 function closeDrawer() {
     foodDrawer.classList.remove('active');
@@ -322,11 +273,6 @@ async function saveFood() {
     if (savedFoods.length > 50) savedFoods.pop();
     localStorage.setItem('savedFoods', JSON.stringify(savedFoods));
     renderSavedFoods();
-
-    // Sync if online
-    if (Supa.getSupabase() && Supa.getCurrentUser()) {
-        await Supa.addRemoteFood(newFood);
-    }
 }
 
 function renderSavedFoods() {
@@ -428,11 +374,6 @@ function showEditFoodModal(food: SavedFood) {
         localStorage.setItem('savedFoods', JSON.stringify(savedFoods));
         renderSavedFoods();
         cleanup();
-
-        // Sync to cloud if online
-        if (Supa.getSupabase() && Supa.getCurrentUser()) {
-            await Supa.updateRemoteFood(food);
-        }
     };
 
     const handleCancel = () => {
@@ -457,11 +398,6 @@ async function deleteSavedFood(id: number) {
         savedFoods = savedFoods.filter(f => f.id !== id);
         localStorage.setItem('savedFoods', JSON.stringify(savedFoods));
         renderSavedFoods();
-
-        // Cloud Sync
-        if (Supa.getSupabase() && Supa.getCurrentUser()) {
-            await Supa.deleteRemoteFood(id);
-        }
     }
 }
 
@@ -560,183 +496,6 @@ changelogModal.addEventListener('click', (e) => {
     }
 });
 
-
-// --- Cloud Settings Logic ---
-const cloudSettingsBtn = document.getElementById('cloud-settings-btn') as HTMLButtonElement;
-const cloudSettingsModal = document.getElementById('cloud-settings-modal') as HTMLDivElement;
-const closeCloudSettingsBtn = document.getElementById('close-cloud-settings-btn') as HTMLButtonElement;
-const cloudStatusDot = document.getElementById('cloud-status-dot') as HTMLSpanElement;
-
-// Sections (Config removed)
-const cloudAuthSection = document.getElementById('cloud-auth-section') as HTMLDivElement;
-const cloudGuestSection = document.getElementById('cloud-guest-section') as HTMLDivElement;
-
-const currentUserEmail = document.getElementById('current-user-email') as HTMLSpanElement;
-const logoutBtn = document.getElementById('logout-btn') as HTMLButtonElement;
-const manualSyncBtn = document.getElementById('manual-sync-btn') as HTMLButtonElement;
-
-const authModal = document.getElementById('auth-modal') as HTMLDivElement;
-const closeAuthBtn = document.getElementById('close-auth-btn') as HTMLButtonElement;
-const authEmailInput = document.getElementById('auth-email') as HTMLInputElement;
-const authPasswordInput = document.getElementById('auth-password') as HTMLInputElement;
-const authSubmitBtn = document.getElementById('auth-submit-btn') as HTMLButtonElement;
-const authSwitchBtn = document.getElementById('auth-switch-btn') as HTMLButtonElement;
-const authSwitchText = document.getElementById('auth-switch-text') as HTMLSpanElement;
-const authTitle = document.getElementById('auth-title') as HTMLHeadingElement;
-
-// State needed for UI
-let isLoginMode = true;
-
-function initCloudUI() {
-    // Config hardcoded, always init
-    Supa.initSupabase();
-
-    // Use real-time subscription for Auth State
-    Supa.subscribeToAuthChanges((user) => {
-        updateCloudUIState(!!user);
-        if (user) {
-            syncFoods();
-        }
-    });
-}
-
-const guestLoginBtn = document.getElementById('guest-login-btn') as HTMLButtonElement;
-
-function updateCloudUIState(isLoggedIn: boolean) {
-    // Always connected now
-    if (isLoggedIn) {
-        cloudStatusDot.classList.remove('hidden');
-        cloudAuthSection.classList.remove('hidden');
-        cloudGuestSection.classList.add('hidden');
-        const user = Supa.getCurrentUser();
-        if (user) currentUserEmail.textContent = user.email || 'User';
-    } else {
-        // Connected to Project, but not User (Guest)
-        cloudStatusDot.classList.add('hidden');
-        cloudAuthSection.classList.add('hidden');
-        cloudGuestSection.classList.remove('hidden');
-    }
-}
-
-// Open Settings
-cloudSettingsBtn.addEventListener('click', async () => {
-    // Just add active - CSS handles the rest
-    cloudSettingsModal.classList.add('active');
-});
-
-// Guest Section Listeners
-guestLoginBtn.addEventListener('click', () => {
-    closeCloudSettings();
-    openAuthModal();
-});
-
-// Guest Reset Config Removed
-
-function closeCloudSettings() {
-    cloudSettingsModal.classList.remove('active');
-
-}
-
-closeCloudSettingsBtn.addEventListener('click', closeCloudSettings);
-cloudSettingsModal.addEventListener('click', (e) => {
-    if (e.target === cloudSettingsModal) closeCloudSettings();
-});
-
-// Save Config Listener Removed
-// Reset Config Listener Removed
-
-// Auth Modal
-function openAuthModal() {
-    authModal.classList.add('active');
-    authEmailInput.focus();
-}
-
-function closeAuthModal() {
-    authModal.classList.remove('active');
-}
-
-closeAuthBtn.addEventListener('click', closeAuthModal);
-
-authSwitchBtn.addEventListener('click', () => {
-    isLoginMode = !isLoginMode;
-    if (isLoginMode) {
-        authTitle.textContent = '登录';
-        authSubmitBtn.textContent = '登录';
-        authSwitchText.textContent = '还没有账号？';
-        authSwitchBtn.textContent = '去注册';
-    } else {
-        authTitle.textContent = '注册账号';
-        authSubmitBtn.textContent = '注册';
-        authSwitchText.textContent = '已有账号？';
-        authSwitchBtn.textContent = '去登录';
-    }
-});
-
-authSubmitBtn.addEventListener('click', async () => {
-    const email = authEmailInput.value.trim();
-    const password = authPasswordInput.value.trim();
-
-    if (!email || !password) return;
-
-    authSubmitBtn.textContent = '处理中...';
-    authSubmitBtn.disabled = true;
-
-    try {
-        if (isLoginMode) {
-            await Supa.login(email, password);
-            closeAuthModal();
-            closeCloudSettings();
-            await showCustomAlert('登录成功！');
-            // UI update handled by subscription
-        } else {
-            const data = await Supa.signUp(email, password);
-            closeAuthModal();
-            closeCloudSettings();
-            if (data.user && !data.session) {
-                await showCustomAlert('注册成功！\n请务必查收邮件并点击验证链接，否则无法登录。', '注册成功');
-            } else {
-                await showCustomAlert('注册并登录成功！');
-            }
-        }
-    } catch (e: unknown) {
-        const message = e instanceof Error ? e.message : '未知错误';
-        await showCustomAlert('操作失败: ' + message, '错误');
-        console.error(e);
-    } finally {
-        authSubmitBtn.textContent = isLoginMode ? '登录' : '注册';
-        authSubmitBtn.disabled = false;
-    }
-});
-
-// Logout
-logoutBtn.addEventListener('click', async () => {
-    logoutBtn.disabled = true;
-    logoutBtn.textContent = '注销中...';
-    try {
-        await Supa.logout();
-        updateCloudUIState(false); // Force UI update immediately
-    } catch (e: unknown) {
-        console.error(e);
-        await showCustomAlert('注销失败，请重试');
-    } finally {
-        logoutBtn.disabled = false;
-        logoutBtn.textContent = '注销登录';
-    }
-});
-
-manualSyncBtn.addEventListener('click', async () => {
-    manualSyncBtn.disabled = true;
-    manualSyncBtn.textContent = '同步中...';
-    await syncFoods();
-    manualSyncBtn.textContent = '同步完成';
-    setTimeout(() => {
-        manualSyncBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/></svg> 立即同步`;
-        manualSyncBtn.disabled = false;
-    }, 1500);
-});
-
-// Init on load
-initCloudUI();
 
 // Display app version
 const appVersionEl = document.getElementById('app-version') as HTMLSpanElement;

@@ -1,38 +1,46 @@
-# 🥑 Calorie Calculator (卡路里计算器)
+# 🥑 卡路里计算器
 
 [简体中文](./README_zh-CN.md) | [English](./README.md)
 
-A modern, minimalist web application to convert food energy values between **kJ** (Kilojoules) and **kcal** (Calories). Designed with a premium Glassmorphism UI and mobile-first approach.
+一个极简、现代的卡路里换算 PWA 应用，专注于 **kJ** 和 **kcal** 之间的精准转换。
 
-✨ **Live Demo**: [https://calorie-calculator-yukiryo.pages.dev/](https://calorie-calculator-yukiryo.pages.dev/)
+✨ **在线演示**: [https://calorie-calculator-yukiryo.pages.dev/](https://calorie-calculator-yukiryo.pages.dev/)
 
-## 🚀 Features
+## 🚀 功能特性
 
-- **Bidirectional Conversion**: 
-  - Mode 1: Input `kJ/100g` & Weight -> Calculate Total `kcal`.
-  - Mode 2: Input `kcal/100g` & Weight -> Calculate Total `kJ`.
-- **Meal Total (Grand Total)**: Add multiple items to a history list to calculate the total calorie intake for a full meal.
-- **Custom Food Library**: Save frequently used foods with their energy values. Quick-fill with one tap. Supports editing.
-- **PWA Support**: Installable as a native app on iOS and Android. Offline capable. Optimized for iOS with immersive status bar and native-like feel.
-- **Premium UI**: Dark mode with Glassmorphism effects. Completely custom alerts and modals (no native browser dialogs).
-- **Responsive**: Fluid typography and layout that adapts to any screen size.
-- **Privacy Focused**: All calculations happen locally in your browser.
+### 核心功能
+- **双向换算**: kJ/100g → kcal 或 kcal/100g → kJ，根据摄入重量自动计算总热量
+- **餐食总计**: 支持添加多条记录，自动计算一顿饭的总热量摄入
+- **常用食品库**: 保存常用食品的能量值，一键填充，支持编辑和删除
 
-## 🛠️ Tech Stack
+### 工具箱
+- **BMI 计算器**: 输入身高体重，计算身体质量指数，提供 WHO 标准参考
+- **BMI 历史记录**: 保存最近的 BMI 测量记录
 
-- **Framework**: [Vite](https://vitejs.dev/)
-- **Language**: TypeScript
-- **Styling**: Vanilla CSS (CSS Variables, Flexbox, Grid, Clamp)
-- **Deployment**: Cloudflare Pages
+### 用户体验
+- **PWA 支持**: 可作为原生应用安装到 iOS 和 Android，支持离线使用
+- **极致 UI**: 深色模式配合毛玻璃磨砂效果
+- **完全自定义弹窗**: 取代所有浏览器原生对话框
+- **响应式设计**: 流体排版和布局，完美适配任何屏幕尺寸
+- **隐私优先**: 所有计算均在本地浏览器中完成，无任何后端依赖
 
-## 📦 Getting Started
+## 🛠️ 技术栈
 
-### Prerequisites
+- **构建工具**: [Vite](https://vitejs.dev/)
+- **开发语言**: TypeScript
+- **样式方案**: 纯 CSS（CSS 变量、Flexbox、Grid、Clamp）
+- **存储方式**: localStorage 本地存储
+- **PWA 支持**: vite-plugin-pwa
+- **部署平台**: Cloudflare Pages
 
-- Node.js (v18 or higher)
+## 📦 快速开始
+
+### 前置要求
+
+- Node.js (v18 或更高版本)
 - npm
 
-### Installation
+### 安装
 
 ```bash
 git clone https://github.com/yukiryo/calorie-calculator.git
@@ -40,40 +48,76 @@ cd calorie-calculator
 npm install
 ```
 
-### Development
+### 开发
 
-Start the local development server:
+启动本地开发服务器：
 
 ```bash
 npm run dev
 ```
 
-### Build
+### 构建
 
-Build for production:
+构建生产版本：
 
 ```bash
 npm run build
 ```
 
-## 🚢 Deployment
+### 预览
 
-This project is optimized for **Cloudflare Pages**.
+预览生产构建：
 
-1. Connect your GitHub repository to Cloudflare Pages.
-2. Select **Vite** as the framework preset.
-3. Deploy!
+```bash
+npm run preview
+```
 
-## 📄 PWA
+## 🚢 部署
 
-This app uses `vite-plugin-pwa` to provide offline capabilities.
-- **Icons**: High-resolution adaptive icons in `public/`.
-- **Service Worker**: Auto-updating service worker for caching resources.
+本项目针对 **Cloudflare Pages** 进行了优化。
 
-## 👤 Author
+1. 将你的 GitHub 仓库连接到 Cloudflare Pages
+2. 选择 **Vite** 作为构建框架预设
+3. 点击部署！
+
+## 📱 PWA 功能
+
+- **安装**: 在移动端浏览器中点击"添加到主屏幕"即可安装
+- **离线支持**: Service Worker 自动缓存资源，无网络也能使用
+- **图标**: `public/` 目录下包含高分辨率自适应图标
+
+## 🎨 设计特点
+
+- **毛玻璃效果**: 半透明背景配合模糊滤镜，营造现代感
+- **深色主题**: 专为夜间使用优化，减少眼睛疲劳
+- **流畅动画**: 所有交互都带有平滑的过渡效果
+- **自定义弹窗**: 完全重写的提示、确认、输入弹窗
+
+## 📁 项目结构
+
+```
+calorie-calculator/
+├── public/              # 静态资源（图标等）
+├── src/
+│   ├── main.ts         # 主应用逻辑
+│   ├── bmi.ts          # BMI 计算器功能
+│   ├── router.ts       # 页面路由
+│   ├── style.css       # 全局样式
+│   └── ui-utils.ts     # 自定义弹窗工具
+├── index.html          # 入口 HTML
+├── package.json        # 项目配置
+├── vite.config.ts      # Vite 配置
+└── tsconfig.json       # TypeScript 配置
+```
+
+## 👤 作者
 
 **雪凌Yukiryo**
 - Telegram: [@Yukiryo](https://t.me/Yukiryo)
+
+## 📄 更新日志
+
+查看 [CHANGELOG.md](./CHANGELOG.md) 了解版本更新历史。
 
 ---
 

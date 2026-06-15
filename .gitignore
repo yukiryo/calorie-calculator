@@ -9,7 +9,6 @@ package-lock.json
 # IDE
 .vscode/
 .idea/
-.cursorrules
 *.suo
 *.ntvs*
 *.njsproj
@@ -26,9 +25,6 @@ yarn-error.log*
 # 临时文件
 tmp/
 temp/
-
-# 脚本
-scripts/
 
 # Agent
 .agent/

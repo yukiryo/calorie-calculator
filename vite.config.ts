@@ -9,7 +9,7 @@ export default defineConfig({
     plugins: [
         VitePWA({
             registerType: 'autoUpdate',
-            includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+            includeAssets: ['apple-touch-icon.png'],
             manifest: {
                 name: '卡路里计算器 - 精准热量换算',
                 short_name: '热量计算',

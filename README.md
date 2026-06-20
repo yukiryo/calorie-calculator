@@ -19,7 +19,8 @@ A minimal, modern PWA for precise conversion between **kJ** and **kcal**.
 
 ### User Experience
 - **PWA Support**: Install as a native app on iOS and Android, works offline
-- **Premium UI**: Dark mode with glassmorphism frosted glass effect
+- **Light/Dark Mode**: Auto follows system theme, manual toggle available
+- **Liquid Glass Design**: Apple-inspired clean UI with translucent nav bar blur
 - **Custom Dialogs**: All browser native dialogs replaced with custom modals
 - **Responsive Design**: Fluid typography and layout, adapts perfectly to any screen size
 - **Privacy First**: All calculations run locally in your browser, no backend dependencies
@@ -88,10 +89,11 @@ This project is optimized for **Cloudflare Pages**.
 
 ## 🎨 Design
 
-- **Glassmorphism**: Semi-transparent background with blur filter for a modern feel
-- **Dark Theme**: Optimized for nighttime use to reduce eye strain
-- **Smooth Animations**: All interactions have smooth transition effects
-- **Custom Dialogs**: Completely rewritten prompt, confirm, and input modals
+- **Liquid Glass Design**: Inspired by Apple iOS 26, clean and minimal system-level design language
+- **Light/Dark Mode**: Auto-follows system preference with manual toggle
+- **Nav Bar Glass Effect**: Translucent blur only on navigation bar, content stays crisp
+- **Unified Colors**: Apple system blue (#007aff), consistent border-radius throughout
+- **Smooth Animations**: Page transitions, theme switching, sliding toggle controls
 
 ## 📁 Project Structure
 

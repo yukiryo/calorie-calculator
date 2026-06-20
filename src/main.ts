@@ -226,8 +226,9 @@ function addToHistory() {
     renderHistory();
 
     addBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> 已添加`;
-    addBtn.style.background = 'rgba(34, 197, 94, 0.4)';
-    addBtn.style.borderColor = 'rgba(34, 197, 94, 0.6)';
+    addBtn.style.background = 'var(--success-bg)';
+    addBtn.style.borderColor = 'var(--success)';
+    addBtn.style.color = 'var(--success)';
 
     setTimeout(() => {
         addBtn.innerHTML = ADD_BTN_HTML;
@@ -260,7 +261,7 @@ function renderHistory() {
         li.innerHTML = `
       <div class="item-info">
         <span class="item-weight">${item.weight}g</span>
-        <span class="item-energy text-muted">@ ${item.energy}${item.unit === 'kcal' ? 'kJ' : 'kcal'}/100g</span>
+        <span class="item-energy">@ ${item.energy}${item.unit === 'kcal' ? 'kJ' : 'kcal'}/100g</span>
       </div>
       <div class="item-result">
         +${item.result} <small>${item.unit}</small>

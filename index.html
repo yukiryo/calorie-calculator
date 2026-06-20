@@ -17,18 +17,38 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%); background-attachment: fixed;">
+<body>
   <div id="app">
     <!-- Main View -->
     <div id="main-view" class="view active">
       <div class="glass-container">
-        <header>
+        <header class="nav-bar">
           <div class="header-content">
             <div class="title-group">
               <h1>卡路里计算器</h1>
               <p class="subtitle">kJ 和 kcal 之间精准换算</p>
             </div>
             <div class="header-actions">
+              <button id="theme-toggle-btn" class="icon-btn" aria-label="切换主题">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="theme-icon-light">
+                  <circle cx="12" cy="12" r="5"></circle>
+                  <line x1="12" y1="1" x2="12" y2="3"></line>
+                  <line x1="12" y1="21" x2="12" y2="23"></line>
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                  <line x1="1" y1="12" x2="3" y2="12"></line>
+                  <line x1="21" y1="12" x2="23" y2="12"></line>
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="theme-icon-dark" style="display:none;">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+              </button>
               <button id="tools-btn" class="icon-btn" aria-label="工具箱">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -143,7 +163,7 @@
     <!-- BMI View -->
     <div id="bmi-view" class="view">
       <div class="glass-container">
-        <header>
+        <header class="nav-bar">
           <div class="header-content">
             <button id="back-btn" class="back-btn" type="button">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -153,9 +173,10 @@
               返回
             </button>
             <div class="title-group" style="text-align: center; flex: 1;">
-              <h1 style="font-size: 1.5rem;">BMI 计算器</h1>
+              <h1 style="font-size: 1.3rem;">BMI 计算器</h1>
               <p class="subtitle">身体质量指数计算</p>
             </div>
+            <div style="width: 40px;"></div>
           </div>
         </header>
 

@@ -6,6 +6,60 @@ import { router } from './router';
 import packageJson from '../package.json';
 import { showCustomPrompt, showCustomConfirm, showCustomAlert } from './ui-utils';
 
+// Theme Toggle
+const THEME_KEY = 'calorie-calculator-theme';
+type ThemePreference = 'light' | 'dark' | 'system';
+
+function getSystemTheme(): 'light' | 'dark' {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function applyTheme(preference: ThemePreference) {
+  const html = document.documentElement;
+  if (preference === 'system') {
+    html.removeAttribute('data-theme');
+  } else {
+    html.setAttribute('data-theme', preference);
+  }
+  updateThemeIcon(preference === 'system' ? getSystemTheme() : preference);
+}
+
+function updateThemeIcon(resolvedTheme: 'light' | 'dark') {
+  const lightIcon = document.querySelector('.theme-icon-light') as HTMLElement;
+  const darkIcon = document.querySelector('.theme-icon-dark') as HTMLElement;
+  if (lightIcon && darkIcon) {
+    lightIcon.style.display = resolvedTheme === 'light' ? 'block' : 'none';
+    darkIcon.style.display = resolvedTheme === 'dark' ? 'block' : 'none';
+  }
+}
+
+function cycleTheme() {
+  const current = (localStorage.getItem(THEME_KEY) as ThemePreference) || 'system';
+  const cycle: ThemePreference[] = ['system', 'light', 'dark'];
+  const nextIndex = (cycle.indexOf(current) + 1) % cycle.length;
+  const next = cycle[nextIndex];
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+}
+
+// Initialize theme
+const savedTheme = (localStorage.getItem(THEME_KEY) as ThemePreference) || 'system';
+applyTheme(savedTheme);
+
+// Listen for system theme changes
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  const saved = localStorage.getItem(THEME_KEY) as ThemePreference;
+  if (!saved || saved === 'system') {
+    updateThemeIcon(getSystemTheme());
+  }
+});
+
+// Theme toggle button
+const themeToggleBtn = document.getElementById('theme-toggle-btn');
+if (themeToggleBtn) {
+  themeToggleBtn.addEventListener('click', cycleTheme);
+}
+
 // Initialize BMI Calculator
 new BMICalculator();
 

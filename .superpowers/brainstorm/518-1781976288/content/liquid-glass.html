@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liquid Glass 风格对比</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0a0a0a;
+      padding: 20px;
+      color: white;
+    }
+    h1 { text-align: center; margin-bottom: 6px; font-size: 1.4rem; font-weight: 600; }
+    .subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 0.85rem; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 860px; margin: 0 auto; }
+
+    /* Phone Frame */
+    .phone {
+      width: 100%;
+      max-width: 340px;
+      margin: 0 auto;
+      border-radius: 36px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 9/18;
+    }
+    .phone-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .phone-content {
+      position: relative;
+      z-index: 1;
+      padding: 52px 20px 28px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Glass Layer */
+    .glass {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(40px) saturate(180%);
+      -webkit-backdrop-filter: blur(40px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .glass::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 50%);
+      pointer-events: none;
+    }
+
+    /* Option Cards */
+    .option-card {
+      background: #141414;
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.25s, box-shadow 0.25s;
+      border: 1.5px solid transparent;
+    }
+    .option-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.4); }
+    .option-card.selected { border-color: #fff; }
+    .option-label {
+      padding: 14px 18px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .option-label .tag {
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .option-label h3 { font-size: 0.95rem; font-weight: 600; color: #eee; }
+    .option-label p { font-size: 0.75rem; color: #888; margin-top: 2px; }
+
+    /* ========== STYLE A: Warm Liquid Glass ========== */
+    .style-a .phone-bg {
+      background:
+        radial-gradient(ellipse at 20% 20%, #ff6b35 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 30%, #f7c948 0%, transparent 40%),
+        radial-gradient(ellipse at 50% 80%, #e8475c 0%, transparent 50%),
+        linear-gradient(160deg, #1a0a2e 0%, #0d0d1a 100%);
+    }
+    .style-a .tag { background: rgba(255,107,53,0.2); color: #ff8c5a; }
+    .style-a .app-header { text-align: center; margin-bottom: 24px; }
+    .style-a .app-icon {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, #ff6b35, #f7c948);
+      border-radius: 14px;
+      margin: 0 auto 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      box-shadow: 0 4px 16px rgba(255,107,53,0.3);
+    }
+    .style-a .app-title { font-size: 1.1rem; font-weight: 600; color: #fff; }
+    .style-a .app-sub { font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    .style-a .glass-card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(40px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .style-a .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    }
+    .style-a .field-label {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.45);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    .style-a .field-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    .style-a .field-unit {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.4);
+    }
+    .style-a .result-glass {
+      background: rgba(255,107,53,0.15);
+      backdrop-filter: blur(40px) saturate(180%);
+      border: 1px solid rgba(255,107,53,0.25);
+      border-radius: 18px;
+      padding: 20px 16px;
+      text-align: center;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .style-a .result-glass::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 20%; right: 20%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,107,53,0.5), transparent);
+    }
+    .style-a .result-label { font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+    .style-a .result-num { font-size: 2.2rem; font-weight: 700; color: #fff; }
+    .style-a .result-unit { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+    .style-a .glass-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      border: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .style-a .glass-btn.primary {
+      background: linear-gradient(135deg, #ff6b35, #e8475c);
+      color: white;
+      box-shadow: 0 4px 16px rgba(255,107,53,0.25);
+    }
+    .style-a .glass-btn.ghost {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.7);
+      margin-top: 8px;
+    }
+
+    /* ========== STYLE B: Cool Liquid Glass ========== */
+    .style-b .phone-bg {
+      background:
+        radial-gradient(ellipse at 30% 15%, #4facfe 0%, transparent 45%),
+        radial-gradient(ellipse at 70% 60%, #00f2fe 0%, transparent 40%),
+        radial-gradient(ellipse at 20% 80%, #667eea 0%, transparent 45%),
+        linear-gradient(170deg, #0c1445 0%, #0a0a1a 100%);
+    }
+    .style-b .tag { background: rgba(79,172,254,0.2); color: #4facfe; }
+    .style-b .app-header { text-align: center; margin-bottom: 24px; }
+    .style-b .app-icon {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      border-radius: 14px;
+      margin: 0 auto 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      box-shadow: 0 4px 16px rgba(79,172,254,0.3);
+    }
+    .style-b .app-title { font-size: 1.1rem; font-weight: 600; color: #fff; }
+    .style-b .app-sub { font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    .style-b .toggle-glass {
+      display: flex;
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(30px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 3px;
+      margin-bottom: 16px;
+    }
+    .style-b .toggle-glass span {
+      flex: 1;
+      text-align: center;
+      padding: 7px 0;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.4);
+    }
+    .style-b .toggle-glass span.active {
+      background: rgba(79,172,254,0.25);
+      border: 1px solid rgba(79,172,254,0.3);
+      color: #4facfe;
+    }
+    .style-b .glass-card {
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(30px) saturate(150%);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+    .style-b .field-label {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    .style-b .field-value {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .style-b .field-unit { font-size: 0.75rem; color: rgba(255,255,255,0.35); }
+    .style-b .result-glass {
+      background: linear-gradient(135deg, rgba(79,172,254,0.12), rgba(0,242,254,0.08));
+      backdrop-filter: blur(30px);
+      border: 1px solid rgba(79,172,254,0.15);
+      border-radius: 18px;
+      padding: 20px 16px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .style-b .result-label { font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+    .style-b .result-num { font-size: 2rem; font-weight: 700; color: #fff; }
+    .style-b .result-unit { font-size: 0.8rem; color: rgba(79,172,254,0.7); }
+    .style-b .glass-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(79,172,254,0.3);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, rgba(79,172,254,0.2), rgba(0,242,254,0.1));
+      color: #4facfe;
+    }
+    .style-b .glass-btn + .glass-btn { margin-top: 8px; border-color: rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.5); }
+
+    /* ========== STYLE C: Minimal Light Liquid Glass ========== */
+    .style-c .phone-bg {
+      background:
+        radial-gradient(ellipse at 30% 20%, rgba(120,120,255,0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 70%, rgba(255,120,180,0.15) 0%, transparent 50%),
+        linear-gradient(170deg, #e8e8f0 0%, #d5d5e0 100%);
+    }
+    .style-c .tag { background: rgba(100,100,200,0.15); color: #6666cc; }
+    .style-c .app-header { text-align: left; margin-bottom: 20px; }
+    .style-c .app-title { font-size: 1.3rem; font-weight: 700; color: #1a1a2e; }
+    .style-c .app-sub { font-size: 0.7rem; color: rgba(26,26,46,0.4); margin-top: 2px; }
+    .style-c .glass-card {
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(30px) saturate(120%);
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .style-c .field-label {
+      font-size: 0.65rem;
+      color: rgba(26,26,46,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .style-c .field-value {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #1a1a2e;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .style-c .field-unit { font-size: 0.75rem; color: rgba(26,26,46,0.35); }
+    .style-c .result-glass {
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(30px) saturate(120%);
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 18px;
+      padding: 20px 16px;
+      text-align: center;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    .style-c .result-label { font-size: 0.7rem; color: rgba(26,26,46,0.4); margin-bottom: 4px; font-weight: 500; }
+    .style-c .result-num { font-size: 2rem; font-weight: 700; color: #1a1a2e; }
+    .style-c .result-unit { font-size: 0.8rem; color: rgba(100,100,200,0.7); }
+    .style-c .glass-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      border: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #6666cc, #8888ee);
+      color: white;
+      box-shadow: 0 4px 12px rgba(100,100,200,0.2);
+    }
+    .style-c .glass-btn + .glass-btn {
+      margin-top: 8px;
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.6);
+      color: rgba(26,26,46,0.5);
+      box-shadow: none;
+    }
+
+    .note { text-align: center; margin-top: 28px; color: #555; font-size: 0.8rem; }
+    .note strong { color: #999; }
+
+    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <h1>液态玻璃风格对比</h1>
+  <p class="subtitle">三种不同色调的 Liquid Glass 方向，选一个你喜欢的</p>
+
+  <div class="grid">
+    <!-- A: Warm Liquid Glass -->
+    <div class="option-card style-a" data-choice="a" onclick="toggleSelect(this)">
+      <div class="option-label">
+        <span class="tag">A</span>
+        <div><h3>暖色液态玻璃</h3><p>橙红渐变，活力温暖</p></div>
+      </div>
+      <div class="phone">
+        <div class="phone-bg"></div>
+        <div class="phone-content">
+          <div class="app-header">
+            <div class="app-icon">🔥</div>
+            <div class="app-title">卡路里计算器</div>
+            <div class="app-sub">kJ ↔ kcal 精准换算</div>
+          </div>
+
+          <div class="glass-card">
+            <div class="field-label">每100g能量</div>
+            <div class="field-value">1800 <span class="field-unit">kJ</span></div>
+          </div>
+
+          <div class="glass-card">
+            <div class="field-label">摄入重量</div>
+            <div class="field-value">150 <span class="field-unit">g</span></div>
+          </div>
+
+          <div class="result-glass">
+            <div class="result-label">总热量</div>
+            <div class="result-num">645.3</div>
+            <div class="result-unit">kcal</div>
+          </div>
+
+          <button class="glass-btn primary">加入记录</button>
+          <button class="glass-btn ghost">常用食品库</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- B: Cool Liquid Glass -->
+    <div class="option-card style-b" data-choice="b" onclick="toggleSelect(this)">
+      <div class="option-label">
+        <span class="tag">B</span>
+        <div><h3>冷色液态玻璃</h3><p>蓝青渐变，科技通透</p></div>
+      </div>
+      <div class="phone">
+        <div class="phone-bg"></div>
+        <div class="phone-content">
+          <div class="app-header">
+            <div class="app-icon">⚡</div>
+            <div class="app-title">卡路里计算器</div>
+            <div class="app-sub">kJ ↔ kcal 精准换算</div>
+          </div>
+
+          <div class="toggle-glass">
+            <span class="active">kJ → kcal</span>
+            <span>kcal → kJ</span>
+          </div>
+
+          <div class="glass-card">
+            <div class="field-label">每100g能量</div>
+            <div class="field-value">1800 <span class="field-unit">kJ</span></div>
+          </div>
+
+          <div class="glass-card">
+            <div class="field-label">摄入重量</div>
+            <div class="field-value">150 <span class="field-unit">g</span></div>
+          </div>
+
+          <div class="result-glass">
+            <div class="result-label">总热量</div>
+            <div class="result-num">645.3</div>
+            <div class="result-unit">kcal</div>
+          </div>
+
+          <button class="glass-btn">加入记录</button>
+          <button class="glass-btn">常用食品库</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- C: Light Liquid Glass -->
+    <div class="option-card style-c" data-choice="c" onclick="toggleSelect(this)">
+      <div class="option-label">
+        <span class="tag">C</span>
+        <div><h3>浅色液态玻璃</h3><p>白紫调，干净优雅</p></div>
+      </div>
+      <div class="phone">
+        <div class="phone-bg"></div>
+        <div class="phone-content">
+          <div class="app-header">
+            <div class="app-title">卡路里计算器</div>
+            <div class="app-sub">kJ ↔ kcal 精准换算</div>
+          </div>
+
+          <div class="glass-card">
+            <div class="field-label">每100g能量</div>
+            <div class="field-value">1800 <span class="field-unit">kJ</span></div>
+          </div>
+
+          <div class="glass-card">
+            <div class="field-label">摄入重量</div>
+            <div class="field-value">150 <span class="field-unit">g</span></div>
+          </div>
+
+          <div class="result-glass">
+            <div class="result-label">总热量</div>
+            <div class="result-num">645.3</div>
+            <div class="result-unit">kcal</div>
+          </div>
+
+          <button class="glass-btn">加入记录</button>
+          <button class="glass-btn">常用食品库</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="note"><strong>A</strong> 暖色 · <strong>B</strong> 冷色 · <strong>C</strong> 浅色 — 点击选择后继续细化</p>
+
+  <script>
+    function toggleSelect(el) {
+      document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liquid Glass v2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #111;
+      padding: 20px;
+      color: white;
+    }
+    h1 { text-align: center; margin-bottom: 6px; font-size: 1.4rem; font-weight: 600; }
+    .subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 0.85rem; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 760px; margin: 0 auto; }
+    .mode-label {
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #888;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* Phone Frame */
+    .phone {
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto;
+      border-radius: 32px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 9/18.5;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+    }
+
+    /* ===== LIGHT MODE ===== */
+    .light .phone {
+      background: #f5f5f7;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    .light .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px 8px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #1d1d1f;
+    }
+    .light .nav-bar {
+      background: rgba(245,245,247,0.72);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 0.5px solid rgba(0,0,0,0.08);
+      padding: 8px 20px 12px;
+      text-align: center;
+    }
+    .light .nav-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1d1d1f;
+    }
+    .light .nav-sub {
+      font-size: 0.65rem;
+      color: #86868b;
+      margin-top: 1px;
+    }
+    .light .content { padding: 16px 18px; flex: 1; }
+    .light .section-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: #86868b;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+    .light .input-row {
+      background: white;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      border: 0.5px solid rgba(0,0,0,0.06);
+    }
+    .light .input-row .label { font-size: 0.75rem; color: #86868b; }
+    .light .input-row .value {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1d1d1f;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+    .light .input-row .unit { font-size: 0.7rem; font-weight: 400; color: #aeaeb2; }
+    .light .result-card {
+      background: white;
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+      margin-top: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      border: 0.5px solid rgba(0,0,0,0.06);
+    }
+    .light .result-label { font-size: 0.7rem; color: #86868b; margin-bottom: 2px; }
+    .light .result-num { font-size: 2rem; font-weight: 700; color: #1d1d1f; }
+    .light .result-unit { font-size: 0.75rem; color: #aeaeb2; }
+    .light .toggle-row {
+      display: flex;
+      background: #e8e8ed;
+      border-radius: 9px;
+      padding: 2px;
+      margin-bottom: 16px;
+    }
+    .light .toggle-row span {
+      flex: 1;
+      text-align: center;
+      padding: 6px 0;
+      border-radius: 7px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #86868b;
+    }
+    .light .toggle-row span.active {
+      background: white;
+      color: #1d1d1f;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .light .bottom-bar {
+      background: rgba(245,245,247,0.72);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-top: 0.5px solid rgba(0,0,0,0.08);
+      padding: 10px 18px 20px;
+    }
+    .light .action-btn {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: #007aff;
+      color: white;
+    }
+    .light .ghost-btn {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      background: transparent;
+      color: #007aff;
+      margin-top: 6px;
+    }
+
+    /* ===== DARK MODE ===== */
+    .dark .phone {
+      background: #000;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .dark .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px 8px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #f5f5f7;
+    }
+    .dark .nav-bar {
+      background: rgba(28,28,30,0.72);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 0.5px solid rgba(255,255,255,0.08);
+      padding: 8px 20px 12px;
+      text-align: center;
+    }
+    .dark .nav-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #f5f5f7;
+    }
+    .dark .nav-sub {
+      font-size: 0.65rem;
+      color: #6e6e73;
+      margin-top: 1px;
+    }
+    .dark .content { padding: 16px 18px; flex: 1; }
+    .dark .section-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: #6e6e73;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+    .dark .input-row {
+      background: #1c1c1e;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 0.5px solid rgba(255,255,255,0.06);
+    }
+    .dark .input-row .label { font-size: 0.75rem; color: #6e6e73; }
+    .dark .input-row .value {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #f5f5f7;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+    .dark .input-row .unit { font-size: 0.7rem; font-weight: 400; color: #48484a; }
+    .dark .result-card {
+      background: #1c1c1e;
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+      margin-top: 12px;
+      border: 0.5px solid rgba(255,255,255,0.06);
+    }
+    .dark .result-label { font-size: 0.7rem; color: #6e6e73; margin-bottom: 2px; }
+    .dark .result-num { font-size: 2rem; font-weight: 700; color: #f5f5f7; }
+    .dark .result-unit { font-size: 0.75rem; color: #48484a; }
+    .dark .toggle-row {
+      display: flex;
+      background: #2c2c2e;
+      border-radius: 9px;
+      padding: 2px;
+      margin-bottom: 16px;
+    }
+    .dark .toggle-row span {
+      flex: 1;
+      text-align: center;
+      padding: 6px 0;
+      border-radius: 7px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #6e6e73;
+    }
+    .dark .toggle-row span.active {
+      background: #3a3a3c;
+      color: #f5f5f7;
+    }
+    .dark .bottom-bar {
+      background: rgba(28,28,30,0.72);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-top: 0.5px solid rgba(255,255,255,0.08);
+      padding: 10px 18px 20px;
+    }
+    .dark .action-btn {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: #0a84ff;
+      color: white;
+    }
+    .dark .ghost-btn {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      background: transparent;
+      color: #0a84ff;
+      margin-top: 6px;
+    }
+
+    /* Shared */
+    .phone-inner {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .note { text-align: center; margin-top: 28px; color: #555; font-size: 0.8rem; }
+
+    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <h1>Liquid Glass · 日间 & 夜间</h1>
+  <p class="subtitle">模仿 iOS 26 的系统级设计语言 — 内容为主，玻璃为辅</p>
+
+  <div class="grid">
+    <!-- LIGHT MODE -->
+    <div>
+      <div class="mode-label">☀️ 日间模式</div>
+      <div class="phone light">
+        <div class="phone-inner">
+          <div class="status-bar">
+            <span>9:41</span>
+            <span>⚡ 86%</span>
+          </div>
+          <div class="nav-bar">
+            <div class="nav-title">卡路里计算器</div>
+            <div class="nav-sub">kJ ↔ kcal 精准换算</div>
+          </div>
+          <div class="content">
+            <div class="toggle-row">
+              <span class="active">kJ → kcal</span>
+              <span>kcal → kJ</span>
+            </div>
+
+            <div class="section-label">每100g能量</div>
+            <div class="input-row">
+              <span class="label">能量值</span>
+              <span class="value">1800 <span class="unit">kJ</span></span>
+            </div>
+
+            <div class="section-label">摄入重量</div>
+            <div class="input-row">
+              <span class="label">重量</span>
+              <span class="value">150 <span class="unit">g</span></span>
+            </div>
+
+            <div class="result-card">
+              <div class="result-label">总热量</div>
+              <div class="result-num">645.3</div>
+              <div class="result-unit">kcal</div>
+            </div>
+          </div>
+          <div class="bottom-bar">
+            <button class="action-btn">加入记录</button>
+            <button class="ghost-btn">常用食品库</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DARK MODE -->
+    <div>
+      <div class="mode-label">🌙 夜间模式</div>
+      <div class="phone dark">
+        <div class="phone-inner">
+          <div class="status-bar">
+            <span>9:41</span>
+            <span>⚡ 86%</span>
+          </div>
+          <div class="nav-bar">
+            <div class="nav-title">卡路里计算器</div>
+            <div class="nav-sub">kJ ↔ kcal 精准换算</div>
+          </div>
+          <div class="content">
+            <div class="toggle-row">
+              <span class="active">kJ → kcal</span>
+              <span>kcal → kJ</span>
+            </div>
+
+            <div class="section-label">每100g能量</div>
+            <div class="input-row">
+              <span class="label">能量值</span>
+              <span class="value">1800 <span class="unit">kJ</span></span>
+            </div>
+
+            <div class="section-label">摄入重量</div>
+            <div class="input-row">
+              <span class="label">重量</span>
+              <span class="value">150 <span class="unit">g</span></span>
+            </div>
+
+            <div class="result-card">
+              <div class="result-label">总热量</div>
+              <div class="result-num">645.3</div>
+              <div class="result-unit">kcal</div>
+            </div>
+          </div>
+          <div class="bottom-bar">
+            <button class="action-btn">加入记录</button>
+            <button class="ghost-btn">常用食品库</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="note">导航栏和底部栏用半透明模糊透出背景，内容卡片是实色 — 这才是 Liquid Glass 的正确用法</p>
+</body>
+</html>

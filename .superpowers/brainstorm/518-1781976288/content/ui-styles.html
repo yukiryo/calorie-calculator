@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI 风格对比</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+      color: #333;
+    }
+    h1 { text-align: center; margin-bottom: 8px; font-size: 1.5rem; }
+    .subtitle { text-align: center; color: #888; margin-bottom: 30px; font-size: 0.9rem; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 900px; margin: 0 auto; }
+    .style-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 2px solid transparent;
+    }
+    .style-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .style-card.selected { border-color: #007AFF; }
+    .style-label {
+      padding: 12px 16px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .style-label .letter {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700; color: white;
+    }
+    .mockup {
+      padding: 16px;
+      min-height: 320px;
+    }
+
+    /* Style A: Apple Minimal */
+    .style-a .letter { background: #007AFF; }
+    .style-a .mockup { background: #f2f2f7; }
+    .style-a .phone-frame {
+      background: white;
+      border-radius: 20px;
+      padding: 20px 16px;
+      max-width: 260px;
+      margin: 0 auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .style-a .app-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1c1c1e;
+      margin-bottom: 4px;
+    }
+    .style-a .app-subtitle { font-size: 0.8rem; color: #8e8e93; margin-bottom: 16px; }
+    .style-a .input-label { font-size: 0.75rem; color: #8e8e93; margin-bottom: 6px; font-weight: 500; }
+    .style-a .input-box {
+      background: #f2f2f7;
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+      color: #c7c7cc;
+    }
+    .style-a .input-box .val { color: #1c1c1e; font-weight: 500; }
+    .style-a .result-area {
+      background: linear-gradient(135deg, #007AFF, #5856D6);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+      margin-top: 16px;
+      color: white;
+    }
+    .style-a .result-label { font-size: 0.75rem; opacity: 0.8; margin-bottom: 4px; }
+    .style-a .result-num { font-size: 2rem; font-weight: 700; }
+    .style-a .result-unit { font-size: 0.85rem; opacity: 0.8; }
+    .style-a .btn-row { display: flex; gap: 8px; margin-top: 12px; }
+    .style-a .pill-btn {
+      flex: 1;
+      padding: 8px;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+    }
+    .style-a .pill-btn.primary { background: #007AFF; color: white; }
+    .style-a .pill-btn.secondary { background: #f2f2f7; color: #007AFF; }
+
+    /* Style B: Material You */
+    .style-b .letter { background: #6750A4; }
+    .style-b .mockup { background: #fef7ff; }
+    .style-b .phone-frame {
+      background: white;
+      border-radius: 20px;
+      padding: 20px 16px;
+      max-width: 260px;
+      margin: 0 auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .style-b .app-title { font-size: 1.4rem; font-weight: 500; color: #1d1b20; margin-bottom: 2px; }
+    .style-b .app-subtitle { font-size: 0.8rem; color: #49454F; margin-bottom: 16px; }
+    .style-b .input-label { font-size: 0.75rem; color: #49454F; margin-bottom: 6px; font-weight: 500; }
+    .style-b .input-box {
+      border: 1.5px solid #79747E;
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+    }
+    .style-b .input-box .val { color: #1d1b20; font-weight: 500; }
+    .style-b .input-box .unit { color: #49454F; }
+    .style-b .toggle-pill {
+      display: flex;
+      background: #f3edf7;
+      border-radius: 20px;
+      padding: 4px;
+      margin-bottom: 16px;
+    }
+    .style-b .toggle-pill span {
+      flex: 1;
+      text-align: center;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #49454F;
+    }
+    .style-b .toggle-pill span.active { background: #6750A4; color: white; }
+    .style-b .result-area {
+      background: #f3edf7;
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+      margin-top: 16px;
+    }
+    .style-b .result-label { font-size: 0.75rem; color: #49454F; margin-bottom: 4px; }
+    .style-b .result-num { font-size: 2rem; font-weight: 500; color: #6750A4; }
+    .style-b .result-unit { font-size: 0.85rem; color: #49454F; }
+    .style-b .md-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      border-radius: 20px;
+      border: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 12px;
+      background: #6750A4;
+      color: white;
+    }
+
+    /* Style C: Japanese Minimal */
+    .style-c .letter { background: #333; }
+    .style-c .mockup { background: #fafafa; }
+    .style-c .phone-frame {
+      background: white;
+      border-radius: 4px;
+      padding: 20px 16px;
+      max-width: 260px;
+      margin: 0 auto;
+      border: 1px solid #e5e5e5;
+    }
+    .style-c .app-title {
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: #111;
+      margin-bottom: 2px;
+      letter-spacing: 0.05em;
+    }
+    .style-c .app-subtitle { font-size: 0.7rem; color: #999; margin-bottom: 20px; letter-spacing: 0.02em; }
+    .style-c .divider-line { height: 1px; background: #e5e5e5; margin: 12px 0; }
+    .style-c .input-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .style-c .input-label { font-size: 0.8rem; color: #666; }
+    .style-c .input-val { font-size: 0.9rem; color: #111; font-weight: 500; }
+    .style-c .result-area {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .style-c .result-num {
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: #111;
+      letter-spacing: -0.02em;
+    }
+    .style-c .result-unit { font-size: 0.8rem; color: #999; margin-top: 2px; }
+    .style-c .action-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #111;
+      background: #111;
+      color: white;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .style-c .secondary-btn {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      background: white;
+      color: #666;
+      font-size: 0.75rem;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    /* Style D: Clean Dark */
+    .style-d .letter { background: #555; }
+    .style-d .mockup { background: #111; border-radius: 0 0 14px 14px; }
+    .style-d .phone-frame {
+      background: #1a1a1a;
+      border-radius: 16px;
+      padding: 20px 16px;
+      max-width: 260px;
+      margin: 0 auto;
+      border: 1px solid #2a2a2a;
+    }
+    .style-d .app-title { font-size: 1.3rem; font-weight: 600; color: #f0f0f0; margin-bottom: 2px; }
+    .style-d .app-subtitle { font-size: 0.8rem; color: #777; margin-bottom: 16px; }
+    .style-d .toggle-row {
+      display: flex;
+      background: #222;
+      border-radius: 8px;
+      padding: 3px;
+      margin-bottom: 16px;
+    }
+    .style-d .toggle-row span {
+      flex: 1;
+      text-align: center;
+      padding: 6px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #888;
+    }
+    .style-d .toggle-row span.active { background: #333; color: #f0f0f0; }
+    .style-d .input-label { font-size: 0.75rem; color: #777; margin-bottom: 6px; font-weight: 500; }
+    .style-d .input-box {
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+    }
+    .style-d .input-box .val { color: #f0f0f0; font-weight: 500; }
+    .style-d .input-box .unit { color: #777; }
+    .style-d .result-area {
+      background: #222;
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+      margin-top: 16px;
+    }
+    .style-d .result-label { font-size: 0.75rem; color: #777; margin-bottom: 4px; }
+    .style-d .result-num { font-size: 2rem; font-weight: 600; color: #f0f0f0; }
+    .style-d .result-unit { font-size: 0.85rem; color: #999; }
+    .style-d .action-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      background: #f0f0f0;
+      color: #111;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .style-d .btn-outline {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #333;
+      background: transparent;
+      color: #888;
+      font-size: 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .note { text-align: center; margin-top: 24px; color: #999; font-size: 0.8rem; }
+    .note strong { color: #666; }
+
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 UI 风格方向对比</h1>
+  <p class="subtitle">点击你喜欢的风格，我会基于它继续细化设计</p>
+
+  <div class="grid">
+    <!-- Style A: Apple Minimal -->
+    <div class="style-card style-a" data-choice="a" onclick="toggleSelect(this)">
+      <div class="style-label">
+        <div class="letter">A</div>
+        苹果极简风
+      </div>
+      <div class="mockup">
+        <div class="phone-frame">
+          <div class="app-title">卡路里计算器</div>
+          <div class="app-subtitle">kJ ↔ kcal 精准换算</div>
+
+          <div class="input-label">每100g能量</div>
+          <div class="input-box">
+            <span class="val">1800</span>
+            <span class="unit">kJ</span>
+          </div>
+
+          <div class="input-label">摄入重量</div>
+          <div class="input-box">
+            <span class="val">150</span>
+            <span>g</span>
+          </div>
+
+          <div class="result-area">
+            <div class="result-label">总热量</div>
+            <div class="result-num">645.3</div>
+            <div class="result-unit">kcal</div>
+          </div>
+
+          <div class="btn-row">
+            <div class="pill-btn primary">加入记录</div>
+            <div class="pill-btn secondary">常用食品</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Style B: Material You -->
+    <div class="style-card style-b" data-choice="b" onclick="toggleSelect(this)">
+      <div class="style-label">
+        <div class="letter">B</div>
+        Material You
+      </div>
+      <div class="mockup">
+        <div class="phone-frame">
+          <div class="app-title">卡路里计算器</div>
+          <div class="app-subtitle">kJ ↔ kcal 精准换算</div>
+
+          <div class="toggle-pill">
+            <span class="active">kJ → kcal</span>
+            <span>kcal → kJ</span>
+          </div>
+
+          <div class="input-label">每100g能量</div>
+          <div class="input-box">
+            <span class="val">1800</span>
+            <span class="unit">kJ</span>
+          </div>
+
+          <div class="input-label">摄入重量</div>
+          <div class="input-box">
+            <span class="val">150</span>
+            <span>g</span>
+          </div>
+
+          <div class="result-area">
+            <div class="result-label">总热量</div>
+            <div class="result-num">645.3</div>
+            <div class="result-unit">kcal</div>
+          </div>
+
+          <button class="md-btn">加入记录</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Style C: Japanese Minimal -->
+    <div class="style-card style-c" data-choice="c" onclick="toggleSelect(this)">
+      <div class="style-label">
+        <div class="letter">C</div>
+        日式极简
+      </div>
+      <div class="mockup">
+        <div class="phone-frame">
+          <div class="app-title">カロリー計算</div>
+          <div class="app-subtitle">CALORIE CALCULATOR</div>
+          <div class="divider-line"></div>
+
+          <div class="input-row">
+            <span class="input-label">每100g能量</span>
+            <span class="input-val">1800 kJ</span>
+          </div>
+          <div class="input-row">
+            <span class="input-label">摄入重量</span>
+            <span class="input-val">150 g</span>
+          </div>
+
+          <div class="result-area">
+            <div class="result-num">645.3</div>
+            <div class="result-unit">kcal</div>
+          </div>
+
+          <button class="action-btn">添加记录</button>
+          <button class="secondary-btn">常用食品库</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Style D: Clean Dark -->
+    <div class="style-card style-d" data-choice="d" onclick="toggleSelect(this)">
+      <div class="style-label">
+        <div class="letter">D</div>
+        干净深色
+      </div>
+      <div class="mockup">
+        <div class="phone-frame">
+          <div class="app-title">卡路里计算器</div>
+          <div class="app-subtitle">kJ ↔ kcal 精准换算</div>
+
+          <div class="toggle-row">
+            <span class="active">kJ → kcal</span>
+            <span>kcal → kJ</span>
+          </div>
+
+          <div class="input-label">每100g能量</div>
+          <div class="input-box">
+            <span class="val">1800</span>
+            <span class="unit">kJ</span>
+          </div>
+
+          <div class="input-label">摄入重量</div>
+          <div class="input-box">
+            <span class="val">150</span>
+            <span>g</span>
+          </div>
+
+          <div class="result-area">
+            <div class="result-label">总热量</div>
+            <div class="result-num">645.3</div>
+            <div class="result-unit">kcal</div>
+          </div>
+
+          <button class="action-btn">加入记录</button>
+          <button class="btn-outline">常用食品库</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="note"><strong>A</strong> 苹果极简 · <strong>B</strong> Material You · <strong>C</strong> 日式极简 · <strong>D</strong> 干净深色</p>
+
+  <script>
+    function toggleSelect(el) {
+      document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      // Record event
+      if (window.__recordEvent) {
+        window.__recordEvent({ type: 'click', choice: el.dataset.choice, text: el.querySelector('.style-label').textContent.trim() });
+      }
+    }
+  </script>
+</body>
+</html>

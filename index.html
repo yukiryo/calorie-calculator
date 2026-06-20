@@ -9,7 +9,8 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>卡路里计算器 | 精准热量换算</title>
   <meta name="description" content="专业的食品热量计算器，快速将千焦(kJ/100g)转换为大卡(kcal)。适用于减肥、健身人群的精准饮食管理工具。">
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -283,7 +284,7 @@
   <div id="custom-confirm-modal" class="modal">
     <div class="modal-content glass-container prompt-modal">
       <h3 class="prompt-title" id="confirm-title">确认操作</h3>
-      <p id="confirm-message" style="margin-bottom: 1.5rem; color: var(--text-muted); line-height: 1.5;"></p>
+      <p id="confirm-message" style="margin-bottom: 1.5rem; color: var(--text-secondary); line-height: 1.5;"></p>
       <div class="prompt-actions">
         <button id="confirm-cancel-btn" class="prompt-btn cancel">取消</button>
         <button id="confirm-yes-btn" class="prompt-btn confirm delete-confirm">确定</button>
@@ -295,7 +296,7 @@
   <div id="custom-alert-modal" class="modal">
     <div class="modal-content glass-container prompt-modal">
       <h3 class="prompt-title" id="alert-title">提示</h3>
-      <p id="alert-message" style="margin-bottom: 1.5rem; color: var(--text-muted); line-height: 1.5;"></p>
+      <p id="alert-message" style="margin-bottom: 1.5rem; color: var(--text-secondary); line-height: 1.5;"></p>
       <div class="prompt-actions">
         <button id="alert-ok-btn" class="prompt-btn confirm" style="width: 100%;">我知道了</button>
       </div>

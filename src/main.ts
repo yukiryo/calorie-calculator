@@ -182,7 +182,7 @@ function toggleMode() {
         option.classList.toggle('active', option.dataset.mode === activeMode);
     });
 
-    const elements = [energyLabel, energyUnit, resultUnit, formulaContainer];
+    const elements = [energyLabel, resultUnit, formulaContainer];
     elements.forEach(el => {
         el.style.opacity = '0';
         el.style.transition = 'opacity 0.2s ease';

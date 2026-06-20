@@ -1,46 +1,46 @@
-# 🥑 卡路里计算器
+# 🥑 Calorie Calculator
 
 [简体中文](./README_zh-CN.md) | [English](./README.md)
 
-一个极简、现代的卡路里换算 PWA 应用，专注于 **kJ** 和 **kcal** 之间的精准转换。
+A minimal, modern PWA for precise conversion between **kJ** and **kcal**.
 
-✨ **在线演示**: [https://calorie-calculator-yukiryo.pages.dev/](https://calorie-calculator-yukiryo.pages.dev/)
+✨ **Live Demo**: [https://calorie-calculator-yukiryo.pages.dev/](https://calorie-calculator-yukiryo.pages.dev/)
 
-## 🚀 功能特性
+## 🚀 Features
 
-### 核心功能
-- **双向换算**: kJ/100g → kcal 或 kcal/100g → kJ，根据摄入重量自动计算总热量
-- **餐食总计**: 支持添加多条记录，自动计算一顿饭的总热量摄入
-- **常用食品库**: 保存常用食品的能量值，一键填充，支持编辑和删除
+### Core
+- **Two-way Conversion**: kJ/100g → kcal or kcal/100g → kJ, with automatic total calorie calculation based on intake weight
+- **Meal Total**: Add multiple entries to calculate total calorie intake for a meal
+- **Food Library**: Save frequently used food energy values for quick access, with edit and delete support
 
-### 工具箱
-- **BMI 计算器**: 输入身高体重，计算身体质量指数，提供 WHO 标准参考
-- **BMI 历史记录**: 保存最近的 BMI 测量记录
+### Tools
+- **BMI Calculator**: Enter height and weight to calculate Body Mass Index with WHO standard reference
+- **BMI History**: Save recent BMI measurements
 
-### 用户体验
-- **PWA 支持**: 可作为原生应用安装到 iOS 和 Android，支持离线使用
-- **极致 UI**: 深色模式配合毛玻璃磨砂效果
-- **完全自定义弹窗**: 取代所有浏览器原生对话框
-- **响应式设计**: 流体排版和布局，完美适配任何屏幕尺寸
-- **隐私优先**: 所有计算均在本地浏览器中完成，无任何后端依赖
+### User Experience
+- **PWA Support**: Install as a native app on iOS and Android, works offline
+- **Premium UI**: Dark mode with glassmorphism frosted glass effect
+- **Custom Dialogs**: All browser native dialogs replaced with custom modals
+- **Responsive Design**: Fluid typography and layout, adapts perfectly to any screen size
+- **Privacy First**: All calculations run locally in your browser, no backend dependencies
 
-## 🛠️ 技术栈
+## 🛠️ Tech Stack
 
-- **构建工具**: [Vite](https://vitejs.dev/)
-- **开发语言**: TypeScript
-- **样式方案**: 纯 CSS（CSS 变量、Flexbox、Grid、Clamp）
-- **存储方式**: localStorage 本地存储
-- **PWA 支持**: vite-plugin-pwa
-- **部署平台**: Cloudflare Pages
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Language**: TypeScript
+- **Styling**: Pure CSS (CSS Variables, Flexbox, Grid, Clamp)
+- **Storage**: localStorage
+- **PWA**: vite-plugin-pwa
+- **Deployment**: Cloudflare Pages
 
-## 📦 快速开始
+## 📦 Quick Start
 
-### 前置要求
+### Prerequisites
 
-- Node.js (v18 或更高版本)
+- Node.js (v18 or higher)
 - npm
 
-### 安装
+### Installation
 
 ```bash
 git clone https://github.com/yukiryo/calorie-calculator.git
@@ -48,76 +48,76 @@ cd calorie-calculator
 npm install
 ```
 
-### 开发
+### Development
 
-启动本地开发服务器：
+Start local development server:
 
 ```bash
 npm run dev
 ```
 
-### 构建
+### Build
 
-构建生产版本：
+Build for production:
 
 ```bash
 npm run build
 ```
 
-### 预览
+### Preview
 
-预览生产构建：
+Preview production build:
 
 ```bash
 npm run preview
 ```
 
-## 🚢 部署
+## 🚢 Deployment
 
-本项目针对 **Cloudflare Pages** 进行了优化。
+This project is optimized for **Cloudflare Pages**.
 
-1. 将你的 GitHub 仓库连接到 Cloudflare Pages
-2. 选择 **Vite** 作为构建框架预设
-3. 点击部署！
+1. Connect your GitHub repository to Cloudflare Pages
+2. Select **Vite** as the build framework preset
+3. Deploy!
 
-## 📱 PWA 功能
+## 📱 PWA Features
 
-- **安装**: 在移动端浏览器中点击"添加到主屏幕"即可安装
-- **离线支持**: Service Worker 自动缓存资源，无网络也能使用
-- **图标**: `public/` 目录下包含高分辨率自适应图标
+- **Install**: Tap "Add to Home Screen" in your mobile browser to install
+- **Offline Support**: Service Worker automatically caches resources, works without network
+- **Icons**: High-resolution adaptive icons included in `public/` directory
 
-## 🎨 设计特点
+## 🎨 Design
 
-- **毛玻璃效果**: 半透明背景配合模糊滤镜，营造现代感
-- **深色主题**: 专为夜间使用优化，减少眼睛疲劳
-- **流畅动画**: 所有交互都带有平滑的过渡效果
-- **自定义弹窗**: 完全重写的提示、确认、输入弹窗
+- **Glassmorphism**: Semi-transparent background with blur filter for a modern feel
+- **Dark Theme**: Optimized for nighttime use to reduce eye strain
+- **Smooth Animations**: All interactions have smooth transition effects
+- **Custom Dialogs**: Completely rewritten prompt, confirm, and input modals
 
-## 📁 项目结构
+## 📁 Project Structure
 
 ```
 calorie-calculator/
-├── public/              # 静态资源（图标等）
+├── public/              # Static assets (icons, etc.)
 ├── src/
-│   ├── main.ts         # 主应用逻辑
-│   ├── bmi.ts          # BMI 计算器功能
-│   ├── router.ts       # 页面路由
-│   ├── style.css       # 全局样式
-│   └── ui-utils.ts     # 自定义弹窗工具
-├── index.html          # 入口 HTML
-├── package.json        # 项目配置
-├── vite.config.ts      # Vite 配置
-└── tsconfig.json       # TypeScript 配置
+│   ├── main.ts         # Main application logic
+│   ├── bmi.ts          # BMI calculator functionality
+│   ├── router.ts       # Page routing
+│   ├── style.css       # Global styles
+│   └── ui-utils.ts     # Custom dialog utilities
+├── index.html          # Entry HTML
+├── package.json        # Project configuration
+├── vite.config.ts      # Vite configuration
+└── tsconfig.json       # TypeScript configuration
 ```
 
-## 👤 作者
+## 👤 Author
 
 **雪凌Yukiryo**
 - Telegram: [@Yukiryo](https://t.me/Yukiryo)
 
-## 📄 更新日志
+## 📄 Changelog
 
-查看 [CHANGELOG.md](./CHANGELOG.md) 了解版本更新历史。
+See [CHANGELOG.md](./CHANGELOG.md) for version history.
 
 ---
 

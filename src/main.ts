@@ -16,12 +16,22 @@ function getSystemTheme(): 'light' | 'dark' {
 
 function applyTheme(preference: ThemePreference) {
   const html = document.documentElement;
+  const body = document.body;
+
+  // Add transition class for smooth theme change
+  body.classList.add('theme-transitioning');
+
   if (preference === 'system') {
     html.removeAttribute('data-theme');
   } else {
     html.setAttribute('data-theme', preference);
   }
   updateThemeIcon(preference === 'system' ? getSystemTheme() : preference);
+
+  // Remove transition class after animation completes
+  setTimeout(() => {
+    body.classList.remove('theme-transitioning');
+  }, 300);
 }
 
 function updateThemeIcon(resolvedTheme: 'light' | 'dark') {

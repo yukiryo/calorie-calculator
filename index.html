@@ -63,16 +63,10 @@
         </header>
 
         <div class="mode-toggle-wrapper">
-          <button id="mode-toggle" class="mode-toggle" type="button">
-            <span class="toggle-text">kJ ➜ kcal</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="toggle-icon">
-              <path d="M7 10h14" />
-              <path d="M7 14h14" />
-              <path d="M7 10L10 7" />
-              <path d="M17 14l-3 3" />
-            </svg>
-          </button>
+          <div id="mode-toggle" class="mode-toggle" role="button" tabindex="0" aria-label="切换计算模式">
+            <span class="toggle-option active" data-mode="kjToKcal">kJ → kcal</span>
+            <span class="toggle-option" data-mode="kcalToKj">kcal → kJ</span>
+          </div>
         </div>
 
         <div class="input-group">

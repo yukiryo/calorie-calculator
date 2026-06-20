@@ -72,8 +72,8 @@ if (toolsBtn) {
 const energyInput = document.getElementById('energy-input') as HTMLInputElement;
 const weightInput = document.getElementById('weight-input') as HTMLInputElement;
 const resultValue = document.getElementById('result-value') as HTMLElement;
-const modeToggleBtn = document.getElementById('mode-toggle') as HTMLButtonElement;
-const toggleText = modeToggleBtn.querySelector('.toggle-text') as HTMLElement;
+const modeToggleBtn = document.getElementById('mode-toggle') as HTMLElement;
+const toggleOptions = modeToggleBtn.querySelectorAll('.toggle-option') as NodeListOf<HTMLElement>;
 
 
 const energyLabel = document.getElementById('energy-label') as HTMLElement;
@@ -114,7 +114,6 @@ const KJ_TO_KCAL = 4.184;
 
 const MODE_CONFIG = {
     kjToKcal: {
-        toggleText: 'kJ ➜ kcal',
         label: '每100g能量 (kJ)',
         unit: 'kJ',
         placeholder: '例如: 1800',
@@ -122,7 +121,6 @@ const MODE_CONFIG = {
         formula: '<p class="formula-hint">Total kcal = (kJ/100g × Weight) ÷ 418.4</p>'
     },
     kcalToKj: {
-        toggleText: 'kcal ➜ kJ',
         label: '每100g热量 (kcal)',
         unit: 'kcal',
         placeholder: '例如: 400',
@@ -167,6 +165,11 @@ function toggleMode() {
     weightInput.value = '';
     updateResult(0);
 
+    // Update toggle active state
+    toggleOptions.forEach(option => {
+        option.classList.toggle('active', option.dataset.mode === (isKjToKcal ? 'kjToKcal' : 'kcalToKj'));
+    });
+
     const elements = [energyLabel, energyUnit, resultUnit, formulaContainer];
     elements.forEach(el => {
         el.style.opacity = '0';
@@ -175,7 +178,6 @@ function toggleMode() {
 
     setTimeout(() => {
         const config = isKjToKcal ? MODE_CONFIG.kjToKcal : MODE_CONFIG.kcalToKj;
-        toggleText.textContent = config.toggleText;
         energyLabel.textContent = config.label;
         energyUnit.textContent = config.unit;
         energyInput.placeholder = config.placeholder;

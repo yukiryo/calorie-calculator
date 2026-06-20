@@ -195,17 +195,14 @@ body {
 
 /* ===== Navigation Bar ===== */
 .nav-bar {
-  background: var(--nav-bg);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 0.5px solid var(--nav-border);
+  background: transparent;
+  border-bottom: 1px solid var(--divider);
   margin: calc(clamp(1rem, 5vw, 2rem) * -1);
   margin-bottom: clamp(1.5rem, 5vw, 2.5rem);
   padding: 0.75rem clamp(1.5rem, 5vw, 2.5rem);
   position: sticky;
   top: 0;
   z-index: 100;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .header-content {
@@ -280,15 +277,33 @@ h1 {
   display: flex;
   align-items: center;
   position: relative;
-  transition: background 0.2s;
   gap: 0;
+}
+
+/* Sliding background indicator */
+.mode-toggle::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  height: calc(100% - 6px);
+  background: var(--toggle-active);
+  border-radius: 7px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+}
+
+.mode-toggle[data-active="kcalToKj"]::before {
+  transform: translateX(100%);
 }
 
 .toggle-option {
   padding: 6px 16px;
   border-radius: 7px;
   color: var(--toggle-text);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   z-index: 1;
   white-space: nowrap;
@@ -296,9 +311,7 @@ h1 {
 }
 
 .toggle-option.active {
-  background: var(--toggle-active);
   color: var(--toggle-active-text);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   font-weight: 600;
 }
 

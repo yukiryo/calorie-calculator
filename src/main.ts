@@ -165,9 +165,11 @@ function toggleMode() {
     weightInput.value = '';
     updateResult(0);
 
-    // Update toggle active state
+    // Update toggle active state and sliding indicator
+    const activeMode = isKjToKcal ? 'kjToKcal' : 'kcalToKj';
+    modeToggleBtn.setAttribute('data-active', activeMode);
     toggleOptions.forEach(option => {
-        option.classList.toggle('active', option.dataset.mode === (isKjToKcal ? 'kjToKcal' : 'kcalToKj'));
+        option.classList.toggle('active', option.dataset.mode === activeMode);
     });
 
     const elements = [energyLabel, energyUnit, resultUnit, formulaContainer];
